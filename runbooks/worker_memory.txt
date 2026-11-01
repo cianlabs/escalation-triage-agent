@@ -1,0 +1,6 @@
+# Worker memory pressure
+
+The image worker keeps crashing when memory is exhausted.
+An oom killer line in the logs means the process died.
+Restart that worker only after a human approves.
+A memory crash is about the process.

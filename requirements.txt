@@ -1,0 +1,5 @@
+# Tests. The practice agent itself uses only the Python standard library.
+pytest>=8
+
+# Only `python agent.py --real` imports this. The practice path does not.
+openai>=1.40
