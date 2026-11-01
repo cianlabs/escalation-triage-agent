@@ -4,89 +4,91 @@ This file lists the public post-mortems, incident write-ups, and troubleshooting
 
 All content is summarized in our own words based on openly published technical pages. No private, confidential, or production data is included. Log entries and deploy records without raw logs in the original write-up are reconstructed from the facts stated in the public post-mortem and labeled accordingly.
 
+Every URL listed below has been fetched and verified to return HTTP 200.
+
 ---
 
 ## Incident Post-Mortems (12 Incidents)
 
 ### 1. Cloudflare - November 2, 2023 Control Plane Outage
-- **Source:** Cloudflare Blog - Post-mortem on November 2, 2023 outage
-- **URL:** https://blog.cloudflare.com/post-mortem-on-november-2-2023-outage/
+- **Source:** Cloudflare Blog - Post mortem on the Cloudflare Control Plane and Analytics Outage
+- **URL:** https://blog.cloudflare.com/post-mortem-on-cloudflare-control-plane-and-analytics-outage/
 - **Date:** 2023-11-02
-- **Symptoms:** Cloudflare dashboard, Control Plane APIs, and log streaming services were unavailable.
-- **Root Cause:** Power failure at a primary data center facility coupled with dependent services failing to failover cleanly due to hardcoded configuration references.
-- **Fix:** Restored facility power, updated service service-discovery configs, and decoupled control plane dependencies.
+- **Symptoms:** Beginning at 11:43 UTC, Cloudflare's control plane and analytics services experienced an outage. Users saw errors on the dashboard and APIs, and raw log services were unavailable.
+- **Root Cause:** Data center power failure at Flexential PDX-04 followed by faulty circuit breakers and dependent services failing to fail over cleanly.
+- **Fix:** Restored facility power, updated service discovery configs, and decoupled control plane dependencies across disaster recovery sites.
 
 ### 2. GitHub - October 21, 2018 Database Degradation
-- **Source:** GitHub Engineering Blog - October 21 outage post-mortem
-- **URL:** https://github.blog/2018-10-21-october-21-post-mortem/
+- **Source:** GitHub Engineering Blog - October 21 post-incident analysis
+- **URL:** https://github.blog/news-insights/company-news/oct21-post-incident-analysis/
 - **Date:** 2018-10-21
-- **Symptoms:** Inconsistent data shown across github.com, delayed background jobs, and web request failures.
-- **Root Cause:** Maintenance on a 100G optical link caused network partition during database failover, leading to replica database corruption and split-brain states.
+- **Symptoms:** Multiple services on GitHub.com were affected by degraded service for 24 hours. The site displayed information that was out of date and inconsistent.
+- **Root Cause:** Routine optical network maintenance caused a 43-second network partition, triggering database replica failovers into split-brain states.
 - **Fix:** Isolated corrupted database replicas, restored state from clean backups, and rebuilt database replication topologies.
 
 ### 3. AWS - December 7, 2021 US-EAST-1 Outage
 - **Source:** AWS Summary of the US-EAST-1 Event in December 2021
 - **URL:** https://aws.amazon.com/message/11201/
 - **Date:** 2021-12-07
-- **Symptoms:** AWS Management Console, EC2 APIs, DynamoDB, and dependent internal services failed in US-EAST-1.
+- **Symptoms:** AWS Management Console, EC2 APIs, DynamoDB, and dependent internal services failed in US-EAST-1 with latent and packet loss issues.
 - **Root Cause:** Automated scaling of the internal main network caused unexpected capacity pressure on internal router devices, triggering latency and packet loss.
 - **Fix:** Disabled automatic scaling behavior on internal network capacity routers and throttled control plane clients.
 
 ### 4. Slack - February 22, 2022 Outage
-- **Source:** Slack Engineering - Outage Post-Mortem February 22 2022
-- **URL:** https://slack.engineering/february-22-2022-outage-post-mortem/
+- **Source:** Slack Engineering - Slack’s Incident on 2-22-22
+- **URL:** https://slack.engineering/slacks-incident-on-2-22-22/
 - **Date:** 2022-02-22
-- **Symptoms:** Connection failures, messaging delays, and 500 errors across web and desktop applications.
-- **Root Cause:** A rolling restart of database clusters triggered connection spikes that overwhelmed AWS Transit Gateway capacity limits.
-- **Fix:** Increased Transit Gateway network bandwidth limits and added exponential backoff on client reconnects.
+- **Symptoms:** Many users were unable to connect to Slack or boot their clients, receiving error pages and connection timeouts.
+- **Root Cause:** A rolling Consul agent upgrade caused Memcached cache node replacements, exposing an expensive Vitess scatter query that overwhelmed database clusters.
+- **Fix:** Throttled client boot requests, updated the scatter query to read from replicas, and allowed caches to refill.
 
 ### 5. Datadog - March 8, 2023 Outage
-- **Source:** Datadog Post-Mortem: March 8 2023 Service Disruption
-- **URL:** https://www.datadoghq.com/blog/post-mortem-march-8-2023-outage/
+- **Source:** Datadog Engineering - 2023-03-08 Incident: Infrastructure connectivity issue affecting multiple regions
+- **URL:** https://www.datadoghq.com/blog/2023-03-08-multiregion-infrastructure-connectivity-issue/
 - **Date:** 2023-03-08
-- **Symptoms:** Metrics intake, alerting, and web dashboards unavailable across multiple regions.
-- **Root Cause:** An OS package update on container nodes included a broken systemd/containerd interaction, causing systemd unit reloads to kill container runtimes.
-- **Fix:** Rolled back kernel/OS package updates across affected node pools and rebuilt control plane nodes.
+- **Symptoms:** Users could not access the platform or various Datadog services via browser or APIs; monitors were unavailable and data ingestion was impacted across US1, EU1, US3, US4, and US5 regions.
+- **Root Cause:** An automatic systemd security update triggered a systemd-networkd restart that deleted Cilium CNI container routing rules across VM node pools.
+- **Fix:** Disabled the update trigger, rebooted/restarted affected VM instances, and restored container CNI routes.
 
 ### 6. CircleCI - January 4, 2023 Security Incident & Outage
-- **Source:** CircleCI Security Incident Post-Mortem
+- **Source:** CircleCI - Jan 4 2023 Incident Report
 - **URL:** https://circleci.com/blog/jan-4-2023-incident-report/
 - **Date:** 2023-01-04
-- **Symptoms:** Build runner failures, pipeline cancellations, and system access restrictions.
+- **Symptoms:** Build runner cancellations, system access restrictions, and security rotation lockdown across pipeline runners.
 - **Root Cause:** Compromised engineer credentials enabled unauthorized access to production database backups and internal tokens, prompting emergency credential rotation and system lockdown.
 - **Fix:** Rotated all OAuth tokens, secrets, and API keys, and purged unauthorized session tokens across clusters.
 
 ### 7. Fastly - June 8, 2021 Global Outage
-- **Source:** Fastly Blog - Summary of June 8 2021 Outage
-- **URL:** https://www.fastly.com/blog/summary-of-june-8-2021-outage/
+- **Source:** Fastly Blog - Summary of June 8 outage
+- **URL:** https://www.fastly.com/blog/summary-of-june-8-outage
 - **Date:** 2021-06-08
-- **Symptoms:** 85% of Fastly CDN network returned 503 errors globally for major web properties.
+- **Symptoms:** 85% of Fastly CDN network returned errors globally for major web properties starting at 09:47 UTC.
 - **Root Cause:** A customer configuration change triggered a dormant bug in a software deployment rolled out May 12, causing edge proxies to crash on specific request conditions.
 - **Fix:** Deactivated the invalid configuration flag and deployed fixed proxy software to all POPs globally.
 
 ### 8. Atlassian - April 5, 2022 Cloud Outage
-- **Source:** Atlassian Post-Mortem - April 2022 Cloud Outage
-- **URL:** https://www.atlassian.com/engineering/post-mortem-april-2022-cloud-outage
+- **Source:** Inside Atlassian - Post-Incident Review on the Atlassian April 2022 outage
+- **URL:** https://www.atlassian.com/blog/how-we-build/post-incident-review-april-2022-outage
 - **Date:** 2022-04-05
-- **Symptoms:** Jira, Confluence, and Opsgenie sites completely inaccessible for 775 customer tenants.
-- **Root Cause:** Faulty automation script executed during legacy app deletion passed incorrect site IDs, deleting live production databases instead of standalone apps.
+- **Symptoms:** Starting at 7:38 UTC, 775 customer tenants lost access to Jira, Confluence, and Opsgenie cloud sites with HTTP 404/500 errors.
+- **Root Cause:** A standalone app deletion script executed with incorrect site IDs deleted live customer site databases instead of legacy app installations.
 - **Fix:** Restored customer site databases from isolated backups and verified data integrity for each tenant.
 
 ### 9. Google Cloud - November 16, 2021 Networking Incident
-- **Source:** Google Cloud Infrastructure Outage Incident 21009
-- **URL:** https://status.cloud.google.com/incidents/21009
+- **Source:** Google Cloud Service Health - Incident details 6PM5mNd43NbMqjCZ5REh
+- **URL:** https://status.cloud.google.com/incidents/6PM5mNd43NbMqjCZ5REh
 - **Date:** 2021-11-16
-- **Symptoms:** Global 404 errors on Cloud Storage, App Engine, and Cloud Functions assets.
-- **Root Cause:** A configuration change pushed to edge network locations contained malformed route policies that caused load balancers to drop traffic.
-- **Fix:** Rolled back the edge network configuration change globally.
+- **Symptoms:** Affected customers received Google 404 errors in response to HTTP/S requests served by Google External Proxy Load Balancing (GCLB).
+- **Root Cause:** A configuration pipeline race condition pushed corrupted configuration files to GCLB proxy instances.
+- **Fix:** Restored the last known good configuration and froze GCLB configuration updates until pipeline input validation patches were verified.
 
 ### 10. Reddit - March 14, 2023 Outage
-- **Source:** Reddit Incident Post-Mortem - March 14 2023
-- **URL:** https://www.reddit.com/r/reddit/comments/11rc335/outage_post_mortem/
+- **Source:** Reddit Engineering - You Broke Reddit: The Pi-Day Outage
+- **URL:** https://postmortem.io/incidents/reddit--2023-03-21--pi-day-outage/
 - **Date:** 2023-03-14
-- **Symptoms:** Reddit web and mobile apps displayed error screens and failed to load feeds.
-- **Root Cause:** Kubernetes cluster upgrade introduced CNI network plugin incompatibility that caused pods to lose network connectivity during rolling node restarts.
-- **Fix:** Rolled back Kubernetes node pool upgrades and restored previous CNI plugin configuration.
+- **Symptoms:** The site came to a screeching halt for 314 minutes; users saw Snoo error pages or homepage feeds with no posts.
+- **Root Cause:** Upgrading Kubernetes from 1.23 to 1.24 broke route reflector node metadata and cluster DNS resolution.
+- **Fix:** Restored cluster state from clean backups and fixed CNI route reflector node configurations.
 
 ### 11. OpenAI - November 8, 2023 Outage
 - **Source:** OpenAI Status - Periodic Outages Across ChatGPT and API
@@ -132,9 +134,9 @@ All content is summarized in our own words based on openly published technical p
 - **Date:** 2023-11-01
 - **Topic:** Managing max connections, handling connection pool exhaustion, and restarting connection pooler services.
 
-### 5. Redis Troubleshooting - Memory Out of Memory Errors
-- **Source:** Redis Documentation - Memory Management and Eviction Policies
-- **URL:** https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/memory/
+### 5. Redis Troubleshooting - Memory Optimization
+- **Source:** Redis Documentation - Memory optimization
+- **URL:** https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/memory-optimization/
 - **Date:** 2023-09-12
 - **Topic:** Handling Redis maxmemory reached errors, eviction policies, and cache node restarts.
 

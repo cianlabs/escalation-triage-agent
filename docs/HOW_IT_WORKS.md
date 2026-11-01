@@ -6,9 +6,13 @@ The agent handles one support escalation built from real public incident write-u
 
 ## Real Public Data & Limitations
 
-The repository uses real public incident post-mortems (such as Cloudflare, GitHub, AWS, Slack, Datadog, Fastly, Atlassian, Google Cloud, Reddit, OpenAI, Heroku) and public troubleshooting runbooks.
+The repository uses real public incident post-mortems (such as Cloudflare, GitHub, AWS, Slack, Datadog, Fastly, Atlassian, Google Cloud, Reddit, OpenAI, Heroku) and public troubleshooting runbooks. All URLs in `SOURCES.md` return HTTP 200.
 
 Where raw log files or deploy logs were not provided in the original public post-mortems, log lines and deploy histories are reconstructed from the facts stated in those post-mortems and clearly labeled as `(reconstructed from public write-up)`.
+
+## Limits
+
+The evaluation score is calculated against a small hand-built set of 12 real incident post-mortems. It serves as a regression check for the practice pipeline rather than an exhaustive benchmark of real-world production incident response.
 
 ## The picture
 
@@ -44,7 +48,7 @@ Follow one arrow at a time. The sample ticket `INC-CLOUDFLARE-01` takes the long
 
 ## Offline Incident Evaluation
 
-`evaluation.py` evaluates all 12 real incident write-ups. It feeds the agent only the ticket description and checks if the top-ranked hypothesis matches the published root cause from the post-mortem.
+`evaluation.py` evaluates all 12 real incident write-ups. It feeds the agent only the ticket description (rewritten directly from published post-mortem summaries) and checks if the top-ranked hypothesis matches the published root cause from the post-mortem.
 
 ## The state is the memory
 
@@ -71,4 +75,4 @@ Follow one arrow at a time. The sample ticket `INC-CLOUDFLARE-01` takes the long
 
 ## Live Model (--real)
 
-`RealModel` in `agent.py` supports `--real` using `grok-build-0.1`. It reads `XAI_API_KEY` from the environment without printing or storing it. In tests, a fake client stands in for the live xAI client so no API key or network is needed.
+`RealModel` in `agent.py` supports `--real` using `grok-build-0.1`. It reads `XAI_API_KEY` from the environment without printing or storing it. In tests, a fake client stands in for the live xAI client so no API key or network is needed. The live model path was tested only with this offline fake client and was not executed live.

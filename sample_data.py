@@ -18,8 +18,9 @@ REAL_ESCALATIONS = {
         "service": "control-plane",
         "published_root_cause": "Bad deploy",
         "ticket": (
-            "Control Plane API and dashboard returning 500 errors globally. "
-            "Recent service configuration release deployed at 11:40 UTC."
+            "Cloudflare control plane and analytics services experienced an outage. "
+            "Customers saw HTTP 500 errors when attempting to make modifications through "
+            "our dashboard or API following an infrastructure power failure and failover configuration release."
         ),
         "logs": [
             {
@@ -52,8 +53,9 @@ REAL_ESCALATIONS = {
         "service": "db-cluster",
         "published_root_cause": "Bad deploy",
         "ticket": (
-            "Database cluster showing 500 errors and network topology corruption after "
-            "database topology migration deploy at 23:00 UTC."
+            "Multiple services on GitHub.com were affected by a network partition during optical "
+            "equipment maintenance, leading to database replica topology failures and 500 errors "
+            "presenting stale and inconsistent information across the site."
         ),
         "logs": [
             {
@@ -86,8 +88,8 @@ REAL_ESCALATIONS = {
         "service": "ec2-api",
         "published_root_cause": "Customer-facing outage",
         "ticket": (
-            "EC2 API and AWS Management Console down in US-EAST-1. "
-            "Major sev-1 customer-facing outage across all customers."
+            "AWS Management Console and EC2 APIs experienced latency and packet loss in US-EAST-1, "
+            "causing a major customer-facing outage across internal control networks."
         ),
         "logs": [
             {
@@ -120,8 +122,8 @@ REAL_ESCALATIONS = {
         "service": "slack-gateway",
         "published_root_cause": "Customer-facing outage",
         "ticket": (
-            "Slack connection failures and messaging down globally. "
-            "Customer-facing outage affecting all workspaces."
+            "Slack users are unable to connect or boot their clients, encountering connection "
+            "timeouts and error pages across web and desktop applications during a major incident."
         ),
         "logs": [
             {
@@ -154,8 +156,8 @@ REAL_ESCALATIONS = {
         "service": "metrics-worker",
         "published_root_cause": "Process needs a restart",
         "ticket": (
-            "Metrics intake worker container crashing repeatedly. "
-            "Memory looks exhausted and systemd unit reloads killed the process."
+            "A systemd update on container VMs caused CNI routing rules to be deleted upon "
+            "service restart, leaving metrics worker instances disconnected from the network with crashing processes."
         ),
         "logs": [
             {
@@ -188,7 +190,8 @@ REAL_ESCALATIONS = {
         "service": "build-runner",
         "published_root_cause": "Process needs a restart",
         "ticket": (
-            "Build runner processes crashing and memory exhausted following system lockdown."
+            "Following an unauthorized access incident, emergency secrets rotation and system "
+            "lockdown caused build runner workers to crash and memory limits to fail."
         ),
         "logs": [
             {
@@ -221,7 +224,8 @@ REAL_ESCALATIONS = {
         "service": "edge-proxy",
         "published_root_cause": "Bad deploy",
         "ticket": (
-            "Edge proxy returning 500 errors after bad deploy configuration rollout at 09:58 UTC."
+            "A valid customer configuration update activated an undiscovered bug in a previous software deploy, "
+            "causing 85 percent of the edge proxy network to return 500 errors."
         ),
         "logs": [
             {
@@ -254,7 +258,8 @@ REAL_ESCALATIONS = {
         "service": "jira-cloud",
         "published_root_cause": "Customer-facing outage",
         "ticket": (
-            "Jira Cloud sites down for customer tenants. Major sev-1 customer-facing outage."
+            "An automated deletion script passed incorrect site IDs during legacy app cleanup, "
+            "resulting in the unexpected deletion of customer tenant sites and a severe outage."
         ),
         "logs": [
             {
@@ -287,7 +292,8 @@ REAL_ESCALATIONS = {
         "service": "cloud-storage-api",
         "published_root_cause": "Bad deploy",
         "ticket": (
-            "Cloud storage API returning 500 error rate jump after edge network route deploy."
+            "A bug in the configuration pipeline allowed a race condition that pushed a corrupted "
+            "routing configuration deploy to external proxy load balancers, returning HTTP 404/500 errors."
         ),
         "logs": [
             {
@@ -320,7 +326,8 @@ REAL_ESCALATIONS = {
         "service": "reddit-feed",
         "published_root_cause": "Bad deploy",
         "ticket": (
-            "Reddit feed service returning 500 errors after Kubernetes CNI plugin deploy."
+            "Upgrading a core Kubernetes cluster from 1.23 to 1.24 introduced an unexpected route "
+            "reflector network failure, bringing down internal DNS and causing a 314-minute outage."
         ),
         "logs": [
             {
@@ -353,7 +360,8 @@ REAL_ESCALATIONS = {
         "service": "chat-api",
         "published_root_cause": "Customer-facing outage",
         "ticket": (
-            "ChatGPT API down with 500 and 503 errors globally. Sev-1 customer-facing outage."
+            "ChatGPT and API services experienced periodic outages and high error rates due to "
+            "abnormal traffic patterns and gateway saturation."
         ),
         "logs": [
             {
@@ -386,7 +394,8 @@ REAL_ESCALATIONS = {
         "service": "slug-compiler",
         "published_root_cause": "Process needs a restart",
         "ticket": (
-            "Slug compiler background worker crashing continuously. Memory and disk exhausted."
+            "Application builds are stuck queued or timing out due to background worker disk "
+            "and memory exhaustion from orphan build artifacts."
         ),
         "logs": [
             {

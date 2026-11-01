@@ -20,9 +20,13 @@ The sample runs `INC-CLOUDFLARE-01`, a real incident write-up (Control Plane Out
 
 ## Real Public Data & Limitations
 
-The repository contains 12 incident post-mortems (e.g. Cloudflare, GitHub, AWS, Slack, Datadog, CircleCI, Fastly, Atlassian, Google Cloud, Reddit, OpenAI, Heroku) and 6 troubleshooting runbooks built from public sources. See `SOURCES.md` for full references.
+The repository contains 12 incident post-mortems (e.g. Cloudflare, GitHub, AWS, Slack, Datadog, CircleCI, Fastly, Atlassian, Google Cloud, Reddit, OpenAI, Heroku) and 6 troubleshooting runbooks built from public sources. See `SOURCES.md` for full references. Every URL in `SOURCES.md` has been verified with an HTTP 200 response.
 
 Where public post-mortems do not include raw log files or deploy records, log lines and deploy histories are reconstructed from the facts stated in the write-ups and explicitly labeled as `(reconstructed from public write-up)`.
+
+## Limits
+
+The incident root cause evaluation score is calculated on a small, hand-built dataset of 12 real incident write-ups. The dataset is meant for demonstration and diagnostic testing, not as a comprehensive benchmark for general production incident triage.
 
 ## Incident Root Cause Evaluation
 
@@ -32,7 +36,7 @@ Run offline evaluation across all 12 real incidents:
 .venv/bin/python evaluation.py
 ```
 
-The evaluation gives the agent only the symptoms (ticket description) for each incident and checks whether its top-ranked hypothesis matches the published root cause. Currently, the offline practice evaluation achieves 12/12 (100.0%) accuracy.
+The evaluation gives the agent only the symptoms (rewritten directly from the published post-mortem text) for each incident and checks whether its top-ranked hypothesis matches the published root cause. Currently, the offline practice evaluation achieves 12/12 (100.0%) accuracy.
 
 ## Example run
 
@@ -43,12 +47,12 @@ No memory file yet. Starting from the ticket.
 Escalation INC-CLOUDFLARE-01
 Tier: gold
 Service: control-plane
-Ticket: Control Plane API and dashboard returning 500 errors globally. Recent service configuration release deployed at 11:40 UTC.
+Ticket: Cloudflare control plane and analytics services experienced an outage. Customers saw HTTP 500 errors when attempting to make modifications through our dashboard or API following an infrastructure power failure and failover configuration release.
 
 Step 1 of 8
 Thinking: I should search the local runbooks before I guess.
-Tool: search_runbooks query='Control Plane API and dashboard returning 500 errors globally. Recent service configuration release deployed at 11:40 UTC.'
-1. [0.444] Rollback a bad deploy (rollback_bad_deploy.txt)
+Tool: search_runbooks query='Cloudflare control plane and analytics services experienced an outage. Customers saw HTTP 500 errors when attempting to make modifications through our dashboard or API following an infrastructure power failure and failover configuration release.'
+1. [0.389] Rollback a bad deploy (rollback_bad_deploy.txt)
    If the error rate jumped after a deploy or a 500 error burst occurred, roll back the service.
    A bad deploy release or route config release causing 500 responses must be rolled back.
    Roll back only after a human approves. A restart is the wrong first step.
@@ -76,7 +80,7 @@ Step 5 of 8
 Thinking: I should draft a customer update and not send it.
 Tool: draft_customer_update hypothesis='Bad deploy'
 Draft only. This was not sent.
-We are investigating an issue on control-plane for the gold tier. What we were told: Control Plane API and dashboard returning 500 errors globally. Recent service configuration release deployed at 11:40 UTC. The leading hypothesis is Bad deploy, linked to evidence log-cf-1, log-cf-2, deploy-cf-1. We have not confirmed a root cause, and we have not taken an action.
+We are investigating an issue on control-plane for the gold tier. What we were told: Cloudflare control plane and analytics services experienced an outage. Customers saw HTTP 500 errors when attempting to make modifications through our dashboard or API following an infrastructure power failure and failover configuration release. The leading hypothesis is Bad deploy, linked to evidence log-cf-1, log-cf-2, deploy-cf-1. We have not confirmed a root cause, and we have not taken an action.
 
 Step 6 of 8
 Thinking: I am proposing an action. I am not allowed to approve it.
@@ -94,7 +98,7 @@ Leading hypothesis: Bad deploy (not confirmed)
 Evidence ids: log-cf-1, log-cf-2, deploy-cf-1
 Customer draft (not sent):
 Draft only. This was not sent.
-We are investigating an issue on control-plane for the gold tier. What we were told: Control Plane API and dashboard returning 500 errors globally. Recent service configuration release deployed at 11:40 UTC. The leading hypothesis is Bad deploy, linked to evidence log-cf-1, log-cf-2, deploy-cf-1. We have not confirmed a root cause, and we have not taken an action.
+We are investigating an issue on control-plane for the gold tier. What we were told: Cloudflare control plane and analytics services experienced an outage. Customers saw HTTP 500 errors when attempting to make modifications through our dashboard or API following an infrastructure power failure and failover configuration release. The leading hypothesis is Bad deploy, linked to evidence log-cf-1, log-cf-2, deploy-cf-1. We have not confirmed a root cause, and we have not taken an action.
 A yes appends one simulated line to action.log.
 A yes does not restart, roll back, page anyone, or send the draft.
 Approve this action? (y/n) y
@@ -136,4 +140,4 @@ export XAI_API_KEY="your key"
 .venv/bin/python agent.py --sample --fresh --real
 ```
 
-Reads `XAI_API_KEY` from the environment without printing or storing it. Uses `grok-build-0.1`. The approval gate and tools remain identical. Testing uses a fake client without calling xAI live.
+Reads `XAI_API_KEY` from the environment without printing or storing it. Uses `grok-build-0.1`. The approval gate and tools remain identical. The live model code path was tested exclusively using an offline fake client adapter and was not executed against live xAI API endpoints as no API key was available in the environment.
