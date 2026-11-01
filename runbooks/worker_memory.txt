@@ -1,6 +1,5 @@
-# Worker memory pressure
+# Restart a crashing process or memory exhausted worker
 
-The image worker keeps crashing when memory is exhausted.
-An oom killer line in the logs means the process died.
-Restart that worker only after a human approves.
-A memory crash is about the process.
+If a worker container, compiler, or process keeps crashing or memory is exhausted, restart it.
+When memory is exhausted or the oom killer fired on a process, a restart clears the memory limit.
+Restart the service only after a human approves.

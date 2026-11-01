@@ -9,9 +9,8 @@ def test_list_prints_the_practice_catalog(capsys):
     code = main(["--list"])
     assert code == 0
     out = capsys.readouterr().out
-    assert "ESC-1001" in out
-    assert "ESC-1005" in out
-    assert "Checkout 500s after a deploy" in out
+    assert "INC-CLOUDFLARE-01" in out
+    assert "INC-GITHUB-02" in out
 
 
 def test_sample_defer_saves_memory_and_does_not_ask(tmp_path, capsys):
@@ -31,7 +30,7 @@ def test_sample_defer_saves_memory_and_does_not_ask(tmp_path, capsys):
     assert "Stop reason: APPROVAL_REQUIRED" in out
     assert "Approve this action? (y/n)" not in out
     assert not log.exists()
-    saved = json.loads((memory / "ESC-1001.json").read_text(encoding="utf-8"))
+    saved = json.loads((memory / "INC-CLOUDFLARE-01.json").read_text(encoding="utf-8"))
     assert saved["pending_approval"]["status"] == "pending"
     assert saved["pending_approval"]["kind"] == "rollback"
 
