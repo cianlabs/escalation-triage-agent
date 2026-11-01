@@ -1,5 +1,5 @@
-# Customer-facing outage
+# Handle customer-facing outage
 
-Page oncall when checkout is down or unavailable for a customer.
-A sev-1 outage needs a human.
-Do not change the service until that human approves a specific action.
+Page oncall when a service is down, unavailable, or experiencing a customer-facing outage.
+A sev-1 outage or major customer-facing outage needs an on-call engineer immediately.
+Page oncall only after a human approves. Do not change the service until that human approves a specific action.

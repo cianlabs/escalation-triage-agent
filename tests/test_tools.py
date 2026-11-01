@@ -47,7 +47,7 @@ def test_search_runbooks_rejects_a_non_string():
 def test_read_logs_returns_evidence_ids():
     result = read_logs("ESC-1001")
     assert [row["id"] for row in result["evidence"]] == ["log-1", "log-2"]
-    assert result["evidence"][0]["source"] == "checkout-api.log"
+    assert "checkout-api.log" in result["evidence"][0]["source"]
 
 
 def test_read_logs_unknown_escalation_is_named():

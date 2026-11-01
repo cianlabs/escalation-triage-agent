@@ -1,4 +1,4 @@
-# Slow dashboard checks
+# Handle slow dashboard performance
 
-Look at the dashboard logs and the latest release before you change anything.
-A slow page is not, by itself, a reason to restart a service.
+If dashboard or web response time is slow, review database connection pool limits.
+Check query performance and verify connection pooler status before taking action.

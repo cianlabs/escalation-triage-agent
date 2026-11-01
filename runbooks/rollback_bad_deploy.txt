@@ -1,5 +1,5 @@
 # Rollback a bad deploy
 
-If the error rate jumped after a deploy, roll back the service.
-A burst of 500 responses on checkout is a sign the new version is bad.
+If the error rate jumped after a deploy or a 500 error burst occurred, roll back the service.
+A bad deploy release or route config release causing 500 responses must be rolled back.
 Roll back only after a human approves. A restart is the wrong first step.

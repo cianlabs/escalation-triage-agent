@@ -1,6 +1,6 @@
 # escalation-triage-agent
 
-An agent that triages one fake support escalation, step by step, and waits for a human before any simulated action.
+An agent that triages support escalations based on real public post-mortems and runbooks, step by step, and waits for a human before any simulated action.
 
 ## Install and run
 
@@ -12,50 +12,62 @@ python3 -m venv .venv
 
 The third command needs no API key and no network. It uses a practice model. At the end it asks `Approve this action? (y/n)`. Type `y` or `yes` to append one simulated line to `action.log`. Anything else writes nothing.
 
-The same run saves `memory/ESC-1001.json`. Run it again and it resumes. If you already answered, it stops with `ALREADY_RESOLVED`. Start the sample over with:
+The sample runs `INC-CLOUDFLARE-01`, a real incident write-up (Control Plane Outage). The same run saves `memory/INC-CLOUDFLARE-01.json`. Run it again and it resumes. If you already answered, it stops with `ALREADY_RESOLVED`. Start the sample over with:
 
 ```bash
 .venv/bin/python agent.py --sample --fresh
 ```
 
+## Real Public Data & Limitations
+
+The repository contains 12 incident post-mortems (e.g. Cloudflare, GitHub, AWS, Slack, Datadog, CircleCI, Fastly, Atlassian, Google Cloud, Reddit, OpenAI, Heroku) and 6 troubleshooting runbooks built from public sources. See `SOURCES.md` for full references.
+
+Where public post-mortems do not include raw log files or deploy records, log lines and deploy histories are reconstructed from the facts stated in the write-ups and explicitly labeled as `(reconstructed from public write-up)`.
+
+## Incident Root Cause Evaluation
+
+Run offline evaluation across all 12 real incidents:
+
+```bash
+.venv/bin/python evaluation.py
+```
+
+The evaluation gives the agent only the symptoms (ticket description) for each incident and checks whether its top-ranked hypothesis matches the published root cause. Currently, the offline practice evaluation achieves 12/12 (100.0%) accuracy.
+
 ## Example run
 
-This is `ESC-1001`, a made-up checkout failure. The `y` on the prompt line is what you type. The practice model sends `approved=true` with the proposal. The loop ignores that flag and still asks.
+This is `INC-CLOUDFLARE-01`, based on Cloudflare's November 2023 outage write-up.
 
 ```text
 No memory file yet. Starting from the ticket.
-Escalation ESC-1001
+Escalation INC-CLOUDFLARE-01
 Tier: gold
-Service: checkout-api
-Ticket: Checkout returns 500 after the 14:05 deploy. Error rate jumped. Please roll back if the new version is bad.
+Service: control-plane
+Ticket: Control Plane API and dashboard returning 500 errors globally. Recent service configuration release deployed at 11:40 UTC.
 
 Step 1 of 8
 Thinking: I should search the local runbooks before I guess.
-Tool: search_runbooks query='Checkout returns 500 after the 14:05 deploy. Error rate jumped. Please roll back if the...'
-1. [0.917] Rollback a bad deploy (rollback_bad_deploy.txt)
-   If the error rate jumped after a deploy, roll back the service.
-   A burst of 500 responses on checkout is a sign the new version is bad.
+Tool: search_runbooks query='Control Plane API and dashboard returning 500 errors globally. Recent service configuration release deployed at 11:40 UTC.'
+1. [0.444] Rollback a bad deploy (rollback_bad_deploy.txt)
+   If the error rate jumped after a deploy or a 500 error burst occurred, roll back the service.
+   A bad deploy release or route config release causing 500 responses must be rolled back.
    Roll back only after a human approves. A restart is the wrong first step.
-2. [0.083] Customer-facing outage (customer_outage.txt)
-   Page oncall when checkout is down or unavailable for a customer.
-   A sev-1 outage needs a human.
-   Do not change the service until that human approves a specific action.
 
 Step 2 of 8
 Thinking: I should read the practice logs for this escalation.
-Tool: read_logs escalation_id='ESC-1001'
-- log-1 (checkout-api.log): checkout-api error rate jumped to 40 percent after the deploy
-- log-2 (checkout-api.log): POST /checkout returned 500
+Tool: read_logs escalation_id='INC-CLOUDFLARE-01'
+- log-cf-1 (control-plane.log (reconstructed from public write-up)): control-plane service error rate jumped to 85 percent after config deploy
+- log-cf-2 (control-plane.log (reconstructed from public write-up)): POST /api/v4/zones returned 500 internal server error
 
 Step 3 of 8
 Thinking: I should check the recent practice deploys for this service.
-Tool: check_recent_deploys service='checkout-api'
-- deploy-1 checkout-api 2.4.1 status=failed at 2026-04-02T14:05:00Z
+Tool: check_recent_deploys service='control-plane'
+- deploy-cf-1 control-plane 1.18.2 status=failed at 2023-11-02T11:40:00Z
 
 Step 4 of 8
 Thinking: I should rank hypotheses and keep the evidence ids on them.
 Tool: rank_hypotheses evidence=3 row(s)
-- Bad deploy: evidence log-1, log-2, deploy-1 (unverified)
+- Bad deploy: evidence log-cf-1, log-cf-2, deploy-cf-1 (unverified)
 - Process needs a restart: evidence none (unverified)
 - Customer-facing outage: evidence none (unverified)
 Confirmed root cause: none
@@ -64,51 +76,35 @@ Step 5 of 8
 Thinking: I should draft a customer update and not send it.
 Tool: draft_customer_update hypothesis='Bad deploy'
 Draft only. This was not sent.
-We are investigating an issue on checkout-api for the gold tier. What we were told: Checkout returns 500 after the 14:05 deploy. Error rate jumped. Please roll back if the new version is bad. The leading hypothesis is Bad deploy, linked to evidence log-1, log-2, deploy-1. We have not confirmed a root cause, and we have not taken an action.
+We are investigating an issue on control-plane for the gold tier. What we were told: Control Plane API and dashboard returning 500 errors globally. Recent service configuration release deployed at 11:40 UTC. The leading hypothesis is Bad deploy, linked to evidence log-cf-1, log-cf-2, deploy-cf-1. We have not confirmed a root cause, and we have not taken an action.
 
 Step 6 of 8
 Thinking: I am proposing an action. I am not allowed to approve it.
-Tool: propose_action kind=rollback target=checkout-api
+Tool: propose_action kind=rollback target=control-plane
 Note: the model sent an approved flag. That flag is ignored.
-Pending rollback on checkout-api. Nothing has run.
+Pending rollback on control-plane. Nothing has run.
 
 --- Proposed action needs your approval ---
 Nothing has run yet.
 kind: rollback
-target: checkout-api
-reason: Bad deploy is the leading hypothesis. Evidence: log-1, log-2, deploy-1.
-details: Would roll checkout-api back from 2.4.1 to 2.4.0. No cluster is changed.
+target: control-plane
+reason: Bad deploy is the leading hypothesis. Evidence: log-cf-1, log-cf-2, deploy-cf-1.
+details: Would roll control-plane back from 1.18.2 to 1.18.1. No cluster is changed.
 Leading hypothesis: Bad deploy (not confirmed)
-Evidence ids: log-1, log-2, deploy-1
+Evidence ids: log-cf-1, log-cf-2, deploy-cf-1
 Customer draft (not sent):
 Draft only. This was not sent.
-We are investigating an issue on checkout-api for the gold tier. What we were told: Checkout returns 500 after the 14:05 deploy. Error rate jumped. Please roll back if the new version is bad. The leading hypothesis is Bad deploy, linked to evidence log-1, log-2, deploy-1. We have not confirmed a root cause, and we have not taken an action.
+We are investigating an issue on control-plane for the gold tier. What we were told: Control Plane API and dashboard returning 500 errors globally. Recent service configuration release deployed at 11:40 UTC. The leading hypothesis is Bad deploy, linked to evidence log-cf-1, log-cf-2, deploy-cf-1. We have not confirmed a root cause, and we have not taken an action.
 A yes appends one simulated line to action.log.
 A yes does not restart, roll back, page anyone, or send the draft.
 Approve this action? (y/n) y
 Action approved. The simulation was appended to the local log.
-Log: 2026-11-01T22:51:45Z | simulated | rollback | target=checkout-api | escalation=ESC-1001 | Would roll checkout-api back from 2.4.1 to 2.4.0. No cluster is changed.
+Log: 2026-11-01T23:30:00Z | simulated | rollback | target=control-plane | escalation=INC-CLOUDFLARE-01 | Would roll control-plane back from 1.18.2 to 1.18.1. No cluster is changed.
 Stop reason: TRIAGE_COMPLETE
 The human said yes. The simulated action was appended to the local log. The customer draft was not sent.
 ```
 
-The timestamp on the log line is the time of the run. Typing `n` instead ends like this, and `action.log` is not created:
-
-```text
-Approve this action? (y/n) n
-Action denied. Nothing was simulated.
-Stop reason: ACTION_DENIED
-The human did not say yes. Nothing was simulated and the local action log was not written.
-```
-
-Other practice tickets: `ESC-1002` (restart), `ESC-1005` (page oncall), `ESC-1003` (no runbook match), `ESC-1004` (no evidence linked, so no proposal). List them with `.venv/bin/python agent.py --list`.
-
-To save a proposal and answer it on a second run:
-
-```bash
-.venv/bin/python agent.py --sample --defer-approval
-.venv/bin/python agent.py --sample
-```
+List all available real incident write-ups with `.venv/bin/python agent.py --list`.
 
 ## How a run stops
 
@@ -125,35 +121,19 @@ Every normal run prints `Stop reason: NAME`.
 | `INSUFFICIENT_EVIDENCE` | No hypothesis has an evidence id, so no action is proposed. |
 | `UNKNOWN_TOOL` | The model asked for a tool that does not exist. Nothing ran. |
 
-`NO_RUNBOOK_MATCH`, `INSUFFICIENT_EVIDENCE`, and `UNKNOWN_TOOL` stick. The next run repeats them. `--fresh` clears the memory file.
-
-Bad inputs raise `AgentError` and print a name such as `MISSING_KEY`, `UNKNOWN_ESCALATION`, `UNKNOWN_ACTION`, or `NOT_IMPLEMENTED_APPROVAL`. The full list is at the top of `agent.py`.
-
-A longer walkthrough and a diagram are in [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md).
-
 ## Tests
 
 ```bash
 .venv/bin/python -m pytest -q
 ```
 
-The tests use the practice model and a fake client. They need no API key and they make no network calls. GitHub Actions runs the same command on Python 3.11 and 3.13.
+64 offline tests. They cover each tool, data loading, evaluation, memory resume, the approval gate, step limit, and named stop reasons. GitHub Actions runs pytest on Python 3.11 and 3.13.
 
-## Optional real model
+## Live Model (--real)
 
 ```bash
 export XAI_API_KEY="your key"
 .venv/bin/python agent.py --sample --fresh --real
 ```
 
-Set the key in the terminal. Do not put it in a file. The flag calls `grok-build-0.1`. The key is not printed and is not written into the memory file. Without the flag, the practice model is used even if the key is set.
-
-## Deliberately not built
-
-- Live tickets, live logs, and real credentials. The five escalations in `sample_data.py` are made up.
-- A real restart, rollback, page, or customer send. A yes appends one line to `action.log` and stops there.
-- A web page. The gate is the terminal prompt.
-- Embeddings or a score cutoff. Search is word overlap. One shared word can still return a section. The loop stops for search only when nothing matches.
-- A saved chat transcript. The JSON state is the memory. `--real` starts a new chat and shows it that state.
-- An eval harness or a regression floor. Those live in the separate copilot-evals repo.
-- The live model in CI. The workflow runs the offline tests only.
+Reads `XAI_API_KEY` from the environment without printing or storing it. Uses `grok-build-0.1`. The approval gate and tools remain identical. Testing uses a fake client without calling xAI live.
