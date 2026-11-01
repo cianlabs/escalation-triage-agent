@@ -121,6 +121,29 @@ def test_draft_customer_update_is_text_only_and_drops_invented_ids():
     assert "log-1" in draft["text"]
     assert "made-up" not in draft["text"]
     assert "gold" in draft["text"]
+    assert "What we were told: Checkout returns 500. The leading hypothesis" in draft["text"]
+
+
+def test_draft_customer_update_punctuation_and_shortened_summary():
+    draft_no_punct = draft_customer_update(
+        "ESC-1001",
+        "gold",
+        "checkout-api",
+        "Checkout returns 500",
+        "Bad deploy",
+        ["log-1"],
+    )
+    assert "What we were told: Checkout returns 500. The leading hypothesis" in draft_no_punct["text"]
+
+    draft_short = draft_customer_update(
+        "ESC-1001",
+        "gold",
+        "checkout-api",
+        "Control plane outage",
+        "Bad deploy",
+        ["log-1"],
+    )
+    assert "What we were told: Control plane outage. The leading hypothesis" in draft_short["text"]
 
 
 def test_propose_action_does_not_write_and_ignores_approved(tmp_path, monkeypatch):

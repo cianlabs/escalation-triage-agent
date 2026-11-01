@@ -75,4 +75,6 @@ Follow one arrow at a time. The sample ticket `INC-CLOUDFLARE-01` takes the long
 
 ## Live Model (--real)
 
-`RealModel` in `agent.py` supports `--real` using `grok-build-0.1`. It reads `XAI_API_KEY` from the environment without printing or storing it. In tests, a fake client stands in for the live xAI client so no API key or network is needed. The live model path was tested only with this offline fake client and was not executed live.
+`RealModel` in `agent.py` supports `--real` using `grok-build-0.1`. It reads `XAI_API_KEY` from the environment without printing or storing it.
+
+The `--real` path was run live once, by the owner in his own Terminal on Nov 1 2026, on one ticket (INC-CLOUDFLARE-01) with the grok-build-0.1 model, and it completed with the same tool order as the practice model and the approval gate unchanged. This was one ticket and one run, not a broad test. Outside of that single live run, in tests, a fake client stands in for the live xAI client so no API key or network is needed, and automated CI runs do not execute against live endpoints.
