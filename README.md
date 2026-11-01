@@ -131,7 +131,7 @@ Every normal run prints `Stop reason: NAME`.
 .venv/bin/python -m pytest -q
 ```
 
-64 offline tests. They cover each tool, data loading, evaluation, memory resume, the approval gate, step limit, and named stop reasons. GitHub Actions runs pytest on Python 3.11 and 3.13.
+65 offline tests. They cover each tool, data loading, evaluation, memory resume, the approval gate, step limit, and named stop reasons. GitHub Actions runs pytest on Python 3.11 and 3.13.
 
 ## Live Model (--real)
 
@@ -140,4 +140,6 @@ export XAI_API_KEY="your key"
 .venv/bin/python agent.py --sample --fresh --real
 ```
 
-Reads `XAI_API_KEY` from the environment without printing or storing it. Uses `grok-build-0.1`. The approval gate and tools remain identical. The live model code path was tested exclusively using an offline fake client adapter and was not executed against live xAI API endpoints as no API key was available in the environment.
+Reads `XAI_API_KEY` from the environment without printing or storing it. Uses `grok-build-0.1`. The approval gate and tools remain identical.
+
+The `--real` path was run live once, by the owner in his own Terminal on Nov 1 2026, on one ticket (INC-CLOUDFLARE-01) with the grok-build-0.1 model, and it completed with the same tool order as the practice model and the approval gate unchanged. This was one ticket and one run, not a broad test. Outside of that single live run, the live model code path is tested using an offline fake client adapter and is not executed against live xAI API endpoints in automated tests or CI.

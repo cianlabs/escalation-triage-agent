@@ -244,10 +244,13 @@ def draft_customer_update(escalation_id, customer_tier, service, symptom, hypoth
         if evidence_id in known and evidence_id not in cited:
             cited.append(evidence_id)
     id_text = ", ".join(cited) if cited else "none"
+    symptom_text = symptom.strip()
+    if symptom_text and not symptom_text.endswith((".", "!", "?")):
+        symptom_text += "."
     text = (
         "Draft only. This was not sent.\n"
         f"We are investigating an issue on {service} for the {customer_tier} tier. "
-        f"What we were told: {symptom} "
+        f"What we were told: {symptom_text} "
         f"The leading hypothesis is {hypothesis_title}, linked to evidence {id_text}. "
         "We have not confirmed a root cause, and we have not taken an action."
     )
