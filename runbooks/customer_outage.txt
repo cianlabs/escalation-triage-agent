@@ -1,0 +1,5 @@
+# Customer-facing outage
+
+Page oncall when checkout is down or unavailable for a customer.
+A sev-1 outage needs a human.
+Do not change the service until that human approves a specific action.

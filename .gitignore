@@ -1,0 +1,24 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Key and secret files. Never commit these.
+.env
+.env.*
+*.key
+*.pem
+secrets/
+
+# Python junk
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# macOS
+.DS_Store
+
+# One escalation's memory, and the simulated action log.
+# Both are local practice output. They are not source.
+memory/
+action.log

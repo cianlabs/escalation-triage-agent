@@ -1,0 +1,4 @@
+# Slow dashboard checks
+
+Look at the dashboard logs and the latest release before you change anything.
+A slow page is not, by itself, a reason to restart a service.
