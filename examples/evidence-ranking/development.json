@@ -1,0 +1,8 @@
+{
+  "incident_id": "PRACTICE-NETWORK",
+  "symptom": "Our dashboard and alerts stopped working.",
+  "evidence": [
+    {"id": "route-check", "source": "synthetic network check", "observation": "The routing table is missing a route to the application network."},
+    {"id": "timing", "source": "synthetic update record", "observation": "An operating system update completed shortly before connectivity was lost."}
+  ]
+}

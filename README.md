@@ -4,6 +4,20 @@ A practice support agent that searches local runbooks, reads synthetic evidence,
 
 The public incident evaluation is separate from those synthetic workflow fixtures. It uses verified user-impact observations from 30 distinct incidents and calls this repository's unchanged ranking tool.
 
+## Investigate concrete evidence
+
+A new, separate investigation mode looks for specific mechanism clues and explains why each might matter. It can suggest a routing failure from a missing route, or an authentication failure from a rejected token. Generic error pages and unavailable services are insufficient evidence. Negated or speculative clues do not become support, and conflicting observations remain visible.
+
+```sh
+.venv/bin/python agent.py --investigate examples/evidence-ranking/development.json
+```
+
+The example is synthetic. It reports a missing route and returns an unverified network-routing hypothesis, the exact supporting clue and a suggested comparison with a healthy host. It does not claim that an operating-system update caused the problem just because one happened earlier.
+
+This mode is read-only and uses deterministic rules, not a live model. It never enters the workflow approval path, reads saved cases, writes memory or proposes an action. It always leaves the confirmed root cause empty. Without a concrete clue it says it does not have enough evidence instead of ranking a default guess. Existing workflow commands remain available separately.
+
+The frozen synthetic challenge matches 11/12 expected behaviors; certificate expiry remains a visible miss. All 30 existing public user-impact records yield insufficient evidence in this mode. Neither number establishes general incident-diagnosis accuracy. The original baseline below is unchanged. See [the explanation and input format](docs/EVIDENCE_RANKING.md) and [the full synthetic challenge results](docs/INVESTIGATION_CHALLENGE.md).
+
 ## Public incident baseline
 
 | Overall top-1 | Overall top-3 | Vague symptom top-1 | Correctly cautious |
