@@ -16,6 +16,7 @@ class EvidenceCheck:
     name: str
     read: object
     timeout_seconds: float = 1.0
+    data_kind: str = "unspecified"
 
 
 def validate_checks(checks):
@@ -28,6 +29,8 @@ def validate_checks(checks):
         if check.name in names or '::' in check.name:
             raise AgentError('BAD_SETTINGS', 'Check names must be unique and cannot contain ::.')
         names.add(check.name)
+        if check.data_kind not in ('unspecified', 'synthetic', 'public_status'):
+            raise AgentError('BAD_SETTINGS', 'Unknown source data kind.')
         if not callable(check.read):
             raise AgentError('BAD_SETTINGS', 'Each check needs an async reader function.')
         if isinstance(check.timeout_seconds, bool) or not isinstance(check.timeout_seconds, (int, float)) or not math.isfinite(check.timeout_seconds) or check.timeout_seconds <= 0:
@@ -37,7 +40,7 @@ def validate_checks(checks):
 async def _run_check(check):
     loop = asyncio.get_running_loop()
     started = loop.time()
-    result = dict(name=check.name, evidence=[], timeout_seconds=check.timeout_seconds)
+    result = dict(name=check.name, evidence=[], timeout_seconds=check.timeout_seconds, data_kind=check.data_kind)
     try:
         raw = await asyncio.wait_for(check.read(), timeout=check.timeout_seconds)
     except asyncio.CancelledError:
@@ -61,7 +64,9 @@ async def _run_check(check):
                           'The check finished without observations. This is not evidence that the service is healthy.',
                           evidence=[dict(id=f'{check.name}::{row["id"]}',
                                          source=f'{check.name}: {row["source"]}',
-                                         observation=row['observation']) for row in rows])
+                                         observation=row['observation'], data_kind=check.data_kind,
+                                         **{key: original[key] for key in ('observed_at', 'source_updated_at', 'source_url', 'status_indicator', 'reported_description') if key in original})
+                                    for row, original in zip(rows, raw)])
     result['elapsed_ms'] = max(0, round((loop.time()-started)*1000))
     return result
 
@@ -80,11 +85,16 @@ async def collect_evidence(checks):
                 evidence=[row for source in sources for row in source['evidence']])
 
 
-async def collect_and_investigate(symptom, checks):
+async def collect_and_investigate(symptom, checks, *, allowed_data_kinds=None):
     # Validate before starting readers, even when the symptom is unusable.
     investigate(dict(symptom=symptom, evidence=[]))
     collection = await collect_evidence(checks)
-    result = investigate(dict(symptom=symptom, evidence=collection['evidence']))
+    selected = [row for row in collection['evidence'] if allowed_data_kinds is None or row['data_kind'] in allowed_data_kinds]
+    result = investigate(dict(symptom=symptom, evidence=selected))
+    result['evidence'] = [dict(row) for row in selected]
+    result['excluded_evidence_ids'] = [row['id'] for row in collection['evidence'] if allowed_data_kinds is not None and row['data_kind'] not in allowed_data_kinds]
+    if result['excluded_evidence_ids']:
+        result['message'] = 'Practice observations are shown separately and excluded from this investigation. '+result['message']
     result['collection'] = collection
     result['collection_incomplete'] = bool(collection['missing_sources'])
     if result['collection_incomplete']:
@@ -123,9 +133,9 @@ def simulated_checks(scenario='complete'):
         return [dict(id='1', source='synthetic service probe',
                      observation='The dashboard endpoint is unavailable.')]
 
-    return [EvidenceCheck('recent_errors', recent_errors, 0.1),
-            EvidenceCheck('recent_changes', recent_changes, 0.1),
-            EvidenceCheck('service_health', service_health, 0.1)]
+    return [EvidenceCheck('recent_errors', recent_errors, 0.1, data_kind='synthetic'),
+            EvidenceCheck('recent_changes', recent_changes, 0.1, data_kind='synthetic'),
+            EvidenceCheck('service_health', service_health, 0.1, data_kind='synthetic')]
 
 
 def run_simulated_collection(scenario):
@@ -134,8 +144,19 @@ def run_simulated_collection(scenario):
 
 def render_collection(result):
     collection = result['collection']
-    lines = ['Synthetic evidence collection. No real systems were contacted.',
+    heading = ('Mixed demonstration: GitHub status is live; recent errors and changes are synthetic.'
+               if result.get('collection_mode') == 'github_status' else
+               'Synthetic evidence collection. No real systems were contacted.')
+    lines = [heading,
              'Collection: '+collection['status'], '']
     for source in collection['sources']:
-        lines.append(f"- {source['name']}: {source['status']} ({source['elapsed_ms']} ms). {source['message']}")
+        lines.append(f"- {source['name']}: {source['status']} [{source['data_kind']}] ({source['elapsed_ms']} ms). {source['message']}")
+        if result.get('collection_mode') == 'github_status' and source['data_kind'] == 'synthetic':
+            lines.extend('  Practice clue (excluded): '+row['observation'] for row in source['evidence'])
+    if result.get('collection_mode') == 'github_status':
+        live = result['github_status']
+        lines += ['', 'GitHub reported status: '+(live['indicator'] if live['state']=='reported' else 'unknown'), 'Source: '+live['source_url']]
+        if live['state']=='reported':
+            lines += ['Provider description: '+live['description'], 'Fetched at: '+live['observed_at'], 'Status page updated at: '+live['source_updated_at']]
+        lines.append('Public aggregate status does not prove the cause or health of your own service.')
     return '\n'.join(lines)+'\n\n'+render_investigation(result)
