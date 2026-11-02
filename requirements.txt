@@ -3,3 +3,6 @@ pytest>=8
 
 # Only `python agent.py --real` imports this. The practice path does not.
 openai>=1.40
+
+# Public status connector. Async HTTP, also tested offline with MockTransport.
+httpx>=0.27,<1

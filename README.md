@@ -4,6 +4,16 @@ A practice support agent that searches local runbooks, reads synthetic evidence,
 
 The public incident evaluation is separate from those synthetic workflow fixtures. It uses verified user-impact observations from 30 distinct incidents and calls this repository's unchanged ranking tool.
 
+## Read GitHub public status
+
+```sh
+.venv/bin/python agent.py --github-status
+```
+
+One real helper reads GitHub's public status API alongside two clearly labeled simulated checks. The live observation keeps its source URL, fetch time and status-page update time. Practice clues are displayed separately and excluded from investigating the real status. No model, account key, saved-memory or action path is used.
+
+A failed, slow or malformed response means unknown, never healthy. GitHub's reported rollup describes provider impact and does not prove the cause or health of your service. The command exits 0 when it obtains a valid report, even if that report says major impact, and 1 when the live result is unknown. See [the source, failure rules and learning exercise](docs/GITHUB_STATUS.md).
+
 ## Collect three simulated sources concurrently
 
 ```sh
