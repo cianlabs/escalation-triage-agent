@@ -1,0 +1,531 @@
+[
+  {
+    "id": "INC-CLOUDFLARE-01",
+    "title": "Synthetic workflow fixture 1",
+    "customer_tier": "gold",
+    "service": "control-plane",
+    "ticket": "The service returns 500 errors after a practice deploy. Please investigate the failed change.",
+    "logs": [
+      {
+        "id": "log-cf-1",
+        "source": "control-plane.log (synthetic practice fixture)",
+        "observation": "control-plane service error rate jumped to 85 percent after config deploy"
+      },
+      {
+        "id": "log-cf-2",
+        "source": "control-plane.log (synthetic practice fixture)",
+        "observation": "POST /api/v4/zones returned 500 internal server error"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-cf-1",
+        "service": "control-plane",
+        "version": "1.18.2",
+        "previous_version": "1.18.1",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy release 1.18.2 caused 500 error rate jump"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "INC-GITHUB-02",
+    "title": "Synthetic workflow fixture 2",
+    "customer_tier": "gold",
+    "service": "db-cluster",
+    "ticket": "The service returns 500 errors after a practice deploy. Please investigate the failed change.",
+    "logs": [
+      {
+        "id": "log-gh-1",
+        "source": "db-cluster.log (synthetic practice fixture)",
+        "observation": "db-cluster error rate jumped following network topology deploy"
+      },
+      {
+        "id": "log-gh-2",
+        "source": "db-cluster.log (synthetic practice fixture)",
+        "observation": "database query returned 500 error split-brain replica state"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-gh-1",
+        "service": "db-cluster",
+        "version": "5.7.3-gh2",
+        "previous_version": "5.7.2-gh1",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy release 5.7.3-gh2 failed replica topology"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "INC-AWS-03",
+    "title": "Synthetic workflow fixture 3",
+    "customer_tier": "gold",
+    "service": "ec2-api",
+    "ticket": "The practice service is down and unavailable for customers. This is a sev-1 outage.",
+    "logs": [
+      {
+        "id": "log-aws-1",
+        "source": "ec2-api.log (synthetic practice fixture)",
+        "observation": "sev-1 outage: ec2-api is down and unavailable for customers"
+      },
+      {
+        "id": "log-aws-2",
+        "source": "ec2-api.log (synthetic practice fixture)",
+        "observation": "internal control network packet loss causing customer-facing outage"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-aws-1",
+        "service": "ec2-api",
+        "version": "4.12.0",
+        "previous_version": "4.11.9",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) release 4.12.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Customer-facing outage"
+  },
+  {
+    "id": "INC-SLACK-04",
+    "title": "Synthetic workflow fixture 4",
+    "customer_tier": "gold",
+    "service": "slack-gateway",
+    "ticket": "The practice service is down and unavailable for customers. This is a sev-1 outage.",
+    "logs": [
+      {
+        "id": "log-slack-1",
+        "source": "slack-gateway.log (synthetic practice fixture)",
+        "observation": "slack-gateway service unavailable and returning connection failures"
+      },
+      {
+        "id": "log-slack-2",
+        "source": "slack-gateway.log (synthetic practice fixture)",
+        "observation": "sev-1 outage: messaging service down for all web and mobile clients"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-slack-1",
+        "service": "slack-gateway",
+        "version": "2.90.0",
+        "previous_version": "2.89.4",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) release 2.90.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Customer-facing outage"
+  },
+  {
+    "id": "INC-DATADOG-05",
+    "title": "Synthetic workflow fixture 5",
+    "customer_tier": "gold",
+    "service": "metrics-worker",
+    "ticket": "The practice worker keeps crashing and memory looks exhausted.",
+    "logs": [
+      {
+        "id": "log-dd-1",
+        "source": "metrics-worker.log (synthetic practice fixture)",
+        "observation": "metrics-worker memory exhausted and process crash recorded"
+      },
+      {
+        "id": "log-dd-2",
+        "source": "metrics-worker.log (synthetic practice fixture)",
+        "observation": "oom killer fired on container node killing metrics-worker"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-dd-1",
+        "service": "metrics-worker",
+        "version": "7.42.0",
+        "previous_version": "7.41.1",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) metrics-worker release 7.42.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Process needs a restart"
+  },
+  {
+    "id": "INC-CIRCLECI-06",
+    "title": "Synthetic workflow fixture 6",
+    "customer_tier": "gold",
+    "service": "build-runner",
+    "ticket": "The practice worker keeps crashing and memory looks exhausted.",
+    "logs": [
+      {
+        "id": "log-cci-1",
+        "source": "build-runner.log (synthetic practice fixture)",
+        "observation": "build-runner process crash recorded after token revocation"
+      },
+      {
+        "id": "log-cci-2",
+        "source": "build-runner.log (synthetic practice fixture)",
+        "observation": "build-runner memory exhausted and worker killed"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-cci-1",
+        "service": "build-runner",
+        "version": "3.8.0",
+        "previous_version": "3.7.9",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) build-runner 3.8.0 release succeeded"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Process needs a restart"
+  },
+  {
+    "id": "INC-FASTLY-07",
+    "title": "Synthetic workflow fixture 7",
+    "customer_tier": "gold",
+    "service": "edge-proxy",
+    "ticket": "The service returns 500 errors after a practice deploy. Please investigate the failed change.",
+    "logs": [
+      {
+        "id": "log-fastly-1",
+        "source": "edge-proxy.log (synthetic practice fixture)",
+        "observation": "edge-proxy error rate jumped to 85 percent following bad deploy"
+      },
+      {
+        "id": "log-fastly-2",
+        "source": "edge-proxy.log (synthetic practice fixture)",
+        "observation": "GET / returned 500 internal server error across edge POPs"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-fastly-1",
+        "service": "edge-proxy",
+        "version": "2021.06.8",
+        "previous_version": "2021.05.12",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy release 2021.06.8 caused proxy crash"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "INC-ATLASSIAN-08",
+    "title": "Synthetic workflow fixture 8",
+    "customer_tier": "gold",
+    "service": "jira-cloud",
+    "ticket": "The practice service is down and unavailable for customers. This is a sev-1 outage.",
+    "logs": [
+      {
+        "id": "log-atl-1",
+        "source": "jira-cloud.log (synthetic practice fixture)",
+        "observation": "sev-1 outage: jira-cloud is down and site database is unavailable"
+      },
+      {
+        "id": "log-atl-2",
+        "source": "jira-cloud.log (synthetic practice fixture)",
+        "observation": "tenant database connection failed causing customer-facing outage"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-atl-1",
+        "service": "jira-cloud",
+        "version": "1001.0.0",
+        "previous_version": "1000.99.0",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) release 1001.0.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Customer-facing outage"
+  },
+  {
+    "id": "INC-GCP-09",
+    "title": "Synthetic workflow fixture 9",
+    "customer_tier": "gold",
+    "service": "cloud-storage-api",
+    "ticket": "The service returns 500 errors after a practice deploy. Please investigate the failed change.",
+    "logs": [
+      {
+        "id": "log-gcp-1",
+        "source": "cloud-storage-api.log (synthetic practice fixture)",
+        "observation": "cloud-storage-api error rate jumped to 40 percent after deploy"
+      },
+      {
+        "id": "log-gcp-2",
+        "source": "cloud-storage-api.log (synthetic practice fixture)",
+        "observation": "GET /object returned 500 internal server error"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-gcp-1",
+        "service": "cloud-storage-api",
+        "version": "21.11.16",
+        "previous_version": "21.11.10",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy release 21.11.16 failed edge routing"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "INC-REDDIT-10",
+    "title": "Synthetic workflow fixture 10",
+    "customer_tier": "gold",
+    "service": "reddit-feed",
+    "ticket": "The service returns 500 errors after a practice deploy. Please investigate the failed change.",
+    "logs": [
+      {
+        "id": "log-reddit-1",
+        "source": "reddit-feed.log (synthetic practice fixture)",
+        "observation": "reddit-feed error rate jumped to 60 percent following deploy"
+      },
+      {
+        "id": "log-reddit-2",
+        "source": "reddit-feed.log (synthetic practice fixture)",
+        "observation": "GET /r/all returned 500 internal server error"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-reddit-1",
+        "service": "reddit-feed",
+        "version": "1.12.0",
+        "previous_version": "1.11.4",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy release 1.12.0 broke pod CNI network"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "INC-OPENAI-11",
+    "title": "Synthetic workflow fixture 11",
+    "customer_tier": "gold",
+    "service": "chat-api",
+    "ticket": "The practice service is down and unavailable for customers. This is a sev-1 outage.",
+    "logs": [
+      {
+        "id": "log-oai-1",
+        "source": "chat-api.log (synthetic practice fixture)",
+        "observation": "sev-1 outage: chat-api is down and unavailable for customers"
+      },
+      {
+        "id": "log-oai-2",
+        "source": "chat-api.log (synthetic practice fixture)",
+        "observation": "gateway traffic saturation causing customer-facing outage"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-oai-1",
+        "service": "chat-api",
+        "version": "2.1.0",
+        "previous_version": "2.0.8",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) release 2.1.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Customer-facing outage"
+  },
+  {
+    "id": "INC-HEROKU-12",
+    "title": "Synthetic workflow fixture 12",
+    "customer_tier": "silver",
+    "service": "slug-compiler",
+    "ticket": "The practice worker keeps crashing and memory looks exhausted.",
+    "logs": [
+      {
+        "id": "log-heroku-1",
+        "source": "slug-compiler.log (synthetic practice fixture)",
+        "observation": "slug-compiler memory exhausted and process crash recorded"
+      },
+      {
+        "id": "log-heroku-2",
+        "source": "slug-compiler.log (synthetic practice fixture)",
+        "observation": "oom killer fired on worker node for slug-compiler process"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-heroku-1",
+        "service": "slug-compiler",
+        "version": "5.4.1",
+        "previous_version": "5.4.0",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) slug-compiler 5.4.1 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Process needs a restart"
+  },
+  {
+    "id": "ESC-1001",
+    "title": "Checkout 500s after a deploy",
+    "customer_tier": "gold",
+    "service": "checkout-api",
+    "ticket": "Checkout returns 500 after the 14:05 deploy. Error rate jumped. Please roll back if the new version is bad.",
+    "logs": [
+      {
+        "id": "log-1",
+        "source": "checkout-api.log (synthetic practice fixture)",
+        "observation": "checkout-api error rate jumped to 40 percent after the deploy"
+      },
+      {
+        "id": "log-2",
+        "source": "checkout-api.log (synthetic practice fixture)",
+        "observation": "POST /checkout returned 500"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-1",
+        "service": "checkout-api",
+        "version": "2.4.1",
+        "previous_version": "2.4.0",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) error rate jumped right after the deploy of 2.4.1"
+      }
+    ],
+    "data_kind": "synthetic_practice"
+  },
+  {
+    "id": "ESC-1002",
+    "title": "Image worker keeps crashing",
+    "customer_tier": "silver",
+    "service": "image-worker",
+    "ticket": "The image worker keeps crashing. Memory looks exhausted. The runbook says when to restart it.",
+    "logs": [
+      {
+        "id": "log-1",
+        "source": "image-worker.log (synthetic practice fixture)",
+        "observation": "image-worker memory exhausted and the oom killer fired"
+      },
+      {
+        "id": "log-2",
+        "source": "image-worker.log (synthetic practice fixture)",
+        "observation": "process crash recorded for image-worker"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-1",
+        "service": "image-worker",
+        "version": "3.2.0",
+        "previous_version": "3.1.4",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) image-worker release 3.2.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice"
+  },
+  {
+    "id": "ESC-1003",
+    "title": "Coffee machine is beeping",
+    "customer_tier": "bronze",
+    "service": "coffee-machine",
+    "ticket": "The office coffee machine is beeping and will not brew.",
+    "logs": [
+      {
+        "id": "log-1",
+        "source": "coffee-machine.log (synthetic practice fixture)",
+        "observation": "practice note: reservoir sensor beep, not a production service"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-1",
+        "service": "coffee-machine",
+        "version": "0.0.1",
+        "previous_version": "0.0.0",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) practice firmware finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice"
+  },
+  {
+    "id": "ESC-1004",
+    "title": "Dashboard feels slow",
+    "customer_tier": "silver",
+    "service": "dashboard",
+    "ticket": "The dashboard feels a bit slow today.",
+    "logs": [
+      {
+        "id": "log-1",
+        "source": "dashboard.log (synthetic practice fixture)",
+        "observation": "dashboard home page responded in 120 ms during a check"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-1",
+        "service": "dashboard",
+        "version": "1.8.0",
+        "previous_version": "1.7.2",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) dashboard release 1.8.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice"
+  },
+  {
+    "id": "ESC-1005",
+    "title": "Checkout is down for customers",
+    "customer_tier": "gold",
+    "service": "checkout-web",
+    "ticket": "Checkout is down for every gold customer. This is a sev-1 outage.",
+    "logs": [
+      {
+        "id": "log-1",
+        "source": "checkout-web.log (synthetic practice fixture)",
+        "observation": "checkout-web health check failed and the service is unavailable"
+      },
+      {
+        "id": "log-2",
+        "source": "checkout-web.log (synthetic practice fixture)",
+        "observation": "sev-1 outage: checkout is down for customers"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-1",
+        "service": "checkout-web",
+        "version": "9.1.0",
+        "previous_version": "9.0.5",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) checkout-web release 9.1.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice"
+  }
+]

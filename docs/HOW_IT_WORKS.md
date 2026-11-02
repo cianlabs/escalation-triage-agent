@@ -1,80 +1,71 @@
-# How the escalation agent works
+# How the agent and evaluation work
 
-This page is for someone new to the code. Read it with `agent.py` open.
+There are two separate kinds of data. Synthetic workflow fixtures exercise the agent loop and approval gate. Verified public observations exercise the existing ranking component. Public scores never use the invented practice logs or deploy records.
 
-The agent handles one support escalation built from real public incident write-ups. It walks a checklist of tools. It keeps what it learned in a state object. It saves that object to a JSON file after every step. When it wants to restart, roll back, or page someone, it stops and asks a human. Only `y` or `yes` lets a simulated line get appended to a local log.
-
-## Real Public Data & Limitations
-
-The repository uses real public incident post-mortems (such as Cloudflare, GitHub, AWS, Slack, Datadog, Fastly, Atlassian, Google Cloud, Reddit, OpenAI, Heroku) and public troubleshooting runbooks. All URLs in `SOURCES.md` return HTTP 200.
-
-Where raw log files or deploy logs were not provided in the original public post-mortems, log lines and deploy histories are reconstructed from the facts stated in those post-mortems and clearly labeled as `(reconstructed from public write-up)`.
-
-## Limits
-
-The evaluation score is calculated against a small hand-built set of 12 real incident post-mortems. It serves as a regression check for the practice pipeline rather than an exhaustive benchmark of real-world production incident response.
-
-## The picture
+## The public evaluation
 
 ```mermaid
-flowchart TD
-    startNode([Start]) --> loadMem[Load memory JSON]
-    loadMem -->|already settled| already([Stop: ALREADY_RESOLVED])
-    loadMem -->|sticky stop| sticky([Stop: the saved reason])
-    loadMem -->|proposal waiting| gate[Ask the human]
-    loadMem -->|still working| budget{Steps left?}
-    budget -->|no| maxed([Stop: MAX_STEPS_REACHED])
-    budget -->|yes| model[Practice or real model picks one tool]
-    model -->|unknown name| unknown([Stop: UNKNOWN_TOOL])
-    model -->|plain text| ignore[Ignore the text]
-    ignore --> budget
-    model -->|search_runbooks| search[Search local runbooks]
-    search -->|nothing| nomatch([Stop: NO_RUNBOOK_MATCH])
-    search -->|hits| save[Save state]
-    model -->|read_logs or deploys or draft| save
-    model -->|rank_hypotheses| rank[Link evidence ids]
-    rank -->|no ids linked| thin([Stop: INSUFFICIENT_EVIDENCE])
-    rank -->|linked| save
-    model -->|propose_action| pending[Store a pending approval]
-    pending -->|defer| wait([Stop: APPROVAL_REQUIRED])
-    pending -->|ask now| gate
-    gate -->|y or yes| sim[Append one line to the local log]
-    sim --> done([Stop: TRIAGE_COMPLETE])
-    gate -->|anything else| denied([Stop: ACTION_DENIED])
-    save --> budget
+flowchart LR
+    sources[Read public reports] --> dataset[Reviewed observations and separate labels]
+    dataset --> boundary[Allow only evidence id, source and observation]
+    boundary --> ranker[Unchanged rank_hypotheses]
+    ranker --> scoring[Compare output with separate labels]
+    scoring --> report[One results table and every miss]
 ```
 
-Follow one arrow at a time. The sample ticket `INC-CLOUDFLARE-01` takes the long path: search, logs, deploys, rank, draft, propose, then the human question.
+incident_data.py validates 30 cases and their fetch receipts. ranking_input copies only the public observation fields. evaluation.py calls tools.rank_hypotheses with those copies. It never calls read_logs, check_recent_deploys, a model client or an action function. Source titles, retrospective causes, families, case kind, dates and context are not ranking inputs. The symptom is retained in the dataset for review but this existing tool does not accept it.
 
-## Offline Incident Evaluation
+This is a component evaluation. It does not claim to test the search, full tool loop, live model, approval gate or repair success. Those workflow behaviors retain their own tests. Because no action or model path is entered, evaluation creates no memory or action log.
 
-`evaluation.py` evaluates all 12 real incident write-ups. It feeds the agent only the ticket description (rewritten directly from published post-mortem summaries) and checks if the top-ranked hypothesis matches the published root cause from the post-mortem.
+The baseline is tools.py from commit 68cb090e106180f08828954f7b322092a395fa8f. Its SHA-256 is checked before recording or reproducing results. The ranking file is unchanged in this PR. Baseline predictions, source dataset hash and scoring outcomes are in results/baseline.json. The generated [baseline report](BASELINE.md) includes the metric table, every top-1 miss, top-3 outcomes and caution results.
 
-## The state is the memory
+## Cause-family labels
 
-`EscalationState` in `state.py` is a small object with:
+The evaluation does not require exact prose matching against a long specific mechanism. It compares a fixed family vocabulary. A published mechanism remains separately documented for review. Broad family credit must not be reported as exact root-cause discovery.
 
-- `checked` — whether runbooks, logs, and deploys have been read
-- `evidence` — the rows collected so far
-- `hypotheses` — the ranked list, with evidence ids
-- `customer_draft` — the unsent text
-- `pending_approval` — the proposal, or empty
-- `settlements` — what the human decided
-- `step_log` — short lines you can read in the JSON
-- `steps_used` — how many model calls this escalation has spent
+| Family | Meaning |
+| --- | --- |
+| change_regression | A software, migration, routing-policy or configuration change introduces faulty behavior. |
+| database_failure | A database or failover failure interrupts the service. |
+| integer_overflow | A counter or identifier exceeds a supported integer range. |
+| dependency_outage | An authentication or other non-storage dependency becomes unavailable. |
+| operator_deletion | An operation deletes the wrong customer resources. |
+| query_overload | Query behavior and retries overwhelm a database. |
+| resource_limit | A hard operating-system resource limit is exhausted. |
+| build_node_failure | A node stops accepting builds while still serving requests. |
+| network_partition | Lost connectivity produces incompatible database topology. |
+| ddos | An amplification attack overwhelms network access. |
+| network_congestion | Traffic volume overloads network links. |
+| operator_disablement | An administrative operation disables a production service. |
+| storage_dependency | Underlying storage unavailability breaks dependent services. |
+| capacity_removal | An operational command removes excessive service capacity. |
 
-`save_state` writes `memory/<escalation id>.json` after a step. One file holds one escalation.
+The existing Bad deploy title maps to change_regression. Its other titles, Process needs a restart and Customer-facing outage, do not describe a cause and map to no cause family. Mapping output for scoring does not reorder or modify hypotheses. All 10 baseline top-1 hits lack supporting evidence and come from default tie order. The score counts a matching family even when it is a guess; do not present it as evidence-based diagnosis. No source-specific mapping is allowed. Canonical family names with spaces are also accepted, so future agents can use the documented vocabulary.
 
-## The approval boolean
+Top-1 and top-3 score the first or first three hypotheses on the 26 diagnosis cases. Vague top-1 scores only the 13 vague diagnosis cases. Four cautious cases, including two vague cases, have no single selected cause and are excluded from diagnosis denominators. An empty category is reported as not measured, rather than dividing by zero or inventing a perfect score.
 
-`propose_action` never runs anything. It is not even able to write the log. The function that writes the log is `record_simulated_action`, and it is not in the tool list the model can call.
+The four cautious cases are Slack's interacting cache, discovery and query failures; GitHub's unresolved June 2020 CPU-starvation investigation; Cloudflare's overlapping June 2024 network and processing failures; and Cloudflare's speculative November 2023 electrical sequence and hidden service dependencies. The expected confirmed cause is none.
 
-`record_simulated_action` writes a line only when `approved is True`. In Python, `True` is a boolean. The string `"yes"`, the string `"true"`, and the string `"approved"` are not that boolean, so they do not write a line.
+Caution passes only with at least two distinct hypotheses in ranked list order, all unverified, references only to supplied evidence ids, an explicitly present empty confirmed_root_cause, and simulation_only mode. Missing confirmation fields, invented evidence, confirmed guesses and execution mode fail. This is a restraint check, not a measure of hypothesis relevance, confidence calibration or useful ordering. The always-unverified baseline can pass while missing most cause families.
 
-`human_said_yes` is the only function that turns a typed answer into that boolean, and only for `y` or `yes`.
+## Why the old perfect score was withdrawn
 
-## Live Model (--real)
+The previous evaluator called read_logs and check_recent_deploys, then ranked their invented content. It did not give only symptoms. Repeated fixture words aligned with the ranker's three fixed labels. Some labels were remedies or impact, and some source pages did not support their attributed incident. A passing synthetic pipeline test is useful, but it is not public incident root-cause accuracy.
 
-`RealModel` in `agent.py` supports `--real` using `grok-build-0.1`. It reads `XAI_API_KEY` from the environment without printing or storing it.
+Seven original events were re-annotated from their actual pages. The AWS citation was corrected to its actual 2020 Kinesis event. Other unsupported cases were omitted and replaced. The final 30 cases include 15 vague customer paraphrases and no invented operational evidence. SOURCES.md names their sections. incidents/original_source_audit.json records omitted or corrected cases. Source HTTP checks do not prove semantic accuracy; people must read the page.
 
-The `--real` path was run live once, by the owner in his own Terminal on Nov 1 2026, on one ticket (INC-CLOUDFLARE-01) with the grok-build-0.1 model, and it completed with the same tool order as the practice model and the approval gate unchanged. This was one ticket and one run, not a broad test. Outside of that single live run, in tests, a fake client stands in for the live xAI client so no API key or network is needed, and automated CI runs do not execute against live endpoints.
+## The synthetic agent workflow
+
+agent.py loads a synthetic fixture and saved EscalationState. The model picks a tool, the loop applies the result and saves state. The default PracticeModel follows a checklist. RealModel can choose tools through the same interface. Both use the same deterministic ranker.
+
+The state stores completed checks, evidence, hypotheses, customer draft, pending approval, settlements, step count and stop reason. JSON files preserve them across runs. This is local saved state, not a shared database or vector memory.
+
+propose_action creates a pending proposal and cannot execute it. record_simulated_action is absent from the model tool list. A model-supplied approved flag is ignored. Only the human's y or yes becomes boolean True at the approval gate. A later run can resume a pending proposal; a settled case does not append a second action. Drafting never sends a message.
+
+Historical INC-prefixed ids stay available for command and saved-file compatibility. They are now explicitly synthetic, with generic practice tickets. Their old logs, versions, deploy dates and customer tiers are not evidence about the corresponding public event. The public case ids use PUB and are not accepted as CLI fixtures.
+
+## Next learning exercise
+
+Trace one missed case from incidents/public.jsonl through ranking_input, rank_hypotheses and score_predictions. Explain which information the ranker receives and which labels it cannot see. Then change a prediction in a temporary copy: move the correct family to second place, invent an evidence id, or assert a confirmed cause. Explain which metric should change before running the scoring tests.
+
+Before improving ranking, acquire fresh incidents and lock their source review, labels and split. The current 30 public cases are exposed baseline examples, not an untouched test set. Use development examples for changes, and evaluate a locked new test set once. Keep the baseline and score rules unchanged so a comparison has meaning.

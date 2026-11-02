@@ -1,145 +1,84 @@
 # escalation-triage-agent
 
-An agent that triages support escalations based on real public post-mortems and runbooks, step by step, and waits for a human before any simulated action.
+A practice support agent that searches local runbooks, reads synthetic evidence, ranks hypotheses, drafts an update and asks a human before recording a simulated action. It saves each case so an investigation can resume later. Nothing restarts, rolls back, pages anyone or sends a message.
 
-## Install and run
+The public incident evaluation is separate from those synthetic workflow fixtures. It uses verified user-impact observations from 30 distinct incidents and calls this repository's unchanged ranking tool.
 
-```bash
+## Public incident baseline
+
+| Overall top-1 | Overall top-3 | Vague symptom top-1 | Correctly cautious |
+| --- | --- | --- | --- |
+| 10/26 (38.5%) | 11/26 (42.3%) | 3/13 (23.1%) | 4/4 (100.0%) |
+
+These are broad cause-family scores, not exact root-cause accuracy. The four cautious cases have no single cause label and are excluded from diagnosis denominators. Fifteen symptoms use vague customer language; two of those are cautious, leaving 13 for vague diagnosis accuracy. [Every miss and its reason](docs/BASELINE.md) is reported, and [full predictions](results/baseline.json) are committed.
+
+The 30 incidents come from 26 first-party pages. Every [source](SOURCES.md) was fetched, read and returned HTTP 200. A successful HTTP response alone was not enough: empty status pages and a report for the wrong incident were excluded or corrected. All observations are paraphrased. No log line, release version or deployment history was invented for this evaluation.
+
+The old 12/12 claim is withdrawn. That evaluation ranked invented logs and deployment notes, despite describing itself as symptoms-only. It also treated remedies and customer impact as published root causes. It is not comparable to the new baseline.
+
+## Install and evaluate
+
+```sh
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-.venv/bin/python agent.py --sample
-```
-
-The third command needs no API key and no network. It uses a practice model. At the end it asks `Approve this action? (y/n)`. Type `y` or `yes` to append one simulated line to `action.log`. Anything else writes nothing.
-
-The sample runs `INC-CLOUDFLARE-01`, a real incident write-up (Control Plane Outage). The same run saves `memory/INC-CLOUDFLARE-01.json`. Run it again and it resumes. If you already answered, it stops with `ALREADY_RESOLVED`. Start the sample over with:
-
-```bash
-.venv/bin/python agent.py --sample --fresh
-```
-
-## Real Public Data & Limitations
-
-The repository contains 12 incident post-mortems (e.g. Cloudflare, GitHub, AWS, Slack, Datadog, CircleCI, Fastly, Atlassian, Google Cloud, Reddit, OpenAI, Heroku) and 6 troubleshooting runbooks built from public sources. See `SOURCES.md` for full references. Every URL in `SOURCES.md` has been verified with an HTTP 200 response.
-
-Where public post-mortems do not include raw log files or deploy records, log lines and deploy histories are reconstructed from the facts stated in the write-ups and explicitly labeled as `(reconstructed from public write-up)`.
-
-## Limits
-
-The incident root cause evaluation score is calculated on a small, hand-built dataset of 12 real incident write-ups. The dataset is meant for demonstration and diagnostic testing, not as a comprehensive benchmark for general production incident triage.
-
-## Incident Root Cause Evaluation
-
-Run offline evaluation across all 12 real incidents:
-
-```bash
 .venv/bin/python evaluation.py
 ```
 
-The evaluation gives the agent only the symptoms (rewritten directly from the published post-mortem text) for each incident and checks whether its top-ranked hypothesis matches the published root cause. Currently, the offline practice evaluation achieves 12/12 (100.0%) accuracy.
+Evaluation is offline, needs no key and executes no actions. It measures the ranking component, not the whole agent loop or a live model. It calls the existing rank_hypotheses function on the allowlisted public observations; labels and retrospective explanations never cross that boundary.
 
-## Example run
-
-This is `INC-CLOUDFLARE-01`, based on Cloudflare's November 2023 outage write-up.
-
-```text
-No memory file yet. Starting from the ticket.
-Escalation INC-CLOUDFLARE-01
-Tier: gold
-Service: control-plane
-Ticket: Cloudflare control plane and analytics services experienced an outage. Customers saw HTTP 500 errors when attempting to make modifications through our dashboard or API following an infrastructure power failure and failover configuration release.
-
-Step 1 of 8
-Thinking: I should search the local runbooks before I guess.
-Tool: search_runbooks query='Cloudflare control plane and analytics services experienced an outage. Customers saw HTTP 500 errors when attempting to make modifications through our dashboard or API following an infrastructure power failure and failover configuration release.'
-1. [0.389] Rollback a bad deploy (rollback_bad_deploy.txt)
-   If the error rate jumped after a deploy or a 500 error burst occurred, roll back the service.
-   A bad deploy release or route config release causing 500 responses must be rolled back.
-   Roll back only after a human approves. A restart is the wrong first step.
-
-Step 2 of 8
-Thinking: I should read the practice logs for this escalation.
-Tool: read_logs escalation_id='INC-CLOUDFLARE-01'
-- log-cf-1 (control-plane.log (reconstructed from public write-up)): control-plane service error rate jumped to 85 percent after config deploy
-- log-cf-2 (control-plane.log (reconstructed from public write-up)): POST /api/v4/zones returned 500 internal server error
-
-Step 3 of 8
-Thinking: I should check the recent practice deploys for this service.
-Tool: check_recent_deploys service='control-plane'
-- deploy-cf-1 control-plane 1.18.2 status=failed at 2023-11-02T11:40:00Z
-
-Step 4 of 8
-Thinking: I should rank hypotheses and keep the evidence ids on them.
-Tool: rank_hypotheses evidence=3 row(s)
-- Bad deploy: evidence log-cf-1, log-cf-2, deploy-cf-1 (unverified)
-- Process needs a restart: evidence none (unverified)
-- Customer-facing outage: evidence none (unverified)
-Confirmed root cause: none
-
-Step 5 of 8
-Thinking: I should draft a customer update and not send it.
-Tool: draft_customer_update hypothesis='Bad deploy'
-Draft only. This was not sent.
-We are investigating an issue on control-plane for the gold tier. What we were told: Cloudflare control plane and analytics services experienced an outage. Customers saw HTTP 500 errors when attempting to make modifications through our dashboard or API following an infrastructure power failure and failover configuration release. The leading hypothesis is Bad deploy, linked to evidence log-cf-1, log-cf-2, deploy-cf-1. We have not confirmed a root cause, and we have not taken an action.
-
-Step 6 of 8
-Thinking: I am proposing an action. I am not allowed to approve it.
-Tool: propose_action kind=rollback target=control-plane
-Note: the model sent an approved flag. That flag is ignored.
-Pending rollback on control-plane. Nothing has run.
-
---- Proposed action needs your approval ---
-Nothing has run yet.
-kind: rollback
-target: control-plane
-reason: Bad deploy is the leading hypothesis. Evidence: log-cf-1, log-cf-2, deploy-cf-1.
-details: Would roll control-plane back from 1.18.2 to 1.18.1. No cluster is changed.
-Leading hypothesis: Bad deploy (not confirmed)
-Evidence ids: log-cf-1, log-cf-2, deploy-cf-1
-Customer draft (not sent):
-Draft only. This was not sent.
-We are investigating an issue on control-plane for the gold tier. What we were told: Cloudflare control plane and analytics services experienced an outage. Customers saw HTTP 500 errors when attempting to make modifications through our dashboard or API following an infrastructure power failure and failover configuration release. The leading hypothesis is Bad deploy, linked to evidence log-cf-1, log-cf-2, deploy-cf-1. We have not confirmed a root cause, and we have not taken an action.
-A yes appends one simulated line to action.log.
-A yes does not restart, roll back, page anyone, or send the draft.
-Approve this action? (y/n) y
-Action approved. The simulation was appended to the local log.
-Log: 2026-11-01T23:30:00Z | simulated | rollback | target=control-plane | escalation=INC-CLOUDFLARE-01 | Would roll control-plane back from 1.18.2 to 1.18.1. No cluster is changed.
-Stop reason: TRIAGE_COMPLETE
-The human said yes. The simulated action was appended to the local log. The customer draft was not sent.
+```sh
+.venv/bin/python evaluation.py --check
+.venv/bin/python evaluation.py --write
+.venv/bin/python verify_sources.py
 ```
 
-List all available real incident write-ups with `.venv/bin/python agent.py --list`.
+`--check` reproduces the committed report and predictions. `--write` records them. `verify_sources.py` explicitly goes online to re-fetch every citation and find its named section. It does not replace a person checking what the page says. Fetch receipts are in incidents/source_checks.json. CI runs tests and reproduces the baseline offline on Python 3.11 and 3.13.
 
-## How a run stops
+## Try the synthetic workflow
 
-Every normal run prints `Stop reason: NAME`.
-
-| Name | Meaning |
-| --- | --- |
-| `TRIAGE_COMPLETE` | You said yes. One simulated line was appended to the local log. The draft was not sent. |
-| `ACTION_DENIED` | You did not say yes. Nothing was simulated. |
-| `APPROVAL_REQUIRED` | A proposal is saved. This run was started with `--defer-approval`, so it did not ask yet. |
-| `MAX_STEPS_REACHED` | The loop used every step it is allowed (8 by default) before the case was settled. |
-| `ALREADY_RESOLVED` | Memory says this escalation is finished. Nothing new ran. |
-| `NO_RUNBOOK_MATCH` | No local runbook shared words with the ticket. No action is proposed. |
-| `INSUFFICIENT_EVIDENCE` | No hypothesis has an evidence id, so no action is proposed. |
-| `UNKNOWN_TOOL` | The model asked for a tool that does not exist. Nothing ran. |
-
-## Tests
-
-```bash
-.venv/bin/python -m pytest -q
+```sh
+.venv/bin/python agent.py --sample --fresh
 ```
 
-65 offline tests. They cover each tool, data loading, evaluation, memory resume, the approval gate, step limit, and named stop reasons. GitHub Actions runs pytest on Python 3.11 and 3.13.
+The default is the deterministic practice model. It uses synthetic fixtures, including invented logs and deploy records. Historical INC-prefixed ids such as INC-CLOUDFLARE-01 are retained so existing commands and saved-state filenames still work; they do not identify real evidence. The banner explicitly labels them synthetic.
 
-## Live Model (--real)
+The workflow searches, reads logs, checks deployments, ranks hypotheses, drafts an update and proposes an action. Only a human typing `y` or `yes` appends one simulated line to action.log. Other answers write no action. Model approval claims are ignored. The draft is never sent.
 
-```bash
-export XAI_API_KEY="your key"
+```sh
+.venv/bin/python agent.py --sample --fresh --defer-approval
+.venv/bin/python agent.py --sample
+.venv/bin/python agent.py --list
+```
+
+The first command saves a pending proposal without asking. The second resumes that proposal and asks for a human decision. A settled case stops with ALREADY_RESOLVED and does not duplicate its action. `--list` lists synthetic workflow fixtures, not public benchmark incidents. Public cases are loaded by incident_data.py and evaluation.py.
+
+## Optional live model
+
+```sh
+export XAI_API_KEY='your key'
 .venv/bin/python agent.py --sample --fresh --real
 ```
 
-Reads `XAI_API_KEY` from the environment without printing or storing it. Uses `grok-build-0.1`. The approval gate and tools remain identical.
+The key is read from the environment and not printed or saved. This uses the live model to choose tools on the same synthetic fixtures; ranking remains deterministic and actions remain simulated. The owner reported one live run on November 1, 2026, against the previous version of the sample. That is not validation of these public incidents. CI uses fake clients and never calls a paid model.
 
-The `--real` path was run live once, by the owner in his own Terminal on Nov 1 2026, on one ticket (INC-CLOUDFLARE-01) with the grok-build-0.1 model, and it completed with the same tool order as the practice model and the approval gate unchanged. This was one ticket and one run, not a broad test. Outside of that single live run, the live model code path is tested using an offline fake client adapter and is not executed against live xAI API endpoints in automated tests or CI.
+## Tests
+
+```sh
+.venv/bin/python -m pytest -q
+```
+
+Tests cover tools, memory, approval, step limits, named stops, model adapters, source receipts, dataset loading, input isolation, top-k scoring and caution failures. The old tests that required a perfect 12/12 score were replaced with checks for the corrected evaluation. Existing workflow tests remain in place.
+
+## Limits
+
+The ranker returns three fixed titles. Only Bad deploy describes a cause family, mapped to change regression; Process needs a restart describes a remedy and Customer-facing outage describes impact. Neither earns cause credit. The top-3 score is therefore a vocabulary-coverage ceiling, not strong ranking performance. All 10 top-1 hits have no supporting evidence: the ranker keeps Bad deploy first when evidence counts tie. These are guesses, not successful investigations. No ranking rules were tuned for this set.
+
+The ranker reads evidence observations, not the symptom text. Vague accuracy is a subset score, not a controlled test of wording. A case can earn broad family credit without identifying its specific mechanism. Sparse user observations usually cannot prove a cause.
+
+The caution score checks multiple unverified hypotheses, valid evidence references, an explicitly empty confirmed cause and simulation-only output. It does not establish that the hypotheses are useful. Always returning unverified hypotheses can pass all four cautious cases.
+
+This is a small selected set, weighted toward GitHub and Cloudflare. Retrospective labels come from postmortems, but the agent sees much less information. These 30 cases have now been inspected and are not a hidden test set. Before changing ranking, collect and lock a fresh set for independent testing. Do not tune the scorer or labels to make a new version look better.
+
+The CLI runbooks are simplified synthetic prompts, not verified operational procedures. The public evaluation does not use them. The CLI remains a local simulation, not a production incident-response service.
+
+See [how it works](docs/HOW_IT_WORKS.md) for the input boundary, label rules and next learning exercise.
