@@ -71,7 +71,9 @@ def parse_run(data, target):
     status,conclusion=parse_state(data)
     return dict(id=data['id'],run_attempt=data['run_attempt'],status=status,conclusion=conclusion,
                 created_at=stamp(data.get('created_at')),updated_at=stamp(data.get('updated_at')),
-                html_url=target['html_url'])
+                html_url=target['html_url'],
+                head_sha=data.get('head_sha') if isinstance(data.get('head_sha'),str) and re.fullmatch(r'[0-9a-fA-F]{40}',data['head_sha']) else None,
+                check_suite_id=data.get('check_suite_id') if positive_integer(data.get('check_suite_id')) else None)
 
 
 async def get_json(client,url,params=None):
@@ -108,8 +110,9 @@ async def read_jobs(client,target,attempt):
                 status,conclusion=parse_state(job)
                 if not isinstance(job.get('name'),str) or not job['name'].strip():
                     raise ValueError('missing job name')
+                from workflow_error_details import parse_steps
                 seen.add(job['id'])
-                new.append(dict(id=job['id'],name=job['name'],status=status,conclusion=conclusion))
+                new.append(dict(id=job['id'],name=job['name'],status=status,conclusion=conclusion,step_details=parse_steps(job.get('steps')),check_run_reference=job.get('check_run_url')))
             jobs.extend(new)
             if len(jobs)>data['total_count']:
                 raise ValueError('inconsistent count')
@@ -159,16 +162,18 @@ async def inspect_run(client,url):
     else:
         jobs,gates=await asyncio.gather(read_jobs(client,target,run['run_attempt']),read_gates(client,target))
     result.update(jobs=jobs,deployment_gates=gates)
+    from workflow_error_details import collect_error_details
+    result['error_details'] = await collect_error_details(client,target,run,jobs['jobs'])
     recheck=await get_json(client,target['api_url'])
     try:
         current=parse_run(recheck.get('data'),target)
-        consistent=all(current[k]==run[k] for k in ('run_attempt','status','conclusion','updated_at'))
+        consistent=all(current[k]==run[k] for k in ('run_attempt','status','conclusion','updated_at','head_sha','check_suite_id'))
     except (ValueError,TypeError):
         consistent=None
     result['snapshot_consistent']=consistent
     if consistent is not True:
         return dict(result,message='The run changed during collection or could not be rechecked. Retry before combining the run and job states.',assessment='snapshot_uncertain')
-    result['complete']=jobs['state']=='reported' and gates['state'] in ('reported','not_checked')
+    result['complete']=jobs['state']=='reported' and gates['state'] in ('reported','not_checked') and result['error_details']['state'] in ('reported','not_needed')
     if run['status']=='completed':
         assessment='completed_'+run['conclusion']
         message=f"GitHub reports this run completed with conclusion {run['conclusion']}. That is an outcome, not an explanation of its cause."
@@ -210,9 +215,14 @@ def render_run(result):
             if detail.get('source_url'): lines.append('Source: '+detail['source_url'])
             if detail.get('error'): lines.append(detail['error'])
     for job in result.get('jobs',{}).get('jobs',[]):
-        lines.append(f"- {job['name']}: {job['status']}"+(f" / {job['conclusion']}" if job['conclusion'] else ''))
+        from workflow_error_details import clip_text
+        display_name,_=clip_text(job['name'],250)
+        lines.append(f"- {display_name}: {job['status']}"+(f" / {job['conclusion']}" if job['conclusion'] else ''))
     for gate in result.get('deployment_gates',{}).get('gates',[]):
         lines.append(f"- Environment {gate['environment']}: required reviewers {'reported' if gate['review_required'] else 'not reported'}; configured wait timer {gate['wait_timer_minutes']} minutes.")
+    if 'error_details' in result:
+        from workflow_error_details import render_error_details
+        lines.extend(render_error_details(result['error_details']))
     lines += ['', 'Next check: open this run on GitHub and inspect the reported job or gate. Do not infer a root cause from its status.',
               'Collection: '+('complete' if result['complete'] else 'incomplete; some state remains unknown'),
               'Confirmed root cause: none']

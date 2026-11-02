@@ -47,3 +47,13 @@ This does not fetch logs, inspect workflow configuration, verify available runne
 ## Learning exercise
 
 Choose a public run URL and locate the run state, job states and attempt number in the output. Explain why a completed failure is different from an unknown API response. Then find the second run request in inspect_run and explain how it helps avoid combining a new retry with old job details.
+
+## Try a real failed run
+
+```sh
+python agent.py --workflow-run https://github.com/cli/cli/actions/runs/41072491583
+```
+
+For failed jobs, the inspector shows failed steps when GitHub supplies them. It also shows public check annotations after matching the check to the job and run. Errors, warnings, and notices are labeled separately. If some details are unavailable, the report preserves the known run outcome and marks collection incomplete.
+
+In this example, the failed step is Run Dependabot. A public annotation reports an updater error. The detailed log requires repository write access, so the underlying cause stays unconfirmed. The inspector reads public metadata only.

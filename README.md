@@ -136,3 +136,5 @@ This is a small selected set, weighted toward GitHub and Cloudflare. Retrospecti
 The CLI runbooks are simplified synthetic prompts, not verified operational procedures. The public evaluation does not use them. The CLI remains a local simulation, not a production incident-response service.
 
 See [how it works](docs/HOW_IT_WORKS.md) for the input boundary, label rules and next learning exercise.
+
+For failed runs, the inspector also shows failed steps and available public error annotations. See the [real failed-run example](docs/WORKFLOW_RUN.md#try-a-real-failed-run).
