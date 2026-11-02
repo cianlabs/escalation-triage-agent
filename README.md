@@ -4,6 +4,16 @@ A practice support agent that searches local runbooks, reads synthetic evidence,
 
 The public incident evaluation is separate from those synthetic workflow fixtures. It uses verified user-impact observations from 30 distinct incidents and calls this repository's unchanged ranking tool.
 
+## Collect three simulated sources concurrently
+
+```sh
+.venv/bin/python agent.py --collect-sample partial
+```
+
+Recent errors, recent changes and service health start together. Each check has its own timeout. The partial demo keeps a missing-route clue while clearly reporting a failed changes check and a timed-out health check. A failed, empty or missing check never becomes a healthy signal. Missing evidence stays visible in the investigation and next checks; the cause remains unconfirmed.
+
+Use complete for three returned results or failed for no available results. All sources are simulated, and this mode never enters a model, saved-memory, approval or action path. The all-failed demo exits 1; a partial result exits 0 with explicit warnings. Read [the simple async explanation and learning exercise](docs/ASYNC_EVIDENCE.md).
+
 ## Investigate concrete evidence
 
 A new, separate investigation mode looks for specific mechanism clues and explains why each might matter. It can suggest a routing failure from a missing route, or an authentication failure from a rejected token. Generic error pages and unavailable services are insufficient evidence. Negated or speculative clues do not become support, and conflicting observations remain visible.
