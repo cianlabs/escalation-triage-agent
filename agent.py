@@ -698,6 +698,7 @@ def main(argv=None, ask=input):
         action="store_true",
         help=f"Run {SAMPLE_ID}, the checkout 500s sample.",
     )
+    parser.add_argument("--collect-sample", choices=("complete", "partial", "failed"), help="Collect three simulated sources concurrently, then investigate without actions.")
     parser.add_argument("--investigate", metavar="JSON_FILE", help="Read evidence and suggest checks; no model, memory or action approval.")
     parser.add_argument("--list", action="store_true", help="Print the practice escalations and exit.")
     parser.add_argument(
@@ -719,6 +720,14 @@ def main(argv=None, ask=input):
     parser.add_argument("--action-log", default=str(DEFAULT_ACTION_LOG))
     parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     args = parser.parse_args(argv)
+
+    if args.collect_sample:
+        if args.investigate or args.real or args.sample or args.escalation_id or args.list or args.fresh or args.defer_approval:
+            parser.error('--collect-sample is a separate simulated read-only mode; do not combine it with workflow options.')
+        from evidence_collection import run_simulated_collection, render_collection
+        result = run_simulated_collection(args.collect_sample)
+        print(render_collection(result))
+        return 1 if result['collection']['status'] == 'failed' else 0
 
     if args.investigate:
         if args.real or args.sample or args.escalation_id or args.list or args.fresh or args.defer_approval:
