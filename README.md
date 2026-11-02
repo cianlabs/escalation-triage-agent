@@ -4,6 +4,16 @@ A practice support agent that searches local runbooks, reads synthetic evidence,
 
 The public incident evaluation is separate from those synthetic workflow fixtures. It uses verified user-impact observations from 30 distinct incidents and calls this repository's unchanged ranking tool.
 
+## Inspect a specific public Actions run
+
+```sh
+.venv/bin/python agent.py --workflow-run https://github.com/cianlabs/escalation-triage-agent/actions/runs/41376006131
+```
+
+Use a public workflow-run URL to read its current state, jobs and any reported pending deployment gates. Queued does not mean stuck, and waiting does not automatically mean human approval. Jobs are tied to the reported attempt, and a second run read detects changes during collection. Missing or partial details stay unknown. No logs are downloaded, no credentials or models are used, no actions run and no cause is confirmed.
+
+A complete read exits 0 even when the workflow failed; incomplete collection exits 1. See [examples, request boundaries and the learning exercise](docs/WORKFLOW_RUN.md).
+
 ## Read GitHub public status
 
 ```sh

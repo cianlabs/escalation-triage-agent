@@ -698,6 +698,7 @@ def main(argv=None, ask=input):
         action="store_true",
         help=f"Run {SAMPLE_ID}, the checkout 500s sample.",
     )
+    parser.add_argument("--workflow-run", metavar="URL", help="Read one public GitHub Actions run and its jobs. No keys or actions.")
     parser.add_argument("--problem", help="Describe a problem locally to compare with current GitHub component status.")
     parser.add_argument("--component", choices=("actions", "git", "api", "pages", "packages", "codespaces", "copilot", "issues", "pull-requests", "webhooks"), help="Explicit GitHub service for --problem.")
     parser.add_argument("--github-status", action="store_true", help="Read GitHub public status alongside two labeled simulated checks. No model or actions.")
@@ -723,6 +724,18 @@ def main(argv=None, ask=input):
     parser.add_argument("--action-log", default=str(DEFAULT_ACTION_LOG))
     parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     args = parser.parse_args(argv)
+
+    if args.workflow_run:
+        if args.github_status or args.problem is not None or args.component or args.collect_sample or args.investigate or args.real or args.sample or args.escalation_id or args.list or args.fresh or args.defer_approval:
+            parser.error('--workflow-run is a separate read-only mode; do not combine it with workflow options.')
+        from workflow_inspection import inspect_public_run, render_run
+        try:
+            result = inspect_public_run(args.workflow_run)
+            print(render_run(result))
+        except AgentError as err:
+            print(str(err), file=sys.stderr)
+            return 1
+        return 0 if result['complete'] else 1
 
     if (args.problem is not None or args.component is not None) and not args.github_status:
         parser.error('--problem and --component require --github-status.')
