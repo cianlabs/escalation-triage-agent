@@ -698,6 +698,8 @@ def main(argv=None, ask=input):
         action="store_true",
         help=f"Run {SAMPLE_ID}, the checkout 500s sample.",
     )
+    parser.add_argument("--problem", help="Describe a problem locally to compare with current GitHub component status.")
+    parser.add_argument("--component", choices=("actions", "git", "api", "pages", "packages", "codespaces", "copilot", "issues", "pull-requests", "webhooks"), help="Explicit GitHub service for --problem.")
     parser.add_argument("--github-status", action="store_true", help="Read GitHub public status alongside two labeled simulated checks. No model or actions.")
     parser.add_argument("--collect-sample", choices=("complete", "partial", "failed"), help="Collect three simulated sources concurrently, then investigate without actions.")
     parser.add_argument("--investigate", metavar="JSON_FILE", help="Read evidence and suggest checks; no model, memory or action approval.")
@@ -722,12 +724,19 @@ def main(argv=None, ask=input):
     parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     args = parser.parse_args(argv)
 
+    if (args.problem is not None or args.component is not None) and not args.github_status:
+        parser.error('--problem and --component require --github-status.')
+    if args.problem is not None and not args.problem.strip():
+        parser.error('--problem must not be empty.')
+    if args.component is not None and args.problem is None:
+        parser.error('--component requires --problem.')
+
     if args.github_status:
         if args.collect_sample or args.investigate or args.real or args.sample or args.escalation_id or args.list or args.fresh or args.defer_approval:
             parser.error('--github-status is a separate read-only mode; do not combine it with workflow options.')
         from github_status import run_github_collection
         from evidence_collection import render_collection
-        result = run_github_collection()
+        result = run_github_collection(problem=args.problem, component=args.component) if args.problem is not None else run_github_collection()
         print(render_collection(result))
         return 0 if result['github_status']['state'] == 'reported' else 1
 
