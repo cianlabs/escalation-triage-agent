@@ -698,6 +698,7 @@ def main(argv=None, ask=input):
         action="store_true",
         help=f"Run {SAMPLE_ID}, the checkout 500s sample.",
     )
+    parser.add_argument("--investigate", metavar="JSON_FILE", help="Read evidence and suggest checks; no model, memory or action approval.")
     parser.add_argument("--list", action="store_true", help="Print the practice escalations and exit.")
     parser.add_argument(
         "--real",
@@ -718,6 +719,17 @@ def main(argv=None, ask=input):
     parser.add_argument("--action-log", default=str(DEFAULT_ACTION_LOG))
     parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     args = parser.parse_args(argv)
+
+    if args.investigate:
+        if args.real or args.sample or args.escalation_id or args.list or args.fresh or args.defer_approval:
+            parser.error('--investigate is a separate read-only mode; do not combine it with workflow options.')
+        from evidence_ranker import investigate_file, render_investigation
+        try:
+            print(render_investigation(investigate_file(args.investigate)))
+        except AgentError as err:
+            print(str(err), file=sys.stderr)
+            return 1
+        return 0
 
     if args.list:
         for escalation in list_escalations():

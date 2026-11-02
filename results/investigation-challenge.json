@@ -1,0 +1,705 @@
+{
+  "public_audit": [
+    {
+      "id": "PUB-01",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-02",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-03",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-04",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-05",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-06",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-07",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-08",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-09",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-10",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-11",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-12",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-13",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-14",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-15",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-16",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-17",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-18",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-19",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-20",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-21",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-22",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-23",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-24",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-25",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-26",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-27",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-28",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-29",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    },
+    {
+      "id": "PUB-30",
+      "assessment": "insufficient_evidence",
+      "families": [],
+      "confirmed_root_cause": null
+    }
+  ],
+  "public_dataset_sha256": "8cfade4ceff44ea2f8d88793f50914bd6d132548b1886c5ddc4be5ee35f1fa80",
+  "kind": "synthetic challenge examples authored and frozen before the ranker implementation; not real or hidden incidents",
+  "challenge_sha256": "f4a6f367c76055665d8f34d6a466b3c6be7411e840b0209ca51cd1b47adb7c5b",
+  "total": 12,
+  "correct": 11,
+  "results": [
+    {
+      "id": "CH-01",
+      "expected_assessment": "insufficient_evidence",
+      "expected_family": null,
+      "predicted_assessment": "insufficient_evidence",
+      "leading_family": null,
+      "matched": true,
+      "prediction": {
+        "symptom": "Everything is broken.",
+        "assessment": "insufficient_evidence",
+        "message": "I do not have enough evidence to name a likely cause. A symptom or error page alone is not enough.",
+        "evidence": [],
+        "hypotheses": [],
+        "counterevidence": [],
+        "next_checks": [
+          "Collect the exact error, affected operation and incident time, then compare a working and failing request."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-02",
+      "expected_assessment": "insufficient_evidence",
+      "expected_family": null,
+      "predicted_assessment": "insufficient_evidence",
+      "leading_family": null,
+      "matched": true,
+      "prediction": {
+        "symptom": "The website will not open.",
+        "assessment": "insufficient_evidence",
+        "message": "I do not have enough evidence to name a likely cause. A symptom or error page alone is not enough.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic customer report",
+            "observation": "The request returned HTTP 500 and the service is unavailable."
+          }
+        ],
+        "hypotheses": [],
+        "counterevidence": [],
+        "next_checks": [
+          "Collect the exact error, affected operation and incident time, then compare a working and failing request."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-03",
+      "expected_assessment": "supported_hypothesis",
+      "expected_family": "network_routing_failure",
+      "predicted_assessment": "supported_hypothesis",
+      "leading_family": "network_routing_failure",
+      "matched": true,
+      "prediction": {
+        "symptom": "The computers cannot talk.",
+        "assessment": "supported_hypothesis",
+        "message": "One mechanism has a specific supporting clue. It remains a hypothesis, not a confirmed root cause.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic network probe",
+            "observation": "Routing table inspection shows a missing route to the service subnet."
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "Network routing failure",
+            "family": "network_routing_failure",
+            "rationale": "A missing or removed route can prevent communication. The reason it changed is still unknown.",
+            "supporting_evidence_ids": [
+              "a"
+            ],
+            "contradicting_evidence_ids": [],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Compare the affected route table with a healthy host and check when the route changed.",
+            "status": "unverified"
+          }
+        ],
+        "counterevidence": [],
+        "next_checks": [
+          "Compare the affected route table with a healthy host and check when the route changed."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-04",
+      "expected_assessment": "supported_hypothesis",
+      "expected_family": "database_connection_limit",
+      "predicted_assessment": "supported_hypothesis",
+      "leading_family": "database_connection_limit",
+      "matched": true,
+      "prediction": {
+        "symptom": "Saving a change fails.",
+        "assessment": "supported_hypothesis",
+        "message": "One mechanism has a specific supporting clue. It remains a hypothesis, not a confirmed root cause.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic database response",
+            "observation": "SQLSTATE 53300: too many connections."
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "Database connection limit",
+            "family": "database_connection_limit",
+            "rationale": "A connection limit can reject database requests. It does not establish why connections accumulated.",
+            "supporting_evidence_ids": [
+              "a"
+            ],
+            "contradicting_evidence_ids": [],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Compare active and waiting connections with configured limits and recent request volume.",
+            "status": "unverified"
+          }
+        ],
+        "counterevidence": [],
+        "next_checks": [
+          "Compare active and waiting connections with configured limits and recent request volume."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-05",
+      "expected_assessment": "supported_hypothesis",
+      "expected_family": "authentication_failure",
+      "predicted_assessment": "supported_hypothesis",
+      "leading_family": "authentication_failure",
+      "matched": true,
+      "prediction": {
+        "symptom": "My tasks stopped running.",
+        "assessment": "supported_hypothesis",
+        "message": "One mechanism has a specific supporting clue. It remains a hypothesis, not a confirmed root cause.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic identity response",
+            "observation": "The access token expired; token validation rejected the request."
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "Authentication failure",
+            "family": "authentication_failure",
+            "rationale": "Rejected credentials can block access without implying that the service itself has failed.",
+            "supporting_evidence_ids": [
+              "a"
+            ],
+            "contradicting_evidence_ids": [],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Check token expiry, issuer, audience and validation results without collecting secret values.",
+            "status": "unverified"
+          }
+        ],
+        "counterevidence": [],
+        "next_checks": [
+          "Check token expiry, issuer, audience and validation results without collecting secret values."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-06",
+      "expected_assessment": "supported_hypothesis",
+      "expected_family": "storage_access_failure",
+      "predicted_assessment": "supported_hypothesis",
+      "leading_family": "storage_access_failure",
+      "matched": true,
+      "prediction": {
+        "symptom": "The files will not open.",
+        "assessment": "supported_hypothesis",
+        "message": "One mechanism has a specific supporting clue. It remains a hypothesis, not a confirmed root cause.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic object service response",
+            "observation": "AccessDenied when reading the object from the bucket."
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "Storage access failure",
+            "family": "storage_access_failure",
+            "rationale": "A storage permission rejection can block reads or writes. It does not establish a storage outage.",
+            "supporting_evidence_ids": [
+              "a"
+            ],
+            "contradicting_evidence_ids": [],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Check the requested resource and effective access policy using a read-only permission check.",
+            "status": "unverified"
+          }
+        ],
+        "counterevidence": [],
+        "next_checks": [
+          "Check the requested resource and effective access policy using a read-only permission check."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-07",
+      "expected_assessment": "insufficient_evidence",
+      "expected_family": null,
+      "predicted_assessment": "insufficient_evidence",
+      "leading_family": null,
+      "matched": true,
+      "prediction": {
+        "symptom": "The app has stopped.",
+        "assessment": "insufficient_evidence",
+        "message": "I do not have enough evidence to name a likely cause. A symptom or error page alone is not enough.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic kernel report",
+            "observation": "No OOM kills were recorded during the incident."
+          },
+          {
+            "id": "b",
+            "source": "synthetic change audit",
+            "observation": "There was no deploy before the failure."
+          }
+        ],
+        "hypotheses": [],
+        "counterevidence": [
+          {
+            "family": "memory_exhaustion",
+            "evidence_ids": [
+              "a"
+            ]
+          }
+        ],
+        "next_checks": [
+          "Collect the exact error, affected operation and incident time, then compare a working and failing request."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-08",
+      "expected_assessment": "conflicting_evidence",
+      "expected_family": "memory_exhaustion",
+      "predicted_assessment": "conflicting_evidence",
+      "leading_family": "memory_exhaustion",
+      "matched": true,
+      "prediction": {
+        "symptom": "The worker stops.",
+        "assessment": "conflicting_evidence",
+        "message": "The clues disagree. Keep the possible causes unverified and reconcile the evidence before choosing one.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic kernel event",
+            "observation": "An OOM kill terminated the worker."
+          },
+          {
+            "id": "b",
+            "source": "synthetic second kernel summary",
+            "observation": "No OOM kills occurred during this incident."
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "Memory exhaustion",
+            "family": "memory_exhaustion",
+            "rationale": "Memory exhaustion can terminate a process. This does not explain why memory ran out.",
+            "supporting_evidence_ids": [
+              "a"
+            ],
+            "contradicting_evidence_ids": [
+              "b"
+            ],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Check the kernel event, memory limit and usage for the same process and incident time.",
+            "status": "unverified"
+          }
+        ],
+        "counterevidence": [
+          {
+            "family": "memory_exhaustion",
+            "evidence_ids": [
+              "b"
+            ]
+          }
+        ],
+        "next_checks": [
+          "Check the kernel event, memory limit and usage for the same process and incident time."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-09",
+      "expected_assessment": "supported_hypothesis",
+      "expected_family": "deployment_regression",
+      "predicted_assessment": "supported_hypothesis",
+      "leading_family": "deployment_regression",
+      "matched": true,
+      "prediction": {
+        "symptom": "The site started failing.",
+        "assessment": "supported_hypothesis",
+        "message": "One mechanism has a specific supporting clue. It remains a hypothesis, not a confirmed root cause.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic change record",
+            "observation": "The error rate increased immediately after the deployment."
+          },
+          {
+            "id": "b",
+            "source": "synthetic recovery test",
+            "observation": "A rollback restored normal service."
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "Deployment regression",
+            "family": "deployment_regression",
+            "rationale": "Failure timing or recovery after rollback suggests a change-related regression. Timing alone is not proof.",
+            "supporting_evidence_ids": [
+              "a",
+              "b"
+            ],
+            "contradicting_evidence_ids": [],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Compare the changed and prior versions, check other simultaneous changes and verify the recovery timeline.",
+            "status": "unverified"
+          }
+        ],
+        "counterevidence": [],
+        "next_checks": [
+          "Compare the changed and prior versions, check other simultaneous changes and verify the recovery timeline."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-10",
+      "expected_assessment": "supported_hypothesis",
+      "expected_family": "storage_io_failure",
+      "predicted_assessment": "supported_hypothesis",
+      "leading_family": "storage_io_failure",
+      "matched": true,
+      "prediction": {
+        "symptom": "My exports cannot be saved.",
+        "assessment": "supported_hypothesis",
+        "message": "One mechanism has a specific supporting clue. It remains a hypothesis, not a confirmed root cause.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic disk response",
+            "observation": "The disk returned EIO during the write."
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "Storage I/O failure",
+            "family": "storage_io_failure",
+            "rationale": "An I/O or full-device error can stop file operations. The underlying device condition needs checking.",
+            "supporting_evidence_ids": [
+              "a"
+            ],
+            "contradicting_evidence_ids": [],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Check device errors, mount health and available space for the affected operation.",
+            "status": "unverified"
+          }
+        ],
+        "counterevidence": [],
+        "next_checks": [
+          "Check device errors, mount health and available space for the affected operation."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-11",
+      "expected_assessment": "supported_hypothesis",
+      "expected_family": "certificate_expiry",
+      "predicted_assessment": "insufficient_evidence",
+      "leading_family": null,
+      "matched": false,
+      "prediction": {
+        "symptom": "The secure page will not open.",
+        "assessment": "insufficient_evidence",
+        "message": "I do not have enough evidence to name a likely cause. A symptom or error page alone is not enough.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic browser error",
+            "observation": "The TLS certificate expired yesterday."
+          }
+        ],
+        "hypotheses": [],
+        "counterevidence": [],
+        "next_checks": [
+          "Collect the exact error, affected operation and incident time, then compare a working and failing request."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    },
+    {
+      "id": "CH-12",
+      "expected_assessment": "competing_hypotheses",
+      "expected_family": null,
+      "predicted_assessment": "competing_hypotheses",
+      "leading_family": "memory_exhaustion",
+      "matched": true,
+      "prediction": {
+        "symptom": "The app is slow and sometimes stops.",
+        "assessment": "competing_hypotheses",
+        "message": "Several mechanisms have supporting clues. Their order is not proof that one caused the incident.",
+        "evidence": [
+          {
+            "id": "a",
+            "source": "synthetic kernel event",
+            "observation": "An OOM kill terminated a process."
+          },
+          {
+            "id": "b",
+            "source": "synthetic network check",
+            "observation": "The routing table is missing a route to the application subnet."
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "Memory exhaustion",
+            "family": "memory_exhaustion",
+            "rationale": "Memory exhaustion can terminate a process. This does not explain why memory ran out.",
+            "supporting_evidence_ids": [
+              "a"
+            ],
+            "contradicting_evidence_ids": [],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Check the kernel event, memory limit and usage for the same process and incident time.",
+            "status": "unverified"
+          },
+          {
+            "title": "Network routing failure",
+            "family": "network_routing_failure",
+            "rationale": "A missing or removed route can prevent communication. The reason it changed is still unknown.",
+            "supporting_evidence_ids": [
+              "b"
+            ],
+            "contradicting_evidence_ids": [],
+            "missing_evidence": [
+              "Independent verification of the mechanism and its incident timing."
+            ],
+            "next_diagnostic_step": "Compare the affected route table with a healthy host and check when the route changed.",
+            "status": "unverified"
+          }
+        ],
+        "counterevidence": [],
+        "next_checks": [
+          "Check the kernel event, memory limit and usage for the same process and incident time.",
+          "Compare the affected route table with a healthy host and check when the route changed."
+        ],
+        "confirmed_root_cause": null,
+        "action_mode": "simulation_only",
+        "action_proposed": false,
+        "stop_reason": "INVESTIGATION_REQUIRED"
+      }
+    }
+  ]
+}

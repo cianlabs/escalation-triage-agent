@@ -30,3 +30,6 @@ jobs:
 
       - name: Reproduce the public incident baseline
         run: python evaluation.py --check
+
+      - name: Reproduce the synthetic investigation challenge
+        run: python investigation_eval.py --check
