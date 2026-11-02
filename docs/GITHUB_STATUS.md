@@ -45,3 +45,37 @@ The original public and synthetic ranking reports reproduce unchanged. This inte
 ## Learning exercise
 
 Read the three source labels in the output. Identify which source contacted a real service and which two did not. Find the two timestamps and explain why they mean different things. Finally, explain why a failed status request must mean unknown, and why a valid major indicator still cannot explain what caused your own problem.
+
+## Compare status with a specific problem
+
+```sh
+python agent.py --github-status --problem 'GitHub Actions jobs are stuck in the queue'
+```
+
+The problem stays on your computer. This mode makes one fixed GET to GitHub's [summary endpoint](https://www.githubstatus.com/api/v2/summary.json), which includes both the aggregate rollup and component statuses. No problem text, repository name, symptom or local clue is sent in the URL, headers or request body.
+
+The program first identifies a GitHub service from a small explicit vocabulary. It then checks that component, rather than treating any GitHub outage as relevant to every problem. For example, a Pages outage does not explain an Actions failure when Actions is reported operational. The aggregate indicator does not override the component report in either direction.
+
+If the service is unclear, choose it explicitly:
+
+```sh
+python agent.py --github-status --problem 'My build is stuck' --component actions
+```
+
+Available service names are actions, git, api, pages, packages, codespaces, copilot, issues, pull-requests and webhooks. A generic website, API or workflow is not assumed to belong to GitHub. Multiple service mentions are ambiguous and require an explicit selection. This is limited text matching, not a model understanding your incident.
+
+| Relevance result | What it means |
+| --- | --- |
+| possibly_related | The selected service has reported degradation or maintenance. Compare incident time, error and scope; this is not proof of causation. |
+| no_reported_issue | The selected service is reported operational. This does not rule out an unreported, local or account-specific problem. |
+| needs_component | The program cannot confidently identify one GitHub service. Ask for clarification. |
+| unknown | The component report is missing, unrecognized or unavailable. Do not infer health. |
+| time_not_matched | The problem explicitly refers to an earlier incident. A current snapshot cannot establish its historical status. |
+
+Historical wording such as yesterday, last week, hours ago or an ISO date triggers the time warning. This detector is incomplete; all results still warn that this is a current snapshot and must be compared with the actual failure window. No historical incident API is queried. Component last-updated time is displayed separately from page update and fetch times. It is not the time a failure began or the last time every request was tested.
+
+Component identity is checked against reviewed ids and names. Duplicate ids, wrong page identity or malformed component timestamps make the summary unavailable. A missing known component or a new unrecognized status never defaults to operational. Unknown future components are ignored rather than matched by their names. Component descriptions and incident narratives are not used as causal evidence.
+
+The two practice sources remain excluded. Every relevance result keeps the cause unconfirmed and proposes no action. The existing --github-status command without a problem keeps using the aggregate endpoint and its previous behavior. Both commands return 0 for a successfully collected report, even if a selected component is missing or degraded; inspect the explicit relevance result. An unavailable public report returns 1.
+
+A manual live problem-specific request succeeded on November 1, 2026, Pacific time. Offline tests cover component matching, unrelated outages, operational and degraded reports, ambiguous scope, missing or unknown components, malformed summaries, historical wording, provenance, privacy of the local problem and CLI validation. Existing ranking scores and reports are unchanged.

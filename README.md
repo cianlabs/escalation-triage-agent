@@ -14,6 +14,16 @@ One real helper reads GitHub's public status API alongside two clearly labeled s
 
 A failed, slow or malformed response means unknown, never healthy. GitHub's reported rollup describes provider impact and does not prove the cause or health of your service. The command exits 0 when it obtains a valid report, even if that report says major impact, and 1 when the live result is unknown. See [the source, failure rules and learning exercise](docs/GITHUB_STATUS.md).
 
+## Is GitHub status relevant to my problem?
+
+```sh
+.venv/bin/python agent.py --github-status --problem 'GitHub Actions jobs are stuck in the queue'
+```
+
+The agent checks Actions specifically. A degraded Actions report is possibly related, not a confirmed cause. An operational report means no reported issue, not that your failure is ruled out. An unrelated outage is not blamed for the problem. If the service is unclear, add --component actions or choose another supported service. Historical problems get a warning that current status cannot answer for the earlier incident.
+
+Your problem stays local; one fixed public summary request supplies the component data. Practice evidence remains excluded and no action runs. [Read the relevance rules and examples](docs/GITHUB_STATUS.md#compare-status-with-a-specific-problem).
+
 ## Collect three simulated sources concurrently
 
 ```sh

@@ -65,7 +65,7 @@ async def _run_check(check):
                           evidence=[dict(id=f'{check.name}::{row["id"]}',
                                          source=f'{check.name}: {row["source"]}',
                                          observation=row['observation'], data_kind=check.data_kind,
-                                         **{key: original[key] for key in ('observed_at', 'source_updated_at', 'source_url', 'status_indicator', 'reported_description') if key in original})
+                                         **{key: original[key] for key in ('observed_at', 'source_updated_at', 'source_url', 'status_indicator', 'reported_description', 'component_key', 'component_name', 'component_status', 'component_updated_at') if key in original})
                                     for row, original in zip(rows, raw)])
     result['elapsed_ms'] = max(0, round((loop.time()-started)*1000))
     return result
@@ -159,4 +159,12 @@ def render_collection(result):
         if live['state']=='reported':
             lines += ['Provider description: '+live['description'], 'Fetched at: '+live['observed_at'], 'Status page updated at: '+live['source_updated_at']]
         lines.append('Public aggregate status does not prove the cause or health of your own service.')
+    if 'status_relevance' in result:
+        relevance = result['status_relevance']
+        lines += ['', 'Relevance to your problem: '+relevance['assessment'], relevance['message']]
+        if relevance['component']:
+            matched = next((row for row in collection['evidence'] if row.get('component_key') == relevance['component']), None)
+            if matched:
+                lines.append('Component last updated at: '+matched['component_updated_at'])
+        lines.append('Current snapshot only; compare the time and scope of your failure.')
     return '\n'.join(lines)+'\n\n'+render_investigation(result)
