@@ -1,0 +1,32 @@
+[
+  {
+    "original_case": "AWS December 2021",
+    "decision": "replace",
+    "reason": "Old URL is a November 2020 Kinesis report. New case uses the actual 2020 incident and date."
+  },
+  {
+    "original_case": "CircleCI January 2023",
+    "decision": "omit",
+    "reason": "Security report does not support the old invented worker crash and memory exhaustion story."
+  },
+  {
+    "original_case": "Reddit March 2023",
+    "decision": "omit",
+    "reason": "Fetched citation is a third-party mirror; not used in this first-party-only benchmark."
+  },
+  {
+    "original_case": "OpenAI November 2023",
+    "decision": "omit",
+    "reason": "HTTP 200 body did not contain the incident report."
+  },
+  {
+    "original_case": "Heroku September 2021",
+    "decision": "omit",
+    "reason": "HTTP 200 body did not contain the incident report."
+  },
+  {
+    "original_case": "AWS CPU runbook link",
+    "decision": "omit",
+    "reason": "Redirects to the general EC2 guide rather than the claimed troubleshooting page."
+  }
+]

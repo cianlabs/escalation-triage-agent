@@ -323,6 +323,7 @@ def _describe_call(turn):
 
 
 def _print_banner(state):
+    print("Data: synthetic practice fixture; not a real incident.")
     print(f"Escalation {state.escalation_id}")
     print(f"Tier: {state.customer_tier}")
     print(f"Service: {state.service}")

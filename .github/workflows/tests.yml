@@ -27,3 +27,6 @@ jobs:
       # or an API key. Do not add a step that calls a live model.
       - name: Run tests
         run: python -m pytest -q
+
+      - name: Reproduce the public incident baseline
+        run: python evaluation.py --check

@@ -1,0 +1,1859 @@
+{
+  "metrics": {
+    "top1": {
+      "correct": 10,
+      "total": 26
+    },
+    "top3": {
+      "correct": 11,
+      "total": 26
+    },
+    "vague_top1": {
+      "correct": 3,
+      "total": 13
+    },
+    "cautious": {
+      "correct": 4,
+      "total": 4
+    }
+  },
+  "results": [
+    {
+      "id": "PUB-01",
+      "title": "Installation token integer overflow",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "integer_overflow",
+      "reference_cause": "Installation token integer overflow",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express integer overflow; source mechanism: Installation token integer overflow."
+    },
+    {
+      "id": "PUB-02",
+      "title": "Database primary crash during failover",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "database_failure",
+      "reference_cause": "Database primary crash during failover",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express database failure; source mechanism: Database primary crash during failover."
+    },
+    {
+      "id": "PUB-03",
+      "title": "Slack client connection failure",
+      "kind": "cautious",
+      "vague": true,
+      "expected_family": null,
+      "reference_cause": null,
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": null,
+      "top3": null,
+      "missed": false,
+      "reason": "Kept multiple unverified hypotheses and no confirmed cause."
+    },
+    {
+      "id": "PUB-04",
+      "title": "Gh Intro",
+      "kind": "cautious",
+      "vague": false,
+      "expected_family": null,
+      "reference_cause": null,
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": null,
+      "top3": null,
+      "missed": false,
+      "reason": "Kept multiple unverified hypotheses and no confirmed cause."
+    },
+    {
+      "id": "PUB-05",
+      "title": "Actions SQL infrastructure failure",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "database_failure",
+      "reference_cause": "Actions SQL infrastructure failure",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express database failure; source mechanism: Actions SQL infrastructure failure."
+    },
+    {
+      "id": "PUB-06",
+      "title": "Check suite integer overflow in GraphQL library",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "integer_overflow",
+      "reference_cause": "Check suite integer overflow in GraphQL library",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express integer overflow; source mechanism: Check suite integer overflow in GraphQL library."
+    },
+    {
+      "id": "PUB-07",
+      "title": "Database index reversal causes full table scans",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "change_regression",
+      "reference_cause": "Database index reversal causes full table scans",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-08",
+      "title": "Hosted compute authentication provider outage",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "dependency_outage",
+      "reference_cause": "Hosted compute authentication provider outage",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express dependency outage; source mechanism: Hosted compute authentication provider outage."
+    },
+    {
+      "id": "PUB-09",
+      "title": "Datadog regional connectivity failure",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "change_regression",
+      "reference_cause": "Systemd update removes Cilium routes",
+      "ranked_titles": [
+        "Customer-facing outage",
+        "Bad deploy",
+        "Process needs a restart"
+      ],
+      "ranked_families": [
+        null,
+        "change_regression",
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": true,
+      "top1": false,
+      "top3": true,
+      "missed": true,
+      "reason": "Correct broad cause family is present, but not ranked first."
+    },
+    {
+      "id": "PUB-10",
+      "title": "Secret scanning migration blocks repository creation",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "change_regression",
+      "reference_cause": "Secret scanning migration blocks repository creation",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-11",
+      "title": "Fastly configuration triggers latent bug",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "change_regression",
+      "reference_cause": "Valid customer configuration triggers deployed software bug",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-12",
+      "title": "Atlassian site deletion",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "operator_deletion",
+      "reference_cause": "Deletion script receives site IDs instead of app IDs",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express operator deletion; source mechanism: Deletion script receives site IDs instead of app IDs."
+    },
+    {
+      "id": "PUB-13",
+      "title": "Poor query and retries overload MySQL primary",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "query_overload",
+      "reference_cause": "Poor query and retries overload MySQL primary",
+      "ranked_titles": [
+        "Customer-facing outage",
+        "Bad deploy",
+        "Process needs a restart"
+      ],
+      "ranked_families": [
+        null,
+        "change_regression",
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": true,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express query overload; source mechanism: Poor query and retries overload MySQL primary."
+    },
+    {
+      "id": "PUB-14",
+      "title": "Google Cloud load balancer configuration corruption",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "change_regression",
+      "reference_cause": "Configuration pipeline race corrupts load balancer configuration",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-15",
+      "title": "Codespaces API response schema regression",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "change_regression",
+      "reference_cause": "Codespaces API response schema regression",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-16",
+      "title": "AWS Kinesis thread limit exhaustion",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "resource_limit",
+      "reference_cause": "Front-end fleet exceeds operating system thread limit",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express resource limit; source mechanism: Front-end fleet exceeds operating system thread limit."
+    },
+    {
+      "id": "PUB-17",
+      "title": "Pages serving node stops accepting builds",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "build_node_failure",
+      "reference_cause": "Pages serving node stops accepting builds",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express build node failure; source mechanism: Pages serving node stops accepting builds."
+    },
+    {
+      "id": "PUB-18",
+      "title": "ZooKeeper split cluster causes conflicting Kafka state",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "change_regression",
+      "reference_cause": "ZooKeeper split cluster causes conflicting Kafka state",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-19",
+      "title": "GitHub network partition and database topology divergence",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "network_partition",
+      "reference_cause": "Network partition triggers incompatible database failover topology",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express network partition; source mechanism: Network partition triggers incompatible database failover topology."
+    },
+    {
+      "id": "PUB-20",
+      "title": "Memcached amplification DDoS",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "ddos",
+      "reference_cause": "Memcached amplification DDoS",
+      "ranked_titles": [
+        "Customer-facing outage",
+        "Bad deploy",
+        "Process needs a restart"
+      ],
+      "ranked_families": [
+        null,
+        "change_regression",
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": true,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express ddos; source mechanism: Memcached amplification DDoS."
+    },
+    {
+      "id": "PUB-21",
+      "title": "Backbone route leak overloads Atlanta router",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "change_regression",
+      "reference_cause": "Backbone route leak overloads Atlanta router",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-22",
+      "title": "BGP policy reorder withdraws prefixes",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "change_regression",
+      "reference_cause": "BGP policy reorder withdraws prefixes",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-23",
+      "title": "Cloudflare Incident On June 20 2024",
+      "kind": "cautious",
+      "vague": true,
+      "expected_family": null,
+      "reference_cause": null,
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": null,
+      "top3": null,
+      "missed": false,
+      "reason": "Kept multiple unverified hypotheses and no confirmed cause."
+    },
+    {
+      "id": "PUB-24",
+      "title": "KV deployment tool misconfiguration",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "change_regression",
+      "reference_cause": "KV deployment tool misconfiguration",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-25",
+      "title": "Post Mortem On Cloudflare Control Plane And Analytics Outage",
+      "kind": "cautious",
+      "vague": false,
+      "expected_family": null,
+      "reference_cause": null,
+      "ranked_titles": [
+        "Customer-facing outage",
+        "Bad deploy",
+        "Process needs a restart"
+      ],
+      "ranked_families": [
+        null,
+        "change_regression",
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": true,
+      "top1": null,
+      "top3": null,
+      "missed": false,
+      "reason": "Kept multiple unverified hypotheses and no confirmed cause."
+    },
+    {
+      "id": "PUB-26",
+      "title": "Traffic surge congests Cloudflare AWS interconnect",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "network_congestion",
+      "reference_cause": "Traffic surge congests Cloudflare AWS interconnect",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express network congestion; source mechanism: Traffic surge congests Cloudflare AWS interconnect."
+    },
+    {
+      "id": "PUB-27",
+      "title": "Abuse remediation disables production R2 gateway",
+      "kind": "diagnosis",
+      "vague": true,
+      "expected_family": "operator_disablement",
+      "reference_cause": "Abuse remediation disables production R2 gateway",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express operator disablement; source mechanism: Abuse remediation disables production R2 gateway."
+    },
+    {
+      "id": "PUB-28",
+      "title": "Third party storage outage breaks Workers KV",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "storage_dependency",
+      "reference_cause": "Third party storage outage breaks Workers KV",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express storage dependency; source mechanism: Third party storage outage breaks Workers KV."
+    },
+    {
+      "id": "PUB-29",
+      "title": "WAF regular expression exhausts CPU",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "change_regression",
+      "reference_cause": "WAF regular expression exhausts CPU",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": true,
+      "top3": true,
+      "missed": false,
+      "reason": "Broad family matches by default order, without supporting evidence; this is a guess."
+    },
+    {
+      "id": "PUB-30",
+      "title": "Maintenance command removes excess S3 servers",
+      "kind": "diagnosis",
+      "vague": false,
+      "expected_family": "capacity_removal",
+      "reference_cause": "Maintenance command removes excess S3 servers",
+      "ranked_titles": [
+        "Bad deploy",
+        "Process needs a restart",
+        "Customer-facing outage"
+      ],
+      "ranked_families": [
+        "change_regression",
+        null,
+        null
+      ],
+      "correctly_cautious": true,
+      "top1_has_support": false,
+      "top1": false,
+      "top3": false,
+      "missed": true,
+      "reason": "Top three cannot express capacity removal; source mechanism: Maintenance command removes excess S3 servers."
+    }
+  ],
+  "total": 30,
+  "predictions": [
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-01"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-02"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-03"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-04"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-05"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-06"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-07"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-08"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Customer-facing outage",
+          "rationale": "Evidence mentions a related signal. This is not a confirmed cause.",
+          "supporting_evidence_ids": [
+            "observation-1"
+          ],
+          "missing_evidence": [],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        },
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-09"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-10"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-11"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-12"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Customer-facing outage",
+          "rationale": "Evidence mentions a related signal. This is not a confirmed cause.",
+          "supporting_evidence_ids": [
+            "observation-1"
+          ],
+          "missing_evidence": [],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        },
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-13"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-14"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-15"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-16"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-17"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-18"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-19"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Customer-facing outage",
+          "rationale": "Evidence mentions a related signal. This is not a confirmed cause.",
+          "supporting_evidence_ids": [
+            "observation-1"
+          ],
+          "missing_evidence": [],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        },
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-20"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-21"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-22"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-23"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-24"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Customer-facing outage",
+          "rationale": "Evidence mentions a related signal. This is not a confirmed cause.",
+          "supporting_evidence_ids": [
+            "observation-1"
+          ],
+          "missing_evidence": [],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        },
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-25"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-26"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-27"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-28"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-29"
+    },
+    {
+      "hypotheses": [
+        {
+          "title": "Bad deploy",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Compare the failed deploy with the previous version, then ask a human before any rollback.",
+          "status": "unverified"
+        },
+        {
+          "title": "Process needs a restart",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Read the crash line, then ask a human before any restart.",
+          "status": "unverified"
+        },
+        {
+          "title": "Customer-facing outage",
+          "rationale": "No supporting evidence in the logs or deploys that were read.",
+          "supporting_evidence_ids": [],
+          "missing_evidence": [
+            "A log line or deploy note that mentions this hypothesis"
+          ],
+          "next_diagnostic_step": "Confirm who is affected, then ask a human before paging oncall.",
+          "status": "unverified"
+        }
+      ],
+      "confirmed_root_cause": null,
+      "action_mode": "simulation_only",
+      "incident_id": "PUB-30"
+    }
+  ],
+  "benchmark": "public user-impact observations; deterministic ranking tool; cause-family scoring",
+  "baseline_commit": "68cb090e106180f08828954f7b322092a395fa8f",
+  "tools_sha256": "1712e5218b4be8ac1fba0c821ed78b0509a00ed6c36cda10b6c36a50b3142e40",
+  "dataset_sha256": "8cfade4ceff44ea2f8d88793f50914bd6d132548b1886c5ddc4be5ee35f1fa80"
+}
