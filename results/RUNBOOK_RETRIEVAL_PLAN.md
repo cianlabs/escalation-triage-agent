@@ -32,3 +32,21 @@ scope, it will say what the guides do not cover. The assistant is read-only.
 These questions were written from the guides before implementation. They
 are development cases. A separate set of questions will be needed to
 measure performance after tuning.
+
+## First lexical baseline
+
+Run `python runbook_search.py 'What should I check if Redis hits maxmemory?'`
+from the repository. The search ranks guides by the number of distinct
+question words they share, after removing common words. Each short guide
+is one passage. Positive matches include exact file and line citations.
+
+| Measure | Score |
+| --- | --- |
+| Expected passage in the top three | 8/8 |
+| Abstention on unsupported questions | 1/2 |
+| Answer grounding | Unscored. This version returns excerpts. |
+
+R09 produced no hits. R10 surfaced the outage guide on the shared word
+waiting, even though the guide gives no cancellation procedure. This is
+the only miss under the retrieval and abstention measures above. These
+are development questions, and the corpus is small.
