@@ -1,0 +1,18 @@
+name: Controlled HTTP failure demo
+on:
+  push:
+    branches: [demo/controlled-http-failure]
+permissions: {}
+jobs:
+  check-response:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check simulated HTTP response
+        shell: bash
+        run: |
+          expected=200
+          observed=503
+          if [[ "$observed" != "$expected" ]]; then
+            echo "::error::Simulated HTTP response mismatch. Expected $expected, got $observed."
+            exit 1
+          fi
