@@ -27,3 +27,21 @@ def test_rejects_same_run_before_fetching():
     url = 'https://github.com/a/b/actions/runs/1'
     with pytest.raises(AgentError, match='two distinct'):
         compare_public_runs(url, url)
+
+
+def test_summary_connects_matching_simulated_error_and_diff():
+    before = run('failure')
+    before['error_details'] = dict(state='reported', message='Reported error', jobs=[
+        dict(job_name='check-response', steps=dict(state='reported', steps=[]),
+             annotations=dict(state='reported', annotations=[
+                 dict(level='failure', path='.github', start_line=10, text_truncated=False,
+                      message='Simulated HTTP response mismatch. Expected 200, got 503.')
+             ]))
+    ])
+    diff = ['  |           expected=200', '  | -          observed=503', '  | +          observed=200']
+    text = render_comparison(before, run('success'), diff)
+    assert 'the simulated value changed from 503 to 200' in text
+    assert 'Confirmed root cause: none' in text
+    unchanged = render_comparison(before, run('success'), ['No workflow line changes found.'])
+    assert 'The available evidence does not explain the change.' in unchanged
+    assert 'the simulated value changed' not in unchanged

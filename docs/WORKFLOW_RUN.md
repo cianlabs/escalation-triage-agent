@@ -71,3 +71,8 @@ The demo shows `check-response` changing from failure to success and includes
 the earlier run's reported mismatch. Jobs are paired by exact name when it is
 unique in both runs. The command reads public run evidence and leaves the
 cause unconfirmed. For push runs with the same workflow path, it shows a bounded diff of the files at the two run commits. If either file is unavailable, the run evidence is still shown. A file diff alone does not verify a fix.
+
+The triage summary highlights jobs that failed before and passed after. For
+the simulated HTTP demo, it connects the reported mismatch to the matching
+assignment change. When the evidence does not line up, it reports the outcome
+change and leaves the explanation open.
