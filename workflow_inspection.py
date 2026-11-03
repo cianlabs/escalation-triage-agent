@@ -201,6 +201,8 @@ def inspect_public_run(url):
 
 
 def render_run(result):
+    from workflow_error_details import clip_text
+
     lines=['Public GitHub Actions run inspection. No actions will run.',
            'Run: '+result['run_url'],'Collection started at: '+result['observed_at'],
            'Assessment: '+result['assessment'],result['message']]
@@ -215,15 +217,22 @@ def render_run(result):
             if detail.get('source_url'): lines.append('Source: '+detail['source_url'])
             if detail.get('error'): lines.append(detail['error'])
     for job in result.get('jobs',{}).get('jobs',[]):
-        from workflow_error_details import clip_text
         display_name,_=clip_text(job['name'],250)
         lines.append(f"- {display_name}: {job['status']}"+(f" / {job['conclusion']}" if job['conclusion'] else ''))
     for gate in result.get('deployment_gates',{}).get('gates',[]):
         lines.append(f"- Environment {gate['environment']}: required reviewers {'reported' if gate['review_required'] else 'not reported'}; configured wait timer {gate['wait_timer_minutes']} minutes.")
+    next_check='open this run on GitHub and inspect the reported job or gate. Do not infer a root cause from its status.'
     if 'error_details' in result:
-        from workflow_error_details import render_error_details
-        lines.extend(render_error_details(result['error_details']))
-    lines += ['', 'Next check: open this run on GitHub and inspect the reported job or gate. Do not infer a root cause from its status.',
+        from workflow_error_details import BAD_CONCLUSIONS, render_error_details
+        details=result['error_details']
+        lines.extend(render_error_details(details))
+        failed_step=next(((job,step) for job in details['jobs'] for step in job['steps']['steps']
+                          if step['conclusion'] in BAD_CONCLUSIONS),None)
+        if failed_step:
+            job,step=failed_step
+            name=' '.join(clip_text(job['job_name'],250)[0].split())
+            next_check=f"open step {step['number']} in job {name} on GitHub. Compare what the step expected with what it observed."
+    lines += ['', 'Next check: '+next_check,
               'Collection: '+('complete' if result['complete'] else 'incomplete; some state remains unknown'),
               'Confirmed root cause: none']
     return '\n'.join(lines)
