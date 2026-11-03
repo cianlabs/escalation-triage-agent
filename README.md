@@ -14,6 +14,11 @@ Use a public workflow-run URL to read its current state, jobs and any reported p
 
 A complete read exits 0 even when the workflow failed; incomplete collection exits 1. See [examples, request boundaries and the learning exercise](docs/WORKFLOW_RUN.md).
 
+For a portfolio demo, run `python agent.py --replay-comparison demo` from
+the repository. The [workflow comparison evaluation](results/WORKFLOW_COMPARISON_EVALUATION.md)
+shows where the rules and Gemini helped, and how the CLI handled model
+unavailability.
+
 ## Read GitHub public status
 
 ```sh
