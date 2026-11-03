@@ -57,3 +57,17 @@ python agent.py --workflow-run https://github.com/cli/cli/actions/runs/410724915
 For failed jobs, the inspector shows failed steps when GitHub supplies them. It also shows public check annotations after matching the check to the job and run. Errors, warnings, and notices are labeled separately. If some details are unavailable, the report preserves the known run outcome and marks collection incomplete.
 
 In this example, the failed step is Run Dependabot. A public annotation reports an updater error. The detailed log requires repository write access, so the underlying cause stays unconfirmed. The inspector reads public metadata only.
+
+## Compare two runs
+
+Pass the earlier run first and the later run second. Both must be distinct
+public run URLs from the same repository.
+
+```sh
+python agent.py --compare-runs https://github.com/cianlabs/escalation-triage-agent/actions/runs/41549968399 https://github.com/cianlabs/escalation-triage-agent/actions/runs/41550790225
+```
+
+The demo shows `check-response` changing from failure to success and includes
+the earlier run's reported mismatch. Jobs are paired by exact name when it is
+unique in both runs. The command reads public run evidence and leaves the
+cause unconfirmed. It does not compare workflow files or verify a fix.
