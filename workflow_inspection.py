@@ -72,6 +72,8 @@ def parse_run(data, target):
     return dict(id=data['id'],run_attempt=data['run_attempt'],status=status,conclusion=conclusion,
                 created_at=stamp(data.get('created_at')),updated_at=stamp(data.get('updated_at')),
                 html_url=target['html_url'],
+                workflow_path=data.get('path') if isinstance(data.get('path'),str) else None,
+                event=data.get('event') if isinstance(data.get('event'),str) else None,
                 head_sha=data.get('head_sha') if isinstance(data.get('head_sha'),str) and re.fullmatch(r'[0-9a-fA-F]{40}',data['head_sha']) else None,
                 check_suite_id=data.get('check_suite_id') if positive_integer(data.get('check_suite_id')) else None)
 
@@ -167,7 +169,7 @@ async def inspect_run(client,url):
     recheck=await get_json(client,target['api_url'])
     try:
         current=parse_run(recheck.get('data'),target)
-        consistent=all(current[k]==run[k] for k in ('run_attempt','status','conclusion','updated_at','head_sha','check_suite_id'))
+        consistent=all(current[k]==run[k] for k in ('run_attempt','status','conclusion','updated_at','head_sha','check_suite_id','workflow_path','event'))
     except (ValueError,TypeError):
         consistent=None
     result['snapshot_consistent']=consistent
