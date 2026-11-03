@@ -106,3 +106,21 @@ spot checks, the assistant cited the pooler logs for a rephrased database
 question and abstained on deployment approval logs. It missed the
 supported question asking which checks to run for a sluggish dashboard.
 The answer trigger matches whole words and accepts check but misses checks.
+
+## Action and approval answers
+
+The answer mode quotes approval requirements for supported operations.
+It also recognizes checks as a diagnostic question term.
+
+| Development measure | Previous | Updated |
+| --- | --- | --- |
+| Expected passage in top three | 8/8 | 8/8 |
+| Complete grounded answer | 3/8 | 8/8 |
+| Abstention on unsupported questions | 2/2 | 2/2 |
+
+The five previously missed action and approval questions now receive
+cited answers. Spot checks for rebooting Redis and restarting after a
+release triggered 500 errors both preserved approval. A rephrased
+deployment cancellation question still received an abstention.
+These rules were developed against the ten questions and use a limited
+set of terms. Broader paraphrases still need evaluation.

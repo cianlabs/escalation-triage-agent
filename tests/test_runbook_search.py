@@ -58,3 +58,16 @@ def test_dashboard_answer_includes_both_diagnostic_lines():
     assert 'connection pool limits' in excerpts[0][1]
     assert 'query performance' in excerpts[1][1]
     assert 'pooler status' in excerpts[1][1]
+
+
+def test_action_answers_keep_human_approval():
+    from runbook_search import answer
+
+    for question, citation in (
+        ('May I reboot Redis without approval?', 'runbooks/redis_memory.txt:5'),
+        ('After a release triggered a burst of 500 errors, should I restart?',
+         'runbooks/rollback_bad_deploy.txt:5'),
+    ):
+        excerpts = answer(question, search(question))
+        assert [source for source, _ in excerpts] == [citation]
+        assert 'human approv' in excerpts[0][1]

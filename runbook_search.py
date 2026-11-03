@@ -41,9 +41,9 @@ def search(question):
 
 
 def answer(question, hits):
-    """Extract an explicit diagnostic check from a matching guide."""
+    """Extract a cited check or approval requirement from a matching guide."""
     query = terms(question)
-    if not query & {'check', 'inspect', 'review', 'logs'} or not hits:
+    if not hits or query & {'cancel', 'rotate'}:
         return []
     best_score = hits[0][0]
     candidates = []
@@ -52,6 +52,12 @@ def answer(question, hits):
             break
         path, _ = citation.rsplit(':', 1)
         lines = passage.splitlines()
+        action = approval_answer(query, path, lines)
+        if action:
+            candidates.append(action)
+            continue
+        if not query & {'check', 'checks', 'inspect', 'review', 'logs'}:
+            continue
         subject = terms(lines[0]) & query
         checks = [(number, line) for number, line in enumerate(lines[1:], 2)
                   if re.match(r'(?:Check|Inspect|Review)\b|If [^,]+, (?:check|inspect|review)\b', line)]
@@ -63,9 +69,29 @@ def answer(question, hits):
     return candidates[0] if len(candidates) == 1 else []
 
 
+def approval_answer(query, path, lines):
+    """Require both the operation and its subject before quoting approval guidance."""
+    restart = query & {'restart', 'bounce', 'reboot'}
+    if path.endswith('/redis_memory.txt') and 'redis' in query and restart:
+        pattern = r"^Restart Redis .*only after human approval"
+    elif path.endswith('/db_connection_pool.txt') and 'pooler' in query and restart:
+        pattern = r"^Restart connection pooler only after human approval"
+    elif (path.endswith('/rollback_bad_deploy.txt') and query & {'500', '500s'}
+          and query & {'release', 'deploy', 'deployment'} and restart):
+        pattern = r"^Roll back only after a human approves"
+    elif path.endswith('/customer_outage.txt') and 'service' in query and 'down' in query and 'approval' in query:
+        pattern = r"^Page oncall only after a human approves"
+    elif path.endswith('/customer_outage.txt') and 'customers' in query and query & {'bring', 'page', 'call'}:
+        pattern = r"^Page oncall (?:when|only after)"
+    else:
+        return []
+    return [(f'{path}:{number}', line) for number, line in enumerate(lines, 1)
+            if re.match(pattern, line)]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--answer', action='store_true', help='Quote a supported diagnostic check.')
+    parser.add_argument('--answer', action='store_true', help='Quote a supported check or approval requirement.')
     parser.add_argument('question')
     args = parser.parse_args()
     hits = search(args.question)
