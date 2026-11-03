@@ -211,3 +211,25 @@ def test_saved_demo_replays_without_github(monkeypatch, capsys):
     assert 'Replaying saved GitHub evidence.' in output
     assert 'check-response: failure -> success' in output
     assert 'the simulated value changed from 503 to 200' in output
+
+
+def test_openai_summary_replays_saved_evidence(monkeypatch, capsys):
+    import json
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+
+    def create(*, model, input, store):
+        assert model == 'gpt-6-luna'
+        assert store is False
+        assert 'Expected 200, got 503' in json.loads(input[1]['content'])['before']
+        return SimpleNamespace(output_text='{"summary":"The check recovered.","sources":["after"]}')
+
+    def unexpected(*args, **kwargs):
+        pytest.fail('OpenAI replay must not call GitHub or xAI')
+
+    client = SimpleNamespace(responses=SimpleNamespace(create=create))
+    monkeypatch.setattr('agent.make_openai_summary_client', lambda: nullcontext(client))
+    monkeypatch.setattr('agent.make_client', unexpected)
+    monkeypatch.setattr('workflow_comparison.compare_public_runs', unexpected)
+    assert main(['--replay-comparison', '--model-summary', '--summary-provider', 'openai']) == 0
+    assert 'The check recovered.' in capsys.readouterr().out

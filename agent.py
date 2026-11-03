@@ -177,7 +177,16 @@ def make_client():
     return OpenAI(api_key=key, base_url=XAI_BASE_URL, timeout=60, max_retries=0)
 
 
-def ask_model(client, messages, tools, *, comparison_summary=False):
+def make_openai_summary_client():
+    key = os.environ.get("OPENAI_API_KEY", "").strip()
+    if not key:
+        raise AgentError("MISSING_KEY", "Set OPENAI_API_KEY in this terminal.")
+    from openai import OpenAI
+
+    return OpenAI(api_key=key, base_url="https://api.openai.com/v1", timeout=60, max_retries=0)
+
+
+def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL, provider="xai"):
     """One model call. Failures become named errors. The exception text is not kept.
 
     Some client errors quote the request. The request can contain the key,
@@ -185,13 +194,14 @@ def ask_model(client, messages, tools, *, comparison_summary=False):
     """
     try:
         if comparison_summary:
-            response = client.responses.create(model=MODEL, input=messages, store=False)
+            response = client.responses.create(model=model, input=messages, store=False)
             return response.output_text
         completion = client.chat.completions.create(model=MODEL, messages=messages, tools=tools)
         return completion.choices[0].message
     except Exception as exc:
         if type(exc).__name__ == "AuthenticationError":
-            raise AgentError("BAD_KEY", "xAI rejected the key. Check XAI_API_KEY in this terminal.") from None
+            key_name = "OPENAI_API_KEY" if provider == "openai" else "XAI_API_KEY"
+            raise AgentError("BAD_KEY", f"The provider rejected the key. Check {key_name} in this terminal.") from None
         status = getattr(exc, "status_code", None)
         code = getattr(exc, "code", None)
         safe_codes = {
@@ -719,7 +729,8 @@ def main(argv=None, ask=input):
     run_mode.add_argument("--compare-runs", nargs=2, metavar=("BEFORE", "AFTER"), help="Compare two public Actions runs from the same repository.")
     run_mode.add_argument("--replay-comparison", action="store_true", help="Compare saved demo runs without contacting GitHub.")
     run_mode.add_argument("--workflow-run", metavar="URL", help="Read one public GitHub Actions run and its jobs. No keys or actions.")
-    parser.add_argument("--model-summary", action="store_true", help="Send public comparison evidence to xAI for an experimental summary.")
+    parser.add_argument("--model-summary", action="store_true", help="Send public comparison evidence to the selected model provider.")
+    parser.add_argument("--summary-provider", choices=("xai", "openai"), help="Provider for --model-summary. Defaults to xai.")
     parser.add_argument("--problem", help="Describe a problem locally to compare with current GitHub component status.")
     parser.add_argument("--component", choices=("actions", "git", "api", "pages", "packages", "codespaces", "copilot", "issues", "pull-requests", "webhooks"), help="Explicit GitHub service for --problem.")
     parser.add_argument("--github-status", action="store_true", help="Read GitHub public status alongside two labeled simulated checks. No model or actions.")
@@ -746,6 +757,9 @@ def main(argv=None, ask=input):
     parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     args = parser.parse_args(argv)
 
+    if args.summary_provider and not args.model_summary:
+        parser.error('--summary-provider requires --model-summary.')
+
     if args.model_summary and not (args.compare_runs or args.replay_comparison):
         parser.error('--model-summary requires --compare-runs or --replay-comparison.')
 
@@ -770,8 +784,18 @@ def main(argv=None, ask=input):
                     else:
                         from workflow_model_summary import model_summary
 
-                        with make_client() as client:
-                            print(model_summary(before, after, diff, lambda messages: ask_model(client, messages, None, comparison_summary=True)))
+                        provider = args.summary_provider or "xai"
+                        model = "gpt-6-luna" if provider == "openai" else MODEL
+                        client_factory = make_openai_summary_client if provider == "openai" else make_client
+                        with client_factory() as client:
+                            summary = model_summary(
+                                before, after, diff,
+                                lambda messages: ask_model(
+                                    client, messages, None, comparison_summary=True,
+                                    model=model, provider=provider,
+                                ),
+                            )
+                            print(summary)
                 return 0 if before['complete'] and after['complete'] else 1
             result = inspect_public_run(args.workflow_run)
             print(render_run(result))

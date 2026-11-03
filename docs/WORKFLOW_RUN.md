@@ -145,3 +145,12 @@ Run `python agent.py --replay-comparison` to use a saved snapshot of the
 public demo evidence, with unrelated notices omitted. Add `--model-summary` with `XAI_API_KEY` set to send
 that snapshot to xAI. Replay makes no GitHub requests. Without the model
 flag, it runs offline.
+
+To use OpenAI for the saved demo, set `OPENAI_API_KEY` in your terminal and run:
+
+```sh
+python agent.py --replay-comparison --model-summary --summary-provider openai
+```
+
+This sends the same saved public evidence to GPT-6 Luna via the Responses
+API. The provider defaults to xAI when the option is omitted.
