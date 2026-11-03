@@ -87,3 +87,22 @@ connection pool limits. R01–R04, R06, and R08 got no answer. The mode only
 extracts explicit checks, and its word matching can miss paraphrases.
 R09 and R10 both got abstentions. Two additional spot checks returned
 a cited answer for Redis metrics and abstained on TLS certificate rotation.
+
+## Log questions and checks inside sentences
+
+The answer mode now accepts log questions and recognizes checks after an
+opening condition. The log answer quotes the diagnostic clause and omits
+the instruction to clear idle backends.
+
+| Development measure | Previous | Updated |
+| --- | --- | --- |
+| Expected passage in top three | 8/8 | 8/8 |
+| Complete grounded answer | 1/8 | 3/8 |
+| Abstention on unsupported questions | 2/2 | 2/2 |
+
+R03, R05, and R07 are complete. R01, R02, R04, R06, and R08 still
+abstain because they ask about actions or approval. In three additional
+spot checks, the assistant cited the pooler logs for a rephrased database
+question and abstained on deployment approval logs. It missed the
+supported question asking which checks to run for a sluggish dashboard.
+The answer trigger matches whole words and accepts check but misses checks.
