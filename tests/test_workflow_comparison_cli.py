@@ -233,3 +233,27 @@ def test_openai_summary_replays_saved_evidence(monkeypatch, capsys):
     monkeypatch.setattr('workflow_comparison.compare_public_runs', unexpected)
     assert main(['--replay-comparison', '--model-summary', '--summary-provider', 'openai']) == 0
     assert 'The check recovered.' in capsys.readouterr().out
+
+
+def test_gemini_summary_replays_saved_evidence(monkeypatch, capsys):
+    import json
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+
+    def create(*, model, messages, response_format):
+        assert response_format == {"type": "json_object"}
+        assert model == 'gemini-3.1-flash-lite'
+        assert 'Expected 200, got 503' in json.loads(messages[1]['content'])['before']
+        message = SimpleNamespace(content='{"summary":"The check recovered.","sources":["after"]}')
+        return SimpleNamespace(choices=[SimpleNamespace(message=message)])
+
+    def unexpected(*args, **kwargs):
+        pytest.fail('Gemini replay must use saved evidence and only the selected provider')
+
+    client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    monkeypatch.setattr('agent.make_gemini_summary_client', lambda: nullcontext(client))
+    monkeypatch.setattr('agent.make_client', unexpected)
+    monkeypatch.setattr('agent.make_openai_summary_client', unexpected)
+    monkeypatch.setattr('workflow_comparison.compare_public_runs', unexpected)
+    assert main(['--replay-comparison', '--model-summary', '--summary-provider', 'gemini']) == 0
+    assert 'The check recovered.' in capsys.readouterr().out
