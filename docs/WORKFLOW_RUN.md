@@ -122,3 +122,9 @@ including whether it calls out missing evidence.
 
 These cases use simulated GitHub responses. The scores apply to these
 examples and their expected wording.
+
+With the per-job summary, the same three cases score 3/3 for outcomes
+and 3/3 for explanations, up from 1/3 for explanations in the baseline
+above. The summary separates recovered jobs and calls out an unavailable
+workflow comparison. The comment-only case still leaves the cause open.
+These are the cases used to guide the change.

@@ -66,7 +66,7 @@ def render_comparison(before, after, diff=()):
         if len(lines) == section_start:
             lines.append('No changes found among jobs with matching names.')
     summary_index = lines.index('Changed job outcomes:')
-    lines[summary_index:summary_index] = ['Triage summary', _triage_summary(before, recovered, diff), '']
+    lines[summary_index:summary_index] = ['Triage summary', *_triage_summary(before, recovered, diff), '']
     lines.extend(['', 'Jobs are matched by name. A changed outcome alone does not explain why it changed.',
                   '', 'Workflow file comparison', *diff, '', 'Before details', render_run(before), '', 'After details', render_run(after)])
     return '\n'.join(lines)
@@ -115,17 +115,20 @@ def _workflow_text(data, path):
 
 def _triage_summary(before, recovered, diff):
     if not recovered:
-        return 'No uniquely matched job was shown to change from failure to success.'
-    names = ', '.join(' '.join(clip_text(name, 250)[0].split()) for name in recovered[:3])
-    subject = names if len(recovered) <= 3 else f'{names} and {len(recovered) - 3} more'
-    outcome = f'{subject} failed before and passed after.'
+        return ['No uniquely matched job was shown to change from failure to success.']
+    return [_summarize_recovery(before, name, diff) for name in recovered]
+
+
+def _summarize_recovery(before, name, diff):
+    display_name = ' '.join(clip_text(name, 250)[0].split())
+    outcome = f'{display_name} failed before and passed after.'
+    if 'Workflow file comparison unavailable. Run evidence is shown below.' in diff:
+        return f'{outcome} The workflow file comparison is unavailable.'
     fallback = f'{outcome} The available evidence does not explain the change.'
-    if len(recovered) != 1:
-        return fallback
 
     # Require the reported mismatch and both sides of the exact demo-style edit.
     for job in before.get('error_details', {}).get('jobs', []):
-        if job['job_name'] != recovered[0]:
+        if job['job_name'] != name:
             continue
         for annotation in job['annotations']['annotations']:
             if annotation['level'] != 'failure' or annotation.get('text_truncated'):

@@ -145,9 +145,9 @@ def test_harder_summary_baseline(monkeypatch, capsys):
 
     cases = [
         ('Two recoveries', two_jobs, False, ('check-response', 'check-cache'),
+         'check-cache failed before and passed after. The available evidence does not explain the change.\n'
          'check-response failed before and passed after. GitHub reported expected 200, got 503. '
-         'The workflow diff shows the simulated value changed from 503 to 200, matching the expected value. '
-         'check-cache failed before and passed after. The available evidence does not explain that change.'),
+         'The workflow diff shows the simulated value changed from 503 to 200, matching the expected value.'),
         ('Matching numbers in a comment', replay_responses(
             503, before_suffix='          # expected=200\n          # observed=503\n',
             after_suffix='          # expected=200\n          # observed=200\n'),
@@ -163,12 +163,12 @@ def test_harder_summary_baseline(monkeypatch, capsys):
             install_replay(patch, responses, missing_file=missing)
             main(['--compare-runs', BEFORE, AFTER])
         output = capsys.readouterr().out
-        summary = output.partition('Triage summary\n')[2].splitlines()[0]
+        summary = output.partition('Triage summary\n')[2].partition('\n\n')[0]
         outcome = all(f'- {job}: failure -> success' in output for job in jobs)
         results.append((outcome, summary == expected))
         report.append(f'{name} | outcome {int(outcome)}/1 | explanation {int(summary == expected)}/1')
         report.append(f'  Summary: {summary}')
 
     print('\n'.join(report))
-    # Pin the measured baseline, including the known misses.
-    assert results == [(True, False), (True, True), (True, False)]
+    # Check the same three cases against the revised summary.
+    assert results == [(True, True)] * 3
