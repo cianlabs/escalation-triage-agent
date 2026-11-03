@@ -70,4 +70,4 @@ python agent.py --compare-runs https://github.com/cianlabs/escalation-triage-age
 The demo shows `check-response` changing from failure to success and includes
 the earlier run's reported mismatch. Jobs are paired by exact name when it is
 unique in both runs. The command reads public run evidence and leaves the
-cause unconfirmed. It does not compare workflow files or verify a fix.
+cause unconfirmed. For push runs with the same workflow path, it shows a bounded diff of the files at the two run commits. If either file is unavailable, the run evidence is still shown. A file diff alone does not verify a fix.

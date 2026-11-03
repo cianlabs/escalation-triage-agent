@@ -735,8 +735,8 @@ def main(argv=None, ask=input):
             if args.compare_runs:
                 from workflow_comparison import compare_public_runs, render_comparison
 
-                before, after = compare_public_runs(*args.compare_runs)
-                print(render_comparison(before, after))
+                before, after, diff = compare_public_runs(*args.compare_runs)
+                print(render_comparison(before, after, diff))
                 return 0 if before['complete'] and after['complete'] else 1
             result = inspect_public_run(args.workflow_run)
             print(render_run(result))
