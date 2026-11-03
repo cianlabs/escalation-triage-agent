@@ -269,3 +269,39 @@ def test_qwen_timeout_replays_without_github(monkeypatch, capsys):
     assert 'E2E Test - macOS - shard 1/2: failure -> success' in output
     assert 'ETIMEDOUT' in output
     assert 'No workflow line changes found.' in output
+
+
+@pytest.mark.parametrize('recovers', [True, False])
+def test_gemini_retries_http_503_once(monkeypatch, capsys, recovers):
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+
+    class ServiceUnavailable(Exception):
+        status_code = 503
+
+    calls = []
+    delays = []
+
+    def create(**kwargs):
+        calls.append(kwargs)
+        if len(calls) == 1 or not recovers:
+            raise ServiceUnavailable('private provider details')
+        message = SimpleNamespace(content='{"summary":"The check recovered.","sources":["after"]}')
+        return SimpleNamespace(choices=[SimpleNamespace(message=message)])
+
+    client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    monkeypatch.setattr('agent.make_gemini_summary_client', lambda: nullcontext(client))
+    monkeypatch.setattr('agent.time.sleep', delays.append)
+    result = main(['--replay-comparison', '--model-summary', '--summary-provider', 'gemini'])
+    output = capsys.readouterr()
+    assert len(calls) == 2 and calls[0] == calls[1]
+    assert delays == [1]
+    assert 'Triage summary' in output.out
+    assert 'private provider details' not in output.err
+    if recovers:
+        assert result == 0
+        assert 'Experimental model summary' in output.out
+    else:
+        assert result == 1
+        assert 'still unavailable after one retry (HTTP 503)' in output.err
+        assert 'Experimental model summary' not in output.out

@@ -43,6 +43,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -197,22 +198,36 @@ def make_gemini_summary_client():
 
 
 def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL, provider="xai"):
-    """One model call. Failures become named errors. The exception text is not kept.
+    """Call the model and translate failures without retaining raw error text.
 
     Some client errors quote the request. The request can contain the key,
     so we report only the exception type, HTTP status and known provider codes.
     """
     try:
         if comparison_summary and provider == "gemini":
-            completion = client.chat.completions.create(
-                model=model, messages=messages, response_format={"type": "json_object"},
-            )
+            for attempt in range(2):
+                try:
+                    completion = client.chat.completions.create(
+                        model=model, messages=messages, response_format={"type": "json_object"},
+                    )
+                    break
+                except Exception as exc:
+                    if getattr(exc, "status_code", None) != 503:
+                        raise
+                    if attempt == 1:
+                        raise AgentError(
+                            "MODEL_ERROR", "Gemini is still unavailable after one retry (HTTP 503). "
+                            "The rule-based report is available.",
+                        ) from None
+                    time.sleep(1)
             return completion.choices[0].message.content
         if comparison_summary:
             response = client.responses.create(model=model, input=messages, store=False)
             return response.output_text
         completion = client.chat.completions.create(model=MODEL, messages=messages, tools=tools)
         return completion.choices[0].message
+    except AgentError:
+        raise
     except Exception as exc:
         if type(exc).__name__ == "AuthenticationError":
             key_name = {"openai": "OPENAI_API_KEY", "gemini": "GOOGLE_API_KEY", "xai": "XAI_API_KEY"}[provider]
@@ -792,7 +807,7 @@ def main(argv=None, ask=input):
                     print('Replaying saved GitHub evidence.')
                 else:
                     before, after, diff = compare_public_runs(*args.compare_runs)
-                print(render_comparison(before, after, diff))
+                print(render_comparison(before, after, diff), flush=True)
                 if args.model_summary:
                     if not (before['complete'] and after['complete']):
                         print('Model summary skipped because run collection is incomplete.')
