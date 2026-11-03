@@ -67,3 +67,24 @@ python runbook_search.py --model-answer --ollama-model qwen2.5:3b 'What approval
 This sends the same retrieved lines to the local Ollama server and uses
 the same citation checks. No API key is needed. Local model quality
 scores are pending.
+
+## Local Qwen results after the prompt update
+
+One live run per question with Ollama and qwen2.5:3b. The prompt asks
+for the exact requested detail and puts missing information first.
+H10 guided the change and is reported separately as a regression check.
+
+| Measure | Rules | Local Qwen |
+| --- | --- | --- |
+| Complete cited answers | 6/8 | 4/8 |
+| Unsupported Redis limit, H09 | 1/1 | 1/1 |
+| Approval-form regression, H10 | 0/1 | 1/1 |
+| Usable responses | 10/10 | 9/10 |
+
+The cited answers passed on H02, H04, H05, and H08. H01 was rejected
+by answer validation and fell back to the rules. H03 named the right
+logs but also suggested clearing idle backends, an action the question
+did not ask for. H06 said a restart was the wrong first step but omitted
+the rollback and approval requirements. H07 named pool limits but
+omitted query performance and pooler status. H10 led with the missing
+form and cited the human approval requirement.
