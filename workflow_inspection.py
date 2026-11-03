@@ -78,10 +78,32 @@ def parse_run(data, target):
                 check_suite_id=data.get('check_suite_id') if positive_integer(data.get('check_suite_id')) else None)
 
 
+def access_guidance(response):
+    status = response.status_code
+    if status not in (403, 429):
+        return None
+    headers = response.headers
+    retry = headers.get('retry-after', '')
+    exhausted = headers.get('x-ratelimit-remaining') == '0'
+    if status == 403 and not exhausted and not retry:
+        return 'GitHub refused access (HTTP 403). The reason is unknown.'
+    prefix = f'GitHub reported a rate limit (HTTP {status}).'
+    if re.fullmatch(r'[0-9]{1,9}', retry):
+        return f'{prefix} Wait at least {int(retry)} seconds before retrying.'
+    reset = headers.get('x-ratelimit-reset', '')
+    if exhausted and re.fullmatch(r'[0-9]{1,11}', reset):
+        when = datetime.fromtimestamp(int(reset), timezone.utc)
+        return f'{prefix} Retry after {when:%Y-%m-%d %H:%M:%S} UTC.'
+    return f'{prefix} GitHub provided no usable retry time.'
+
+
 async def get_json(client,url,params=None):
     try:
         response=await asyncio.wait_for(client.get(url,params=params,headers=HEADERS,timeout=4,follow_redirects=False),5)
         if response.status_code!=200:
+            guidance=access_guidance(response)
+            if guidance:
+                return dict(state='unknown',source_url=url,error=guidance,access_guidance=guidance)
             return dict(state='unknown',source_url=url,error=f'HTTP {response.status_code}; unavailable, inaccessible or rate-limited. No state inferred.')
         return dict(state='reported',source_url=url,data=response.json())
     except (TimeoutError,httpx.TimeoutException):
@@ -167,6 +189,7 @@ async def inspect_run(client,url):
     from workflow_error_details import collect_error_details
     result['error_details'] = await collect_error_details(client,target,run,jobs['jobs'])
     recheck=await get_json(client,target['api_url'])
+    result['recheck_guidance']=recheck.get('access_guidance')
     try:
         current=parse_run(recheck.get('data'),target)
         consistent=all(current[k]==run[k] for k in ('run_attempt','status','conclusion','updated_at','head_sha','check_suite_id','workflow_path','event'))
@@ -212,6 +235,8 @@ def render_run(result):
     if run['state']=='reported':
         lines += [f"Reported attempt: {run['run_attempt']}", 'Run created at: '+run['created_at'],
                   'Run last updated at: '+run['updated_at'],'Run source: '+run['source_url']]
+    if run.get('error'): lines.append(run['error'])
+    if result.get('recheck_guidance'): lines.append(result['recheck_guidance'])
     for key,title in (('jobs','Jobs'),('deployment_gates','Deployment gates')):
         if key in result:
             detail=result[key]

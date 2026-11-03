@@ -39,6 +39,16 @@ def render_comparison(before, after, diff=()):
     lines = ['Public GitHub Actions run comparison',
              f"Before: {before['assessment']} | {before['run_url']}",
              f"After:  {after['assessment']} | {after['run_url']}", '', 'Changed job outcomes:']
+    guidance = dict.fromkeys(
+        message
+        for result in (before, after)
+        for message in (result.get('recheck_guidance'),
+                        *(result.get(key, {}).get('access_guidance')
+                          for key in ('run', 'jobs', 'deployment_gates')))
+        if message
+    )
+    if guidance:
+        lines[3:3] = ['', 'GitHub access', *guidance]
     recovered = []
     if not all(result.get('snapshot_consistent') and result.get('jobs', {}).get('state') == 'reported'
                for result in (before, after)):
@@ -55,7 +65,8 @@ def render_comparison(before, after, diff=()):
                 lines.append(f"- {' '.join(clip_text(name, 250)[0].split())}: {first[name][0]} -> {second[name][0]}")
         if len(lines) == section_start:
             lines.append('No changes found among jobs with matching names.')
-    lines[3:3] = ['', 'Triage summary', _triage_summary(before, recovered, diff)]
+    summary_index = lines.index('Changed job outcomes:')
+    lines[summary_index:summary_index] = ['Triage summary', _triage_summary(before, recovered, diff), '']
     lines.extend(['', 'Jobs are matched by name. A changed outcome alone does not explain why it changed.',
                   '', 'Workflow file comparison', *diff, '', 'Before details', render_run(before), '', 'After details', render_run(after)])
     return '\n'.join(lines)

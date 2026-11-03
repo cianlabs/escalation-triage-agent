@@ -45,3 +45,27 @@ def test_summary_connects_matching_simulated_error_and_diff():
     unchanged = render_comparison(before, run('success'), ['No workflow line changes found.'])
     assert 'The available evidence does not explain the change.' in unchanged
     assert 'the simulated value changed' not in unchanged
+
+
+@pytest.mark.parametrize('headers, expected', [
+    ({'x-ratelimit-remaining': '0', 'x-ratelimit-reset': '1800000000'},
+     'Retry after 2027-01-15 08:00:00 UTC.'),
+    ({}, 'GitHub refused access (HTTP 403). The reason is unknown.'),
+])
+def test_access_guidance_precedes_incomplete_comparison(headers, expected):
+    import asyncio
+
+    import httpx
+
+    from workflow_inspection import inspect_run
+
+    async def inspect():
+        transport = httpx.MockTransport(lambda request: httpx.Response(403, headers=headers))
+        async with httpx.AsyncClient(transport=transport) as client:
+            return await inspect_run(client, 'https://github.com/a/b/actions/runs/1')
+
+    before = asyncio.run(inspect())
+    assert not before['complete']
+    text = render_comparison(before, run('success'))
+    assert text.index(expected) < text.index('Triage summary')
+    assert 'Job comparison unavailable' in text

@@ -76,3 +76,9 @@ The triage summary highlights jobs that failed before and passed after. For
 the simulated HTTP demo, it connects the reported mismatch to the matching
 assignment change. When the evidence does not line up, it reports the outcome
 change and leaves the explanation open.
+
+If GitHub blocks a run, job list, deployment gate or run recheck, the
+comparison puts access guidance near the top. It shows a retry delay or
+UTC reset time when GitHub provides usable rate-limit headers. A bare
+HTTP 403 leaves the reason unknown. The report still marks affected
+collection incomplete.
