@@ -87,3 +87,21 @@ To replay the comparison without GitHub access, run
 `python -m pytest -q tests/test_workflow_comparison_cli.py`.
 The tests run the CLI with simulated API responses for a matching workflow
 edit, an unchanged file, and a rate-limited job request.
+
+### Comparison summary baseline
+
+Run `python -m pytest -qs tests/test_workflow_comparison_cli.py -k baseline`
+to print the scores. Outcome checks whether the report shows the job moving
+from failure to success. Explanation checks the summary against wording set
+before replaying each case.
+
+| Simulated case | Outcome | Explanation |
+| --- | --- | --- |
+| Edit matches the reported mismatch | 1/1 | 1/1 |
+| Only a comment changes | 1/1 | 1/1 |
+| Timeout and dependency version both change | 1/1 | 1/1 |
+| Total | 3/3 | 3/3 |
+
+These three examples use the same simulated job. They measure how the
+current summary handles these examples and leave performance on other
+workflows open.
