@@ -219,7 +219,7 @@ def test_openai_summary_replays_saved_evidence(monkeypatch, capsys):
     from types import SimpleNamespace
 
     def create(*, model, input, store):
-        assert model == 'gpt-5.6-terra'
+        assert model == 'gpt-6-luna'
         assert store is False
         assert 'Expected 200, got 503' in json.loads(input[1]['content'])['before']
         return SimpleNamespace(output_text='{"summary":"The check recovered.","sources":["after"]}')

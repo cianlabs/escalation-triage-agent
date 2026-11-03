@@ -785,7 +785,7 @@ def main(argv=None, ask=input):
                         from workflow_model_summary import model_summary
 
                         provider = args.summary_provider or "xai"
-                        model = "gpt-5.6-terra" if provider == "openai" else MODEL
+                        model = "gpt-6-luna" if provider == "openai" else MODEL
                         client_factory = make_openai_summary_client if provider == "openai" else make_client
                         with client_factory() as client:
                             summary = model_summary(

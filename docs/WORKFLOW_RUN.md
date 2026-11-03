@@ -152,5 +152,5 @@ To use OpenAI for the saved demo, set `OPENAI_API_KEY` in your terminal and run:
 python agent.py --replay-comparison --model-summary --summary-provider openai
 ```
 
-This sends the same saved public evidence to GPT-5.6 Terra via the Responses
+This sends the same saved public evidence to GPT-6 Luna via the Responses
 API. The provider defaults to xAI when the option is omitted.
