@@ -15,3 +15,23 @@ five guides and score retrieval, complete cited answers, and abstention separate
 | F08 | Can I cycle the Redis nodes without getting a human to sign off? | redis_memory:5. Human approval is required for a restart. |
 | F09 | How do I increase Redis maxmemory? | Unsupported. The guide gives checks and restart guidance. |
 | F10 | Where are the database pooler logs stored on disk? | Unsupported. The guide names the logs without giving a path. |
+
+## Results
+
+| Measure | Development set | Fresh set |
+| --- | --- | --- |
+| Expected passage in the top three | 8/8 | 8/8 |
+| Complete cited answers | 8/8 | 5/8 |
+| Abstention on unsupported questions | 2/2 | 1/2 |
+
+F03–F07 received complete cited answers. F09 correctly received an abstention.
+The ranking found the expected passage for all eight supported questions.
+The misses came from the answer step:
+
+- F01. It retrieved the outage guide but missed the phrasing about who needs to be paged.
+- F02. It retrieved the outage guide but missed signs off as approval language.
+- F08. It retrieved the Redis guide but missed cycle as a way of saying restart.
+- F10. It cited which logs to check, but the question asked for an on-disk path the guide does not give.
+
+The fresh set uses the same five short guides. It tests unfamiliar wording
+and unsupported details within that corpus.
