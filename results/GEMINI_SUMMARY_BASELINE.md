@@ -85,3 +85,14 @@ Both saved comparisons completed and printed the rule-based report.
 Gemini returned no summary, so these attempts provide no evidence about
 whether the updated prompt improved either case. Compare future results
 using the same saved evidence, model, prompt, and scoring criteria.
+
+### Live fallback check
+
+After the one-retry change, the saved Qwen comparison completed and
+printed the rule-based report. The live Gemini request returned HTTP 503
+on the first call and on the automatic retry. The CLI reported that
+Gemini was still unavailable and kept the report visible.
+
+Availability result: zero summaries from one Qwen replay (two API calls).
+Summary quality: unscored for the updated prompt. The earlier Gemini
+score of 3/3 applies to the previous prompt.
