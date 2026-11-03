@@ -67,3 +67,23 @@ The Redis example retains just the Redis guide. R10 still surfaces the
 outage guide because it shares the word waiting and has no stronger
 match to compare against. A relative cutoff reduces weak alternatives
 when there is a strong match. These scores use the development set.
+
+## Cited diagnostic answers
+
+Use `python runbook_search.py --answer 'What should I check if Redis hits maxmemory?'`.
+This mode quotes explicit diagnostic checks from the top guide when the
+question shares a subject term with its title. If there is no qualifying
+guide or the qualifying guides tie, it abstains. Search mode still shows
+the ranked excerpts.
+
+| Measure | Development score |
+| --- | --- |
+| Expected passage in top three | 8/8 |
+| Complete grounded answer | 1/8 |
+| Abstention on unsupported questions | 2/2 |
+
+R05 was complete. R07 cited query performance and pooler status but omitted
+connection pool limits. R01–R04, R06, and R08 got no answer. The mode only
+extracts explicit checks, and its word matching can miss paraphrases.
+R09 and R10 both got abstentions. Two additional spot checks returned
+a cited answer for Redis metrics and abstained on TLS certificate rotation.

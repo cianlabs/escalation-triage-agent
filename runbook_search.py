@@ -40,11 +40,39 @@ def search(question):
 
 
 
+def answer(question, hits):
+    """Extract an explicit diagnostic check from a matching guide."""
+    query = terms(question)
+    if not query & {'check', 'inspect', 'review'} or not hits:
+        return []
+    best_score = hits[0][0]
+    candidates = []
+    for score, citation, passage in hits:
+        if score != best_score:
+            break
+        path, _ = citation.rsplit(':', 1)
+        lines = passage.splitlines()
+        subject = terms(lines[0]) & query
+        checks = [(number, line) for number, line in enumerate(lines[1:], 2)
+                  if line.startswith(('Check ', 'Inspect ', 'Review '))]
+        if subject and checks:
+            candidates.append([(f'{path}:{number}', line) for number, line in checks])
+    return candidates[0] if len(candidates) == 1 else []
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--answer', action='store_true', help='Quote a supported diagnostic check.')
     parser.add_argument('question')
     args = parser.parse_args()
     hits = search(args.question)
+    if args.answer:
+        excerpts = answer(args.question, hits)
+        if not excerpts:
+            print('The guides do not provide a supported answer to this question.')
+        for citation, line in excerpts:
+            print(f'{line} [{citation}]')
+        return
     if not hits:
         print('The guides do not contain a matching passage.')
         return

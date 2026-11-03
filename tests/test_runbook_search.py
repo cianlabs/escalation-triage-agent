@@ -19,3 +19,20 @@ def test_no_shared_terms_returns_no_passage():
 def test_redis_query_omits_generic_check_matches():
     hits = search('What should I check if Redis hits maxmemory?')
     assert [citation for _, citation, _ in hits] == ['runbooks/redis_memory.txt:1-5']
+
+
+def test_answer_quotes_redis_check_and_line():
+    from runbook_search import answer
+
+    question = 'What should I check if Redis hits maxmemory?'
+    assert answer(question, search(question)) == [
+        ('runbooks/redis_memory.txt:4', 'Check memory eviction settings and keyspace metrics.'),
+    ]
+
+
+def test_answer_abstains_on_unsupported_deployment_cancellation():
+    from runbook_search import answer
+
+    question = "How do I cancel a deployment that's stuck waiting for a reviewer?"
+    assert search(question)
+    assert answer(question, search(question)) == []
