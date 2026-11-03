@@ -25,7 +25,10 @@ def model_answer(question, hits, ask):
             'You may state a related supported requirement if it helps. Return a JSON '
             'object with claims, a list of objects with text and citation (one exact '
             'line ID from the evidence), and missing, a short string describing any '
-            'unanswered part. If nothing supports the answer, use an empty claims list.'
+            'unanswered part. If nothing supports the answer, use an empty claims list. '
+            'Example claim: {"text":"Check the queue depth.","citation":"runbooks/example.txt:4"}. '
+            'Write the actual answer in text and put the line ID only in citation. '
+            'The example illustrates the format. Use only the evidence below for this answer.'
         )},
         {'role': 'user', 'content': json.dumps({'question': question, 'evidence': evidence})},
     ]
@@ -42,7 +45,10 @@ def model_answer(question, hits, ask):
             text, citation = claim['text'], claim['citation']
             if not isinstance(text, str) or not text.strip() or citation not in evidence:
                 raise ValueError
-            lines.append(f"{' '.join(clip_text(text, 500)[0].split())} [{citation}]")
+            clean_text = ' '.join(clip_text(text, 500)[0].split())
+            if not clean_text or clean_text.strip('[]` .') in evidence:
+                raise ValueError
+            lines.append(f'{clean_text} [{citation}]')
         if missing.strip():
             lines.append('Not covered by the guides: ' + ' '.join(clip_text(missing, 500)[0].split()))
     except (KeyError, TypeError, ValueError):

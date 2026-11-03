@@ -58,3 +58,13 @@ def test_ollama_cli_uses_same_citation_validation(monkeypatch, capsys):
                                      'qwen2.5:3b', 'What form do I need to restart Redis?'])
     assert main() == 0
     assert 'The guide gives no form.' in capsys.readouterr().out
+
+
+def test_rejects_citation_only_approval_answer():
+    question = 'What approval form must I file before I restart Redis?'
+    citation = 'runbooks/redis_memory.txt:5'
+    with pytest.raises(AgentError, match='invalid runbook answer or citation'):
+        model_answer(question, search(question), lambda _: json.dumps({
+            'claims': [{'text': citation, 'citation': citation}],
+            'missing': '',
+        }))
