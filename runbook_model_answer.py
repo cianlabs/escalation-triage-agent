@@ -1,6 +1,8 @@
 """Produce a model answer with citations restricted to the retrieved guides."""
 import json
 
+import httpx
+
 from errors import AgentError
 from workflow_error_details import clip_text
 
@@ -44,6 +46,23 @@ def model_answer(question, hits, ask):
         if missing.strip():
             lines.append('Not covered by the guides: ' + ' '.join(clip_text(missing, 500)[0].split()))
     except (KeyError, TypeError, ValueError):
-        raise AgentError('MODEL_ERROR', 'Gemini returned an invalid runbook answer or citation.') from None
+        raise AgentError('MODEL_ERROR', 'The model returned an invalid runbook answer or citation.') from None
 
     return '\n'.join(lines) if lines else 'The guides do not provide a supported answer to this question.'
+
+def ask_ollama(model, messages):
+    if model.endswith('-cloud') or ':cloud' in model or '/' in model:
+        raise AgentError('MODEL_ERROR', 'Choose an installed local Ollama model.')
+    try:
+        with httpx.Client(trust_env=False, timeout=90) as client:
+            response = client.post('http://127.0.0.1:11434/api/chat', json={
+                'model': model, 'messages': messages, 'stream': False, 'format': 'json',
+            })
+            response.raise_for_status()
+            return response.json()['message']['content']
+    except httpx.HTTPStatusError as exc:
+        raise AgentError('MODEL_ERROR', f'Ollama returned HTTP {exc.response.status_code}. Check that the model is installed.') from None
+    except httpx.RequestError:
+        raise AgentError('MODEL_ERROR', 'Could not reach Ollama on this Mac. Check that Ollama is running.') from None
+    except (KeyError, TypeError, ValueError):
+        raise AgentError('MODEL_ERROR', 'Ollama returned an invalid response.') from None

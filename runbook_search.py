@@ -101,8 +101,11 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--model-answer', action='store_true', help='Ask Gemini to answer from the retrieved guides.')
     mode.add_argument('--answer', action='store_true', help='Quote a supported check or approval requirement.')
+    parser.add_argument('--ollama-model', help='Use this installed local Ollama model with --model-answer.')
     parser.add_argument('question')
     args = parser.parse_args()
+    if args.ollama_model is not None and not args.model_answer:
+        parser.error('--ollama-model requires --model-answer')
     hits = search(args.question)
     if args.model_answer:
         from agent import ask_model, make_gemini_summary_client
@@ -111,6 +114,11 @@ def main():
         try:
             if not hits:
                 print('The guides do not provide a supported answer to this question.')
+                return 0
+            if args.ollama_model:
+                from runbook_model_answer import ask_ollama
+
+                print(model_answer(args.question, hits, lambda messages: ask_ollama(args.ollama_model, messages)))
                 return 0
             with make_gemini_summary_client() as client:
                 print(model_answer(args.question, hits, lambda messages: ask_model(

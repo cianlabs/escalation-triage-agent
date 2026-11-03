@@ -54,3 +54,16 @@ GOOGLE_API_KEY='op://Personal/Google API Key/credential' op run -- python runboo
 
 The rules scored 6/8 for complete cited answers and 1/2 for abstention.
 Live Gemini scores are pending.
+
+## Compare a local Ollama model
+
+With Ollama running, download a small model and try the approval-form case:
+
+```sh
+ollama pull qwen2.5:3b
+python runbook_search.py --model-answer --ollama-model qwen2.5:3b 'What approval form must I file before I restart Redis?'
+```
+
+This sends the same retrieved lines to the local Ollama server and uses
+the same citation checks. No API key is needed. Local model quality
+scores are pending.
