@@ -181,15 +181,29 @@ def ask_model(client, messages, tools):
     """One model call. Failures become named errors. The exception text is not kept.
 
     Some client errors quote the request. The request can contain the key,
-    so the message we raise names the exception type only.
+    so we report only the exception type, HTTP status and known provider codes.
     """
     try:
         completion = client.chat.completions.create(model=MODEL, messages=messages, tools=tools)
         return completion.choices[0].message
     except Exception as exc:
         if type(exc).__name__ == "AuthenticationError":
-            raise AgentError("BAD_KEY", "xAI rejected the key. Check XAI_API_KEY in this terminal.")
-        raise AgentError("MODEL_ERROR", f"the model call failed ({type(exc).__name__}).")
+            raise AgentError("BAD_KEY", "xAI rejected the key. Check XAI_API_KEY in this terminal.") from None
+        status = getattr(exc, "status_code", None)
+        code = getattr(exc, "code", None)
+        safe_codes = {
+            "invalid_request_error", "model_not_found", "invalid_model",
+            "unsupported_parameter", "invalid_parameter", "rate_limit_exceeded",
+            "insufficient_quota", "permission_denied",
+        }
+        detail = f"the model call failed ({type(exc).__name__})"
+        if type(status) is int and 400 <= status <= 599:
+            detail += f", HTTP {status}"
+        if isinstance(code, str) and code in safe_codes:
+            detail += f", provider code {code}"
+        if status == 400 and not (isinstance(code, str) and code in safe_codes):
+            detail += ", provider code unavailable"
+        raise AgentError("MODEL_ERROR", detail + ".") from None
 
 
 def _opening_message(state):
