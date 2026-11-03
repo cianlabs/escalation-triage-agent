@@ -36,3 +36,25 @@ def test_answer_abstains_on_unsupported_deployment_cancellation():
     question = "How do I cancel a deployment that's stuck waiting for a reviewer?"
     assert search(question)
     assert answer(question, search(question)) == []
+
+
+def test_log_answer_quotes_the_check_without_the_remediation():
+    from runbook_search import answer
+
+    question = 'The database says there are too many connections. Which logs should I look at?'
+    assert answer(question, search(question)) == [
+        ('runbooks/db_connection_pool.txt:4', 'Check connection pooler service logs'),
+    ]
+
+
+def test_dashboard_answer_includes_both_diagnostic_lines():
+    from runbook_search import answer
+
+    question = 'The dashboard takes ages to load. What should I check before touching anything?'
+    excerpts = answer(question, search(question))
+    assert [citation for citation, _ in excerpts] == [
+        'runbooks/slow_dashboard.txt:3', 'runbooks/slow_dashboard.txt:4',
+    ]
+    assert 'connection pool limits' in excerpts[0][1]
+    assert 'query performance' in excerpts[1][1]
+    assert 'pooler status' in excerpts[1][1]

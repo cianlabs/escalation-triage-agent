@@ -43,7 +43,7 @@ def search(question):
 def answer(question, hits):
     """Extract an explicit diagnostic check from a matching guide."""
     query = terms(question)
-    if not query & {'check', 'inspect', 'review'} or not hits:
+    if not query & {'check', 'inspect', 'review', 'logs'} or not hits:
         return []
     best_score = hits[0][0]
     candidates = []
@@ -54,7 +54,10 @@ def answer(question, hits):
         lines = passage.splitlines()
         subject = terms(lines[0]) & query
         checks = [(number, line) for number, line in enumerate(lines[1:], 2)
-                  if line.startswith(('Check ', 'Inspect ', 'Review '))]
+                  if re.match(r'(?:Check|Inspect|Review)\b|If [^,]+, (?:check|inspect|review)\b', line)]
+        if 'logs' in query:
+            checks = [(number, line.split(' and clear ', 1)[0])
+                      for number, line in checks if 'logs' in terms(line)]
         if subject and checks:
             candidates.append([(f'{path}:{number}', line) for number, line in checks])
     return candidates[0] if len(candidates) == 1 else []
