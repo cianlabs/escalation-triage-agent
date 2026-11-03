@@ -17,3 +17,22 @@ An abstention point requires withholding an answer to an unsupported request.
 | H08 | Is it okay to power-cycle the Redis cache nodes before a human gives the green light? | redis_memory:5. Restart requires human approval. |
 | H09 | Which Redis maxmemory value in gigabytes should we set for production? | Unsupported. The guide gives no target limit. |
 | H10 | What approval form must I file before I restart Redis? | Unsupported. The guide requires human approval and gives no form. |
+
+## Results
+
+| Measure | Previously tuned sets | New holdout |
+| --- | --- | --- |
+| Expected passage in the top three | 8/8 each | 8/8 |
+| Complete cited answers | 8/8 each | 6/8 |
+| Abstention on unsupported questions | 2/2 each | 1/2 |
+
+- H01. The outage guide ranked first, but the answer rule missed the
+  wording about alerting someone and asking permission.
+- H04. The database guide ranked second, and answer selection considered
+  only the top score. The question also used restarting and go-ahead,
+  which the operation and approval rules do not recognize.
+- H10. The assistant quoted the human approval requirement, but the guide
+  specifies no form. The answer should have flagged that missing detail.
+
+H09 correctly received an abstention. The holdout uses the same five
+guides, so it measures unfamiliar questions within that corpus.
