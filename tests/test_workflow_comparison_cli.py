@@ -240,7 +240,8 @@ def test_gemini_summary_replays_saved_evidence(monkeypatch, capsys):
     from contextlib import nullcontext
     from types import SimpleNamespace
 
-    def create(*, model, messages):
+    def create(*, model, messages, response_format):
+        assert response_format == {"type": "json_object"}
         assert model == 'gemini-3.1-flash-lite'
         assert 'Expected 200, got 503' in json.loads(messages[1]['content'])['before']
         message = SimpleNamespace(content='{"summary":"The check recovered.","sources":["after"]}')

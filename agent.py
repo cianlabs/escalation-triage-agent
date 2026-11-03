@@ -204,7 +204,9 @@ def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL,
     """
     try:
         if comparison_summary and provider == "gemini":
-            completion = client.chat.completions.create(model=model, messages=messages)
+            completion = client.chat.completions.create(
+                model=model, messages=messages, response_format={"type": "json_object"},
+            )
             return completion.choices[0].message.content
         if comparison_summary:
             response = client.responses.create(model=model, input=messages, store=False)
