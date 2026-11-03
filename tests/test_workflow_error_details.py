@@ -70,6 +70,7 @@ def test_failure_details_are_associated_read_only_and_unconfirmed():
     assert result['error_details']['state']=='reported'
     text=render_run(result)
     assert 'Failed step 2: Run tests (failure)' in text
+    assert 'Next check: open step 2 in job ' in text
     assert 'Expected 2, received 3.' in text
     assert '(unverified text)' in text
     assert result['confirmed_root_cause'] is None
