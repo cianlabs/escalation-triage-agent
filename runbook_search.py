@@ -43,6 +43,10 @@ def search(question):
 def answer(question, hits):
     """Extract a cited check or approval requirement from a matching guide."""
     query = terms(question)
+    if 'logs' in query and query & {'path', 'stored', 'disk', 'directory', 'location'}:
+        return []
+    if re.search(r'\bsign(?:s|ed|ing)?[ -]+off\b', question, re.IGNORECASE):
+        query.add('approval')
     if not hits or query & {'cancel', 'rotate'}:
         return []
     best_score = hits[0][0]
@@ -72,16 +76,16 @@ def answer(question, hits):
 def approval_answer(query, path, lines):
     """Require both the operation and its subject before quoting approval guidance."""
     restart = query & {'restart', 'bounce', 'reboot'}
-    if path.endswith('/redis_memory.txt') and 'redis' in query and restart:
+    if path.endswith('/redis_memory.txt') and 'redis' in query and (restart or {'cycle', 'nodes'} <= query):
         pattern = r"^Restart Redis .*only after human approval"
     elif path.endswith('/db_connection_pool.txt') and 'pooler' in query and restart:
         pattern = r"^Restart connection pooler only after human approval"
     elif (path.endswith('/rollback_bad_deploy.txt') and query & {'500', '500s'}
           and query & {'release', 'deploy', 'deployment'} and restart):
         pattern = r"^Roll back only after a human approves"
-    elif path.endswith('/customer_outage.txt') and 'service' in query and 'down' in query and 'approval' in query:
+    elif path.endswith('/customer_outage.txt') and 'service' in query and query & {'down', 'outage'} and 'approval' in query:
         pattern = r"^Page oncall only after a human approves"
-    elif path.endswith('/customer_outage.txt') and 'customers' in query and query & {'bring', 'page', 'call'}:
+    elif path.endswith('/customer_outage.txt') and query & {'customer', 'customers'} and query & {'bring', 'page', 'paged', 'call'}:
         pattern = r"^Page oncall (?:when|only after)"
     else:
         return []
