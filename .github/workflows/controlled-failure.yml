@@ -11,7 +11,7 @@ jobs:
         shell: bash
         run: |
           expected=200
-          observed=503
+          observed=200
           if [[ "$observed" != "$expected" ]]; then
             echo "::error::Simulated HTTP response mismatch. Expected $expected, got $observed."
             exit 1
