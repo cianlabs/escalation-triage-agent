@@ -105,3 +105,20 @@ before replaying each case.
 These three examples use the same simulated job. They measure how the
 current summary handles these examples and leave performance on other
 workflows open.
+
+### Harder summary cases
+
+Run `python -m pytest -qs tests/test_workflow_comparison_cli.py -k harder`
+to replay these three simulated cases with the existing summary rules.
+Explanation scoring checks the summary against the expected wording,
+including whether it calls out missing evidence.
+
+| Case | Outcome | Explanation | What the summary missed |
+| --- | --- | --- | --- |
+| Two jobs recover | 1/1 | 0/1 | It grouped the jobs and omitted the matching evidence for check-response. |
+| Matching numbers in a comment | 1/1 | 1/1 | It left the explanation open. |
+| Workflow file unavailable | 1/1 | 0/1 | The report flagged the missing file below the summary, which gave only a generic explanation. |
+| Total | 3/3 | 1/3 | |
+
+These cases use simulated GitHub responses. The scores apply to these
+examples and their expected wording.

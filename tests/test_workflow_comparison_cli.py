@@ -52,7 +52,7 @@ def replay_responses(after_value, *, before_suffix="", after_suffix=""):
     return responses
 
 
-def install_replay(monkeypatch, responses, *, rate_limited=False):
+def install_replay(monkeypatch, responses, *, rate_limited=False, missing_file=False):
     blocked = f'{API}/actions/runs/102/attempts/1/jobs?per_page=100&page=1'
     client = httpx.AsyncClient
 
@@ -62,6 +62,8 @@ def install_replay(monkeypatch, responses, *, rate_limited=False):
         url = str(request.url)
         if rate_limited and url == blocked:
             return httpx.Response(403, headers={'retry-after': '60'})
+        if missing_file and url == f'{API}/contents/{PATH}?ref={AFTER_SHA}':
+            return httpx.Response(404)
         return httpx.Response(200, json=responses[url])
 
     def offline_client(**kwargs):
@@ -128,3 +130,45 @@ def test_comparison_summary_baseline(monkeypatch, capsys):
         print(f'{name} | {int(outcome)}/1 | {int(explanation)}/1')
     print(f'Total | {sum(row[1] for row in results)}/3 | {sum(row[2] for row in results)}/3')
     assert all(outcome and explanation for _, outcome, explanation in results), results
+
+
+def test_harder_summary_baseline(monkeypatch, capsys):
+    two_jobs = replay_responses(200)
+    for run_id in (101, 102):
+        jobs = two_jobs[f'{API}/actions/runs/{run_id}/attempts/1/jobs?per_page=100&page=1']
+        jobs['total_count'] = 2
+        jobs['jobs'].append(dict(jobs['jobs'][0], id=run_id + 1000, name='check-cache',
+                                 check_run_url=f'{API}/check-runs/202'))
+    two_jobs[f'{API}/check-runs/202'] = dict(two_jobs[f'{API}/check-runs/201'],
+                                           id=202, name='check-cache', output=dict(annotations_count=0))
+    two_jobs[f'{API}/check-runs/202/annotations?per_page=100&page=1'] = []
+
+    cases = [
+        ('Two recoveries', two_jobs, False, ('check-response', 'check-cache'),
+         'check-response failed before and passed after. GitHub reported expected 200, got 503. '
+         'The workflow diff shows the simulated value changed from 503 to 200, matching the expected value. '
+         'check-cache failed before and passed after. The available evidence does not explain that change.'),
+        ('Matching numbers in a comment', replay_responses(
+            503, before_suffix='          # expected=200\n          # observed=503\n',
+            after_suffix='          # expected=200\n          # observed=200\n'),
+         False, ('check-response',),
+         'check-response failed before and passed after. The available evidence does not explain the change.'),
+        ('Missing workflow file', replay_responses(200), True, ('check-response',),
+         'check-response failed before and passed after. The workflow file comparison is unavailable.'),
+    ]
+    results = []
+    report = []
+    for name, responses, missing, jobs, expected in cases:
+        with monkeypatch.context() as patch:
+            install_replay(patch, responses, missing_file=missing)
+            main(['--compare-runs', BEFORE, AFTER])
+        output = capsys.readouterr().out
+        summary = output.partition('Triage summary\n')[2].splitlines()[0]
+        outcome = all(f'- {job}: failure -> success' in output for job in jobs)
+        results.append((outcome, summary == expected))
+        report.append(f'{name} | outcome {int(outcome)}/1 | explanation {int(summary == expected)}/1')
+        report.append(f'  Summary: {summary}')
+
+    print('\n'.join(report))
+    # Pin the measured baseline, including the known misses.
+    assert results == [(True, False), (True, True), (True, False)]
