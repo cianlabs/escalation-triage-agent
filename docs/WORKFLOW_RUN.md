@@ -138,3 +138,10 @@ practice agent's real mode. It prints a separate experimental summary
 after the rule-based report. The model call has no tools and may incur
 API charges. The source links identify evidence the model cited. They
 do not verify that its claims follow from that evidence.
+
+### Replay the demo without GitHub
+
+Run `python agent.py --replay-comparison` to use a saved snapshot of the
+public demo evidence, with unrelated notices omitted. Add `--model-summary` with `XAI_API_KEY` set to send
+that snapshot to xAI. Replay makes no GitHub requests. Without the model
+flag, it runs offline.
