@@ -4,6 +4,9 @@ from collections import Counter
 import math
 from pathlib import Path
 import re
+import sys
+
+from errors import AgentError
 
 GUIDES = (
     'customer_outage.txt',
@@ -95,10 +98,43 @@ def approval_answer(query, path, lines):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--answer', action='store_true', help='Quote a supported check or approval requirement.')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--model-answer', action='store_true', help='Ask Gemini to answer from the retrieved guides.')
+    mode.add_argument('--answer', action='store_true', help='Quote a supported check or approval requirement.')
+    parser.add_argument('--ollama-model', help='Use this installed local Ollama model with --model-answer.')
     parser.add_argument('question')
     args = parser.parse_args()
+    if args.ollama_model is not None and not args.model_answer:
+        parser.error('--ollama-model requires --model-answer')
     hits = search(args.question)
+    if args.model_answer:
+        from agent import ask_model, make_gemini_summary_client
+        from runbook_model_answer import model_answer
+
+        try:
+            if not hits:
+                print('The guides do not provide a supported answer to this question.')
+                return 0
+            if args.ollama_model:
+                from runbook_model_answer import ask_ollama
+
+                print(model_answer(args.question, hits, lambda messages: ask_ollama(args.ollama_model, messages)))
+                return 0
+            with make_gemini_summary_client() as client:
+                print(model_answer(args.question, hits, lambda messages: ask_model(
+                    client, messages, None, comparison_summary=True,
+                    model='gemini-3.1-flash-lite', provider='gemini',
+                )))
+        except AgentError as exc:
+            print('Rule-based fallback')
+            excerpts = answer(args.question, hits)
+            if not excerpts:
+                print('The guides do not provide a supported answer to this question.')
+            for citation, line in excerpts:
+                print(f'{line} [{citation}]')
+            print(exc, file=sys.stderr)
+            return 1
+        return 0
     if args.answer:
         excerpts = answer(args.question, hits)
         if not excerpts:
@@ -114,4 +150,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
