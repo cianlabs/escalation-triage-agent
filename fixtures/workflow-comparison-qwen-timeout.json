@@ -1,0 +1,1962 @@
+[
+  {
+    "run_url": "https://github.com/QwenLM/qwen-code/actions/runs/37119220504",
+    "observed_at": "2026-11-03T05:28:31.944306+00:00",
+    "confirmed_root_cause": null,
+    "action_proposed": false,
+    "action_mode": "read_only",
+    "assessment": "completed_failure",
+    "complete": true,
+    "run": {
+      "state": "reported",
+      "source_url": "https://api.github.com/repos/QwenLM/qwen-code/actions/runs/37119220504",
+      "id": 37119220504,
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-10-03T11:18:11+00:00",
+      "updated_at": "2026-10-03T11:52:18+00:00",
+      "html_url": "https://github.com/QwenLM/qwen-code/actions/runs/37119220504",
+      "workflow_path": ".github/workflows/e2e.yml",
+      "event": "push",
+      "head_sha": "66a62798944346d5e2cd316726f4aa63fe67e1ac",
+      "check_suite_id": 100543973838
+    },
+    "jobs": {
+      "state": "reported",
+      "source_url": "https://api.github.com/repos/QwenLM/qwen-code/actions/runs/37119220504/attempts/1/jobs",
+      "jobs": [
+        {
+          "id": 111191911114,
+          "name": "Build for E2E",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Build project",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Bundle CLI for E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Pack build outputs",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Upload build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Upload build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 12,
+                "name": "Announce absorbed upload failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 24,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 25,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111191911114"
+        },
+        {
+          "id": 111191911931,
+          "name": "web-shell Browser Regression",
+          "status": "completed",
+          "conclusion": "skipped",
+          "step_details": {
+            "state": "reported",
+            "steps": []
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111191911931"
+        },
+        {
+          "id": 111192974041,
+          "name": "E2E Test - macOS - shard 2/2",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111192974041"
+        },
+        {
+          "id": 111192974050,
+          "name": "E2E Test (Linux) - sandbox:none - shard 1/1",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Record job start epoch",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Check container runtime",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Restore workspace ownership",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Set up Node.js 22.x (hosted)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Use pre-installed Node.js (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Configure persistent npm cache (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Disk floor gate (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 12,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 13,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 14,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 15,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 16,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 17,
+                "name": "Set up Docker",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 18,
+                "name": "Set up Podman",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 19,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Remove job-owned E2E containers",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Prune dangling docker images",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 42,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 43,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111192974050"
+        },
+        {
+          "id": 111192974055,
+          "name": "E2E Test - macOS - shard 1/2",
+          "status": "completed",
+          "conclusion": "failure",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "failure",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111192974055"
+        },
+        {
+          "id": 111192974059,
+          "name": "E2E Test (Linux) - sandbox:docker - shard 1/1",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Record job start epoch",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Check container runtime",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Restore workspace ownership",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Set up Node.js 22.x (hosted)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Use pre-installed Node.js (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Configure persistent npm cache (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Disk floor gate (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 12,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 13,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 14,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 15,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 16,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 17,
+                "name": "Set up Docker",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 18,
+                "name": "Set up Podman",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 19,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Remove job-owned E2E containers",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Prune dangling docker images",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 42,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 43,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111192974059"
+        },
+        {
+          "id": 111192974074,
+          "name": "E2E Interactive - OpenTUI renderer (bun)",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Set up Bun",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 12,
+                "name": "Run interactive E2E tests (OpenTUI)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Post Set up Bun",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 24,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 25,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111192974074"
+        },
+        {
+          "id": 111192974657,
+          "name": "${{ matrix.label }} (nightly)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "step_details": {
+            "state": "reported",
+            "steps": []
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111192974657"
+        }
+      ]
+    },
+    "deployment_gates": {
+      "state": "not_checked",
+      "gates": [],
+      "reason": "The run was already completed; no current waiting approval is inferred."
+    },
+    "error_details": {
+      "state": "reported",
+      "jobs": [
+        {
+          "job_id": 111192974055,
+          "job_name": "E2E Test - macOS - shard 1/2",
+          "steps": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "failure",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "annotations": {
+            "state": "reported",
+            "source_url": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111192974055/annotations",
+            "annotations": [
+              {
+                "level": "warning",
+                "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+                "path": ".github",
+                "start_line": 2,
+                "end_line": 2,
+                "text_truncated": false
+              },
+              {
+                "level": "failure",
+                "message": "Unable to download artifact(s): Failed to ListArtifacts: Unable to make request: ETIMEDOUT\nIf you are using self-hosted runners, please make sure your runner has access to all GitHub endpoints: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#communication-between-self-hosted-runners-and-github",
+                "path": ".github",
+                "start_line": 15,
+                "end_line": 15,
+                "text_truncated": false
+              },
+              {
+                "level": "failure",
+                "message": "Unable to download artifact(s): Failed to ListArtifacts: Unable to make request: ETIMEDOUT\nIf you are using self-hosted runners, please make sure your runner has access to all GitHub endpoints: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#communication-between-self-hosted-runners-and-github",
+                "path": ".github",
+                "start_line": 15,
+                "end_line": 15,
+                "text_truncated": false
+              },
+              {
+                "level": "notice",
+                "message": "Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times.",
+                "path": ".github",
+                "start_line": 1,
+                "end_line": 1,
+                "text_truncated": false
+              }
+            ],
+            "total_count": 4,
+            "error": null
+          }
+        }
+      ],
+      "message": "Provider error details; these are not verified root causes."
+    },
+    "recheck_guidance": null,
+    "snapshot_consistent": true,
+    "message": "GitHub reports this run completed with conclusion failure. That is an outcome, not an explanation of its cause."
+  },
+  {
+    "run_url": "https://github.com/QwenLM/qwen-code/actions/runs/37142411422",
+    "observed_at": "2026-11-03T05:28:31.960457+00:00",
+    "confirmed_root_cause": null,
+    "action_proposed": false,
+    "action_mode": "read_only",
+    "assessment": "completed_success",
+    "complete": true,
+    "run": {
+      "state": "reported",
+      "source_url": "https://api.github.com/repos/QwenLM/qwen-code/actions/runs/37142411422",
+      "id": 37142411422,
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-03T17:57:32+00:00",
+      "updated_at": "2026-10-03T19:47:39+00:00",
+      "html_url": "https://github.com/QwenLM/qwen-code/actions/runs/37142411422",
+      "workflow_path": ".github/workflows/e2e.yml",
+      "event": "push",
+      "head_sha": "2c591ecc08a6fa080342f9b1b9f7f43215178cbb",
+      "check_suite_id": 100608155314
+    },
+    "jobs": {
+      "state": "reported",
+      "source_url": "https://api.github.com/repos/QwenLM/qwen-code/actions/runs/37142411422/attempts/1/jobs",
+      "jobs": [
+        {
+          "id": 111269149469,
+          "name": "Build for E2E",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Build project",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Bundle CLI for E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Pack build outputs",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Upload build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Upload build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 12,
+                "name": "Announce absorbed upload failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 24,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 25,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111269149469"
+        },
+        {
+          "id": 111269150224,
+          "name": "web-shell Browser Regression",
+          "status": "completed",
+          "conclusion": "skipped",
+          "step_details": {
+            "state": "reported",
+            "steps": []
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111269150224"
+        },
+        {
+          "id": 111274659862,
+          "name": "E2E Test - macOS - shard 1/2",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111274659862"
+        },
+        {
+          "id": 111274659868,
+          "name": "E2E Test - macOS - shard 2/2",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111274659868"
+        },
+        {
+          "id": 111274659870,
+          "name": "E2E Test (Linux) - sandbox:docker - shard 1/1",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Record job start epoch",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Check container runtime",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Restore workspace ownership",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Set up Node.js 22.x (hosted)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Use pre-installed Node.js (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Configure persistent npm cache (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Disk floor gate (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 12,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 13,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 14,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 15,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 16,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 17,
+                "name": "Set up Docker",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 18,
+                "name": "Set up Podman",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 19,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Remove job-owned E2E containers",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Prune dangling docker images",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 42,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 43,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111274659870"
+        },
+        {
+          "id": 111274659878,
+          "name": "E2E Interactive - OpenTUI renderer (bun)",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Set up Bun",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 12,
+                "name": "Run interactive E2E tests (OpenTUI)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Post Set up Bun",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 22,
+                "name": "Post Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 23,
+                "name": "Post Set up Node.js",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 24,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 25,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111274659878"
+        },
+        {
+          "id": 111274659885,
+          "name": "E2E Test (Linux) - sandbox:none - shard 1/1",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Record job start epoch",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Check container runtime",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 4,
+                "name": "Restore workspace ownership",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 5,
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 6,
+                "name": "Set up Node.js 22.x (hosted)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 7,
+                "name": "Cache pnpm store (hosted)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 8,
+                "name": "Use pre-installed Node.js (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 9,
+                "name": "Configure persistent npm cache (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 10,
+                "name": "Configure npm for rate limiting",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 11,
+                "name": "Disk floor gate (self-hosted)",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 12,
+                "name": "Install dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 13,
+                "name": "Download build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 14,
+                "name": "Download build artifact (retry)",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 15,
+                "name": "Announce absorbed download failure",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 16,
+                "name": "Unpack build artifact",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 17,
+                "name": "Set up Docker",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 18,
+                "name": "Set up Podman",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 19,
+                "name": "Run E2E tests",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 20,
+                "name": "Remove job-owned E2E containers",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 21,
+                "name": "Prune dangling docker images",
+                "status": "completed",
+                "conclusion": "skipped",
+                "name_truncated": false
+              },
+              {
+                "number": 42,
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 43,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111274659885"
+        },
+        {
+          "id": 111274661981,
+          "name": "${{ matrix.label }} (nightly)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "step_details": {
+            "state": "reported",
+            "steps": []
+          },
+          "check_run_reference": "https://api.github.com/repos/QwenLM/qwen-code/check-runs/111274661981"
+        }
+      ]
+    },
+    "deployment_gates": {
+      "state": "not_checked",
+      "gates": [],
+      "reason": "The run was already completed; no current waiting approval is inferred."
+    },
+    "error_details": {
+      "state": "not_needed",
+      "jobs": [],
+      "message": "No failed jobs were returned for step and annotation inspection."
+    },
+    "recheck_guidance": null,
+    "snapshot_consistent": true,
+    "message": "GitHub reports this run completed with conclusion success. That is an outcome, not an explanation of its cause."
+  },
+  [
+    "Before file: https://github.com/QwenLM/qwen-code/blob/66a62798944346d5e2cd316726f4aa63fe67e1ac/.github/workflows/e2e.yml",
+    "After file: https://github.com/QwenLM/qwen-code/blob/2c591ecc08a6fa080342f9b1b9f7f43215178cbb/.github/workflows/e2e.yml",
+    "No workflow line changes found."
+  ]
+]

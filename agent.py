@@ -742,7 +742,7 @@ def main(argv=None, ask=input):
     )
     run_mode = parser.add_mutually_exclusive_group()
     run_mode.add_argument("--compare-runs", nargs=2, metavar=("BEFORE", "AFTER"), help="Compare two public Actions runs from the same repository.")
-    run_mode.add_argument("--replay-comparison", action="store_true", help="Compare saved demo runs without contacting GitHub.")
+    run_mode.add_argument("--replay-comparison", nargs="?", const="demo", choices=("demo", "qwen-timeout"), help="Replay saved evidence without contacting GitHub. Defaults to demo.")
     run_mode.add_argument("--workflow-run", metavar="URL", help="Read one public GitHub Actions run and its jobs. No keys or actions.")
     parser.add_argument("--model-summary", action="store_true", help="Send public comparison evidence to the selected model provider.")
     parser.add_argument("--summary-provider", choices=("xai", "openai", "gemini"), help="Provider for --model-summary. Defaults to xai.")
@@ -787,7 +787,7 @@ def main(argv=None, ask=input):
                 from workflow_comparison import compare_public_runs, render_comparison
 
                 if args.replay_comparison:
-                    fixture = Path(__file__).resolve().parent / 'fixtures' / 'workflow-comparison-demo.json'
+                    fixture = Path(__file__).resolve().parent / 'fixtures' / f'workflow-comparison-{args.replay_comparison}.json'
                     before, after, diff = json.loads(fixture.read_text(encoding='utf-8'))
                     print('Replaying saved GitHub evidence.')
                 else:
