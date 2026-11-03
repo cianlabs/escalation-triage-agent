@@ -257,3 +257,15 @@ def test_gemini_summary_replays_saved_evidence(monkeypatch, capsys):
     monkeypatch.setattr('workflow_comparison.compare_public_runs', unexpected)
     assert main(['--replay-comparison', '--model-summary', '--summary-provider', 'gemini']) == 0
     assert 'The check recovered.' in capsys.readouterr().out
+
+
+def test_qwen_timeout_replays_without_github(monkeypatch, capsys):
+    def unexpected_call(*args, **kwargs):
+        pytest.fail('Replay must not call GitHub')
+
+    monkeypatch.setattr('workflow_comparison.compare_public_runs', unexpected_call)
+    assert main(['--replay-comparison', 'qwen-timeout']) == 0
+    output = capsys.readouterr().out
+    assert 'E2E Test - macOS - shard 1/2: failure -> success' in output
+    assert 'ETIMEDOUT' in output
+    assert 'No workflow line changes found.' in output

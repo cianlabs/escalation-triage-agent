@@ -44,3 +44,32 @@ rubric before changing the prompt. Give both summaries the same snapshot.
 
 The first comparison covers one controlled demo and one live model response.
 It does not measure performance on fresh public run pairs.
+
+## Live Qwen Code artifact download case
+
+The same macOS E2E job failed on an artifact download timeout and passed
+in a later run. The workflow file was unchanged. Both summaries were
+scored on recovery, naming the timeout, and leaving its cause open.
+
+| Summary | Outcome | Evidence | Uncertainty |
+| --- | --- | --- | --- |
+| Rules | 1/1 | 0/1 | 1/1 |
+| Gemini before the prompt change | 1/1 | 1/1 | 1/1 |
+
+The rules showed the timeout in the details but omitted it from the short
+summary. Gemini included it and left the cause open.
+
+[Failed run](https://github.com/QwenLM/qwen-code/actions/runs/37119220504)
+· [Passing run](https://github.com/QwenLM/qwen-code/actions/runs/37142411422)
+
+The updated prompt asks the model to trace values to their source.
+Recheck both cases with the same scoring. Run the following in a terminal
+with `GOOGLE_API_KEY` available, or wrap each command with `op run`.
+
+```sh
+python agent.py --replay-comparison demo --model-summary --summary-provider gemini
+python agent.py --replay-comparison qwen-timeout --model-summary --summary-provider gemini
+```
+
+The post-change Gemini scores are pending. These two cases guided the
+prompt change and serve as regression checks.
