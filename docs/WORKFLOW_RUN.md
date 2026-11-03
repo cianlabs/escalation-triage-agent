@@ -128,3 +128,13 @@ and 3/3 for explanations, up from 1/3 for explanations in the baseline
 above. The summary separates recovered jobs and calls out an unavailable
 workflow comparison. The comment-only case still leaves the cause open.
 These are the cases used to guide the change.
+
+### Try a model-written summary
+
+Add `--model-summary` to the comparison command with `XAI_API_KEY` already
+set in your terminal. This opt-in sends bounded public job details,
+annotations and workflow differences to the same xAI model used by the
+practice agent's real mode. It prints a separate experimental summary
+after the rule-based report. The model call has no tools and may incur
+API charges. The source links identify evidence the model cited. They
+do not verify that its claims follow from that evidence.

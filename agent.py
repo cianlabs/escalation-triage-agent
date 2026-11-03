@@ -701,6 +701,7 @@ def main(argv=None, ask=input):
     run_mode = parser.add_mutually_exclusive_group()
     run_mode.add_argument("--compare-runs", nargs=2, metavar=("BEFORE", "AFTER"), help="Compare two public Actions runs from the same repository.")
     run_mode.add_argument("--workflow-run", metavar="URL", help="Read one public GitHub Actions run and its jobs. No keys or actions.")
+    parser.add_argument("--model-summary", action="store_true", help="Send public comparison evidence to xAI for an experimental summary.")
     parser.add_argument("--problem", help="Describe a problem locally to compare with current GitHub component status.")
     parser.add_argument("--component", choices=("actions", "git", "api", "pages", "packages", "codespaces", "copilot", "issues", "pull-requests", "webhooks"), help="Explicit GitHub service for --problem.")
     parser.add_argument("--github-status", action="store_true", help="Read GitHub public status alongside two labeled simulated checks. No model or actions.")
@@ -727,6 +728,9 @@ def main(argv=None, ask=input):
     parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     args = parser.parse_args(argv)
 
+    if args.model_summary and not args.compare_runs:
+        parser.error('--model-summary requires --compare-runs.')
+
     if args.workflow_run is not None or args.compare_runs:
         if args.github_status or args.problem is not None or args.component or args.collect_sample or args.investigate or args.real or args.sample or args.escalation_id or args.list or args.fresh or args.defer_approval:
             parser.error('Run inspection is a separate read-only mode; do not combine it with workflow options.')
@@ -737,6 +741,14 @@ def main(argv=None, ask=input):
 
                 before, after, diff = compare_public_runs(*args.compare_runs)
                 print(render_comparison(before, after, diff))
+                if args.model_summary:
+                    if not (before['complete'] and after['complete']):
+                        print('Model summary skipped because run collection is incomplete.')
+                    else:
+                        from workflow_model_summary import model_summary
+
+                        with make_client() as client:
+                            print(model_summary(before, after, diff, lambda messages: ask_model(client, messages, None)))
                 return 0 if before['complete'] and after['complete'] else 1
             result = inspect_public_run(args.workflow_run)
             print(render_run(result))
