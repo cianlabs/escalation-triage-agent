@@ -180,22 +180,20 @@ def test_opt_in_model_summary_uses_public_evidence_without_tools(monkeypatch, ca
     import json
 
     install_replay(monkeypatch, replay_responses(200))
-    client = object()
-    monkeypatch.setattr('agent.make_client', lambda: nullcontext(client))
-
-    def ask(actual_client, messages, tools):
-        assert actual_client is client
-        assert tools is None
-        evidence = json.loads(messages[1]['content'])
+    def create(*, model, input, store):
+        assert model == "grok-build-0.1"
+        assert store is False
+        evidence = json.loads(input[1]['content'])
         assert 'Expected 200, got 503' in evidence['before']
         assert 'completed_success' in evidence['after']
         assert 'observed=200' in evidence['diff']
-        return SimpleNamespace(content=json.dumps(dict(
+        return SimpleNamespace(output_text=json.dumps(dict(
             summary='The check recovered after the simulated value changed.',
             sources=['before', 'after', 'diff'],
         )))
 
-    monkeypatch.setattr('agent.ask_model', ask)
+    client = SimpleNamespace(responses=SimpleNamespace(create=create))
+    monkeypatch.setattr('agent.make_client', lambda: nullcontext(client))
     assert main(['--compare-runs', BEFORE, AFTER, '--model-summary']) == 0
     output = capsys.readouterr().out
     assert output.index('Triage summary') < output.index('Experimental model summary')

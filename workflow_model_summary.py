@@ -22,9 +22,8 @@ def model_summary(before, after, diff, ask):
             key: clip_text(value, 8_000)[0] for key, value in sources.items()
         })},
     ]
-    reply = ask(messages)
+    content = ask(messages)
     try:
-        content = reply.content
         if not isinstance(content, str) or len(content) > 4_000:
             raise ValueError
         result = json.loads(content)

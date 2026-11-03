@@ -177,13 +177,16 @@ def make_client():
     return OpenAI(api_key=key, base_url=XAI_BASE_URL, timeout=60, max_retries=0)
 
 
-def ask_model(client, messages, tools):
+def ask_model(client, messages, tools, *, comparison_summary=False):
     """One model call. Failures become named errors. The exception text is not kept.
 
     Some client errors quote the request. The request can contain the key,
     so we report only the exception type, HTTP status and known provider codes.
     """
     try:
+        if comparison_summary:
+            response = client.responses.create(model=MODEL, input=messages, store=False)
+            return response.output_text
         completion = client.chat.completions.create(model=MODEL, messages=messages, tools=tools)
         return completion.choices[0].message
     except Exception as exc:
@@ -768,7 +771,7 @@ def main(argv=None, ask=input):
                         from workflow_model_summary import model_summary
 
                         with make_client() as client:
-                            print(model_summary(before, after, diff, lambda messages: ask_model(client, messages, None)))
+                            print(model_summary(before, after, diff, lambda messages: ask_model(client, messages, None, comparison_summary=True)))
                 return 0 if before['complete'] and after['complete'] else 1
             result = inspect_public_run(args.workflow_run)
             print(render_run(result))
