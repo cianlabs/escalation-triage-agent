@@ -186,6 +186,16 @@ def make_openai_summary_client():
     return OpenAI(api_key=key, base_url="https://api.openai.com/v1", timeout=60, max_retries=0)
 
 
+def make_gemini_summary_client():
+    key = os.environ.get("GOOGLE_API_KEY", "").strip()
+    if not key:
+        raise AgentError("MISSING_KEY", "Set GOOGLE_API_KEY in this terminal.")
+    from openai import OpenAI
+
+    return OpenAI(api_key=key, base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+                  timeout=60, max_retries=0)
+
+
 def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL, provider="xai"):
     """One model call. Failures become named errors. The exception text is not kept.
 
@@ -193,6 +203,9 @@ def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL,
     so we report only the exception type, HTTP status and known provider codes.
     """
     try:
+        if comparison_summary and provider == "gemini":
+            completion = client.chat.completions.create(model=model, messages=messages)
+            return completion.choices[0].message.content
         if comparison_summary:
             response = client.responses.create(model=model, input=messages, store=False)
             return response.output_text
@@ -200,7 +213,7 @@ def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL,
         return completion.choices[0].message
     except Exception as exc:
         if type(exc).__name__ == "AuthenticationError":
-            key_name = "OPENAI_API_KEY" if provider == "openai" else "XAI_API_KEY"
+            key_name = {"openai": "OPENAI_API_KEY", "gemini": "GOOGLE_API_KEY", "xai": "XAI_API_KEY"}[provider]
             raise AgentError("BAD_KEY", f"The provider rejected the key. Check {key_name} in this terminal.") from None
         status = getattr(exc, "status_code", None)
         code = getattr(exc, "code", None)
@@ -730,7 +743,7 @@ def main(argv=None, ask=input):
     run_mode.add_argument("--replay-comparison", action="store_true", help="Compare saved demo runs without contacting GitHub.")
     run_mode.add_argument("--workflow-run", metavar="URL", help="Read one public GitHub Actions run and its jobs. No keys or actions.")
     parser.add_argument("--model-summary", action="store_true", help="Send public comparison evidence to the selected model provider.")
-    parser.add_argument("--summary-provider", choices=("xai", "openai"), help="Provider for --model-summary. Defaults to xai.")
+    parser.add_argument("--summary-provider", choices=("xai", "openai", "gemini"), help="Provider for --model-summary. Defaults to xai.")
     parser.add_argument("--problem", help="Describe a problem locally to compare with current GitHub component status.")
     parser.add_argument("--component", choices=("actions", "git", "api", "pages", "packages", "codespaces", "copilot", "issues", "pull-requests", "webhooks"), help="Explicit GitHub service for --problem.")
     parser.add_argument("--github-status", action="store_true", help="Read GitHub public status alongside two labeled simulated checks. No model or actions.")
@@ -785,8 +798,11 @@ def main(argv=None, ask=input):
                         from workflow_model_summary import model_summary
 
                         provider = args.summary_provider or "xai"
-                        model = "gpt-6-luna" if provider == "openai" else MODEL
-                        client_factory = make_openai_summary_client if provider == "openai" else make_client
+                        client_factory, model = {
+                            "xai": (make_client, MODEL),
+                            "openai": (make_openai_summary_client, "gpt-6-luna"),
+                            "gemini": (make_gemini_summary_client, "gemini-3.1-flash-lite"),
+                        }[provider]
                         with client_factory() as client:
                             summary = model_summary(
                                 before, after, diff,

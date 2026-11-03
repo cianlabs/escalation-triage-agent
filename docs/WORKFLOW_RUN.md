@@ -154,3 +154,12 @@ python agent.py --replay-comparison --model-summary --summary-provider openai
 
 This sends the same saved public evidence to GPT-6 Luna via the Responses
 API. The provider defaults to xAI when the option is omitted.
+
+To use Gemini Flash-Lite, set `GOOGLE_API_KEY` and run:
+
+```sh
+python agent.py --replay-comparison --model-summary --summary-provider gemini
+```
+
+Replay sends the saved public evidence to Google's Gemini API without
+fetching it again from GitHub.
