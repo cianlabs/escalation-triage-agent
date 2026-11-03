@@ -73,3 +73,15 @@ python agent.py --replay-comparison qwen-timeout --model-summary --summary-provi
 
 The post-change Gemini scores are pending. These two cases guided the
 prompt change and serve as regression checks.
+
+### Post-change replay attempts
+
+| Case | Pre-change Gemini score | Post-change Gemini score | Replay result |
+| --- | --- | --- | --- |
+| Controlled demo | 1/3 | Unscored | Gemini returned HTTP 503 on the initial call and one retry. |
+| Qwen Code timeout | 3/3 | Unscored | Gemini returned HTTP 503 on the initial call. |
+
+Both saved comparisons completed and printed the rule-based report.
+Gemini returned no summary, so these attempts provide no evidence about
+whether the updated prompt improved either case. Compare future results
+using the same saved evidence, model, prompt, and scoring criteria.
