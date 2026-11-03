@@ -39,6 +39,7 @@ def render_comparison(before, after, diff=()):
     lines = ['Public GitHub Actions run comparison',
              f"Before: {before['assessment']} | {before['run_url']}",
              f"After:  {after['assessment']} | {after['run_url']}", '', 'Changed job outcomes:']
+    recovered = []
     if not all(result.get('snapshot_consistent') and result.get('jobs', {}).get('state') == 'reported'
                for result in (before, after)):
         lines.append('Job comparison unavailable because a job list is incomplete or changed during collection.')
@@ -49,9 +50,12 @@ def render_comparison(before, after, diff=()):
             if len(first[name]) != 1 or len(second[name]) != 1:
                 lines.append(f"- {' '.join(clip_text(name, 250)[0].split())}: skipped because the job name is repeated.")
             elif first[name] != second[name]:
+                if first[name] == ['failure'] and second[name] == ['success']:
+                    recovered.append(name)
                 lines.append(f"- {' '.join(clip_text(name, 250)[0].split())}: {first[name][0]} -> {second[name][0]}")
         if len(lines) == section_start:
             lines.append('No changes found among jobs with matching names.')
+    lines[3:3] = ['', 'Triage summary', _triage_summary(before, recovered, diff)]
     lines.extend(['', 'Jobs are matched by name. A changed outcome alone does not explain why it changed.',
                   '', 'Workflow file comparison', *diff, '', 'Before details', render_run(before), '', 'After details', render_run(after)])
     return '\n'.join(lines)
@@ -96,3 +100,40 @@ def _workflow_text(data, path):
             or len(data['content']) > 90_000):
         raise ValueError('Unavailable or oversized workflow file')
     return base64.b64decode(''.join(data['content'].split()), validate=True).decode('utf-8')
+
+
+def _triage_summary(before, recovered, diff):
+    if not recovered:
+        return 'No uniquely matched job was shown to change from failure to success.'
+    names = ', '.join(' '.join(clip_text(name, 250)[0].split()) for name in recovered[:3])
+    subject = names if len(recovered) <= 3 else f'{names} and {len(recovered) - 3} more'
+    outcome = f'{subject} failed before and passed after.'
+    fallback = f'{outcome} The available evidence does not explain the change.'
+    if len(recovered) != 1:
+        return fallback
+
+    # Require the reported mismatch and both sides of the exact demo-style edit.
+    for job in before.get('error_details', {}).get('jobs', []):
+        if job['job_name'] != recovered[0]:
+            continue
+        for annotation in job['annotations']['annotations']:
+            if annotation['level'] != 'failure' or annotation.get('text_truncated'):
+                continue
+            match = re.fullmatch(r'Simulated HTTP response mismatch\. Expected ([0-9]{3}), got ([0-9]{3})\.',
+                                 annotation['message'].strip())
+            if match:
+                expected, observed = match.groups()
+                if expected != observed and _shows_response_edit(diff, expected, observed):
+                    return (f'{outcome} GitHub reported expected {expected}, got {observed}. '
+                            f'The workflow diff shows the simulated value changed from {observed} '
+                            f'to {expected}, matching the expected value.')
+    return fallback
+
+
+def _shows_response_edit(diff, expected, observed):
+    for context, removed, added in zip(diff, diff[1:], diff[2:]):
+        if (context.startswith('  |  ') and context[5:].strip() == f'expected={expected}'
+                and removed.startswith('  | -') and removed[5:].strip() == f'observed={observed}'
+                and added.startswith('  | +') and added[5:].strip() == f'observed={expected}'):
+            return True
+    return False
