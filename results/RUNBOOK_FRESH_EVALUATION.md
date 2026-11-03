@@ -35,3 +35,16 @@ The misses came from the answer step:
 
 The fresh set uses the same five short guides. It tests unfamiliar wording
 and unsupported details within that corpus.
+
+## After the answer-rule update
+
+| Measure | Development set | Formerly fresh set, before | Formerly fresh set, after |
+| --- | --- | --- | --- |
+| Expected passage in the top three | 8/8 | 8/8 | 8/8 |
+| Complete cited answers | 8/8 | 5/8 | 8/8 |
+| Abstention on unsupported questions | 2/2 | 1/2 | 2/2 |
+
+The answer rules now recognize paged, sign-off wording, and cycling Redis
+nodes. Requests for a log storage location receive an abstention. The four
+misses above guided these changes, so the updated scores are regression
+results. A new holdout is needed to measure how well the rules generalize.

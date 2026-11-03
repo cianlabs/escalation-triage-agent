@@ -71,3 +71,21 @@ def test_action_answers_keep_human_approval():
         excerpts = answer(question, search(question))
         assert [source for source, _ in excerpts] == [citation]
         assert 'human approv' in excerpts[0][1]
+
+
+def test_approval_paraphrases_and_missing_log_path():
+    from runbook_search import answer
+
+    cases = [
+        ('Nobody can access the customer portal. Who needs to be paged, and when?',
+         ['runbooks/customer_outage.txt:3', 'runbooks/customer_outage.txt:5']),
+        ('During a service outage, can we make changes before someone signs off?',
+         ['runbooks/customer_outage.txt:5']),
+        ('Can I cycle the Redis nodes without getting a human to sign off?',
+         ['runbooks/redis_memory.txt:5']),
+        ('Where are the database pooler logs stored on disk?', []),
+    ]
+    for question, expected in cases:
+        hits = search(question)
+        assert hits
+        assert [citation for citation, _ in answer(question, hits)] == expected
