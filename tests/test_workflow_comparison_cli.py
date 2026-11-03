@@ -201,3 +201,15 @@ def test_opt_in_model_summary_uses_public_evidence_without_tools(monkeypatch, ca
     assert output.index('Triage summary') < output.index('Experimental model summary')
     assert f'Source: {BEFORE}' in output
     assert f'Source: https://github.com/{REPO}/blob/{AFTER_SHA}/{PATH}' in output
+
+
+def test_saved_demo_replays_without_github(monkeypatch, capsys):
+    def unexpected_call(*args, **kwargs):
+        pytest.fail('Replay must not call GitHub')
+
+    monkeypatch.setattr('workflow_comparison.compare_public_runs', unexpected_call)
+    assert main(['--replay-comparison']) == 0
+    output = capsys.readouterr().out
+    assert 'Replaying saved GitHub evidence.' in output
+    assert 'check-response: failure -> success' in output
+    assert 'the simulated value changed from 503 to 200' in output

@@ -1,0 +1,221 @@
+[
+  {
+    "run_url": "https://github.com/cianlabs/escalation-triage-agent/actions/runs/41549968399",
+    "observed_at": "2026-11-03T01:01:14.256391+00:00",
+    "confirmed_root_cause": null,
+    "action_proposed": false,
+    "action_mode": "read_only",
+    "assessment": "completed_failure",
+    "complete": true,
+    "run": {
+      "state": "reported",
+      "source_url": "https://api.github.com/repos/cianlabs/escalation-triage-agent/actions/runs/41549968399",
+      "id": 41549968399,
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-03T00:02:52+00:00",
+      "updated_at": "2026-11-03T00:02:57+00:00",
+      "html_url": "https://github.com/cianlabs/escalation-triage-agent/actions/runs/41549968399",
+      "workflow_path": ".github/workflows/controlled-failure.yml",
+      "event": "push",
+      "head_sha": "773f903cc3c5e7f56974692a541bb2210c5857be",
+      "check_suite_id": 112593886935
+    },
+    "jobs": {
+      "state": "reported",
+      "source_url": "https://api.github.com/repos/cianlabs/escalation-triage-agent/actions/runs/41549968399/attempts/1/jobs",
+      "jobs": [
+        {
+          "id": 125634839669,
+          "name": "check-response",
+          "status": "completed",
+          "conclusion": "failure",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Check simulated HTTP response",
+                "status": "completed",
+                "conclusion": "failure",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/cianlabs/escalation-triage-agent/check-runs/125634839669"
+        }
+      ]
+    },
+    "deployment_gates": {
+      "state": "not_checked",
+      "gates": [],
+      "reason": "The run was already completed; no current waiting approval is inferred."
+    },
+    "error_details": {
+      "state": "reported",
+      "jobs": [
+        {
+          "job_id": 125634839669,
+          "job_name": "check-response",
+          "steps": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Check simulated HTTP response",
+                "status": "completed",
+                "conclusion": "failure",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "annotations": {
+            "state": "reported",
+            "source_url": "https://api.github.com/repos/cianlabs/escalation-triage-agent/check-runs/125634839669/annotations",
+            "annotations": [
+              {
+                "level": "failure",
+                "message": "Process completed with exit code 1.",
+                "path": ".github",
+                "start_line": 11,
+                "end_line": 11,
+                "text_truncated": false
+              },
+              {
+                "level": "failure",
+                "message": "Simulated HTTP response mismatch. Expected 200, got 503.",
+                "path": ".github",
+                "start_line": 10,
+                "end_line": 10,
+                "text_truncated": false
+              }
+            ],
+            "total_count": 2,
+            "error": null
+          }
+        }
+      ],
+      "message": "Provider error details; these are not verified root causes."
+    },
+    "recheck_guidance": null,
+    "snapshot_consistent": true,
+    "message": "GitHub reports this run completed with conclusion failure. That is an outcome, not an explanation of its cause."
+  },
+  {
+    "run_url": "https://github.com/cianlabs/escalation-triage-agent/actions/runs/41550790225",
+    "observed_at": "2026-11-03T01:01:14.272195+00:00",
+    "confirmed_root_cause": null,
+    "action_proposed": false,
+    "action_mode": "read_only",
+    "assessment": "completed_success",
+    "complete": true,
+    "run": {
+      "state": "reported",
+      "source_url": "https://api.github.com/repos/cianlabs/escalation-triage-agent/actions/runs/41550790225",
+      "id": 41550790225,
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-03T00:09:23+00:00",
+      "updated_at": "2026-11-03T00:09:29+00:00",
+      "html_url": "https://github.com/cianlabs/escalation-triage-agent/actions/runs/41550790225",
+      "workflow_path": ".github/workflows/controlled-failure.yml",
+      "event": "push",
+      "head_sha": "53891d56d79cc5511565a90f43394bad5fc04251",
+      "check_suite_id": 112595983111
+    },
+    "jobs": {
+      "state": "reported",
+      "source_url": "https://api.github.com/repos/cianlabs/escalation-triage-agent/actions/runs/41550790225/attempts/1/jobs",
+      "jobs": [
+        {
+          "id": 125637566747,
+          "name": "check-response",
+          "status": "completed",
+          "conclusion": "success",
+          "step_details": {
+            "state": "reported",
+            "steps": [
+              {
+                "number": 1,
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 2,
+                "name": "Check simulated HTTP response",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              },
+              {
+                "number": 3,
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "name_truncated": false
+              }
+            ]
+          },
+          "check_run_reference": "https://api.github.com/repos/cianlabs/escalation-triage-agent/check-runs/125637566747"
+        }
+      ]
+    },
+    "deployment_gates": {
+      "state": "not_checked",
+      "gates": [],
+      "reason": "The run was already completed; no current waiting approval is inferred."
+    },
+    "error_details": {
+      "state": "not_needed",
+      "jobs": [],
+      "message": "No failed jobs were returned for step and annotation inspection."
+    },
+    "recheck_guidance": null,
+    "snapshot_consistent": true,
+    "message": "GitHub reports this run completed with conclusion success. That is an outcome, not an explanation of its cause."
+  },
+  [
+    "Before file: https://github.com/cianlabs/escalation-triage-agent/blob/773f903cc3c5e7f56974692a541bb2210c5857be/.github/workflows/controlled-failure.yml",
+    "After file: https://github.com/cianlabs/escalation-triage-agent/blob/53891d56d79cc5511565a90f43394bad5fc04251/.github/workflows/controlled-failure.yml",
+    "Workflow changes are evidence to review. Confirmed root cause remains none.",
+    "  | --- before",
+    "  | +++ after",
+    "  | @@ -13,3 +13,3 @@",
+    "  |            expected=200",
+    "  | -          observed=503",
+    "  | +          observed=200",
+    "  |            if [[ \"$observed\" != \"$expected\" ]]; then"
+  ]
+]
