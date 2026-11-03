@@ -82,3 +82,8 @@ comparison puts access guidance near the top. It shows a retry delay or
 UTC reset time when GitHub provides usable rate-limit headers. A bare
 HTTP 403 leaves the reason unknown. The report still marks affected
 collection incomplete.
+
+To replay the comparison without GitHub access, run
+`python -m pytest -q tests/test_workflow_comparison_cli.py`.
+The tests run the CLI with simulated API responses for a matching workflow
+edit, an unchanged file, and a rate-limited job request.
