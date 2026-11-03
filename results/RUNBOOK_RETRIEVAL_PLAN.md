@@ -50,3 +50,20 @@ R09 produced no hits. R10 surfaced the outage guide on the shared word
 waiting, even though the guide gives no cancellation procedure. This is
 the only miss under the retrieval and abstention measures above. These
 are development questions, and the corpus is small.
+
+## Rarity-weighted search
+
+Shared words now carry more weight when they appear in fewer guides.
+Results below half the best score are omitted.
+
+| Measure | Original | Rarity-weighted |
+| --- | --- | --- |
+| Expected passage in the top three | 8/8 | 8/8 |
+| Abstention on unsupported questions | 1/2 | 1/2 |
+| Excerpts returned across the ten questions | 23 | 12 |
+| Excerpts returned for the Redis maxmemory example | 3 | 1 |
+
+The Redis example retains just the Redis guide. R10 still surfaces the
+outage guide because it shares the word waiting and has no stronger
+match to compare against. A relative cutoff reduces weak alternatives
+when there is a strong match. These scores use the development set.

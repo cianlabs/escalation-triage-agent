@@ -1,5 +1,7 @@
 """Read-only lexical search over the runbook assistant's five guides."""
 import argparse
+from collections import Counter
+import math
 from pathlib import Path
 import re
 
@@ -20,14 +22,22 @@ def terms(text):
 
 def search(question):
     query = terms(question)
-    hits = []
+    passages = []
     for name in GUIDES:
         lines = (RUNBOOKS / name).read_text(encoding='utf-8').splitlines()
         passage = '\n'.join(lines)
-        score = len(query & terms(passage))
-        if score:
-            hits.append((score, f'runbooks/{name}:1-{len(lines)}', passage))
-    return sorted(hits, key=lambda hit: (-hit[0], hit[1]))[:3]
+        passages.append((f'runbooks/{name}:1-{len(lines)}', passage, terms(passage)))
+
+    frequencies = Counter(word for _, _, words in passages for word in words)
+    weights = {word: math.log(1 + len(passages) / count)
+               for word, count in frequencies.items() if word in query}
+    hits = [(sum(weights[word] for word in sorted(query & words)), citation, passage)
+            for citation, passage, words in passages]
+    ranked = sorted(hits, key=lambda hit: (-hit[0], hit[1]))
+    # Keep alternatives with at least half the lexical support of the best hit.
+    cutoff = ranked[0][0] / 2
+    return [hit for hit in ranked if hit[0] > 0 and hit[0] >= cutoff][:3]
+
 
 
 def main():

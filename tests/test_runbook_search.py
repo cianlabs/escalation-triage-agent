@@ -14,3 +14,8 @@ def test_hits_are_ranked_and_cite_exact_text():
 
 def test_no_shared_terms_returns_no_passage():
     assert search('Rotate the production TLS certificate') == []
+
+
+def test_redis_query_omits_generic_check_matches():
+    hits = search('What should I check if Redis hits maxmemory?')
+    assert [citation for _, citation, _ in hits] == ['runbooks/redis_memory.txt:1-5']
