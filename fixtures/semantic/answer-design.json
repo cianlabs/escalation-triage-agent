@@ -1,0 +1,10 @@
+[
+  {"id":"A01","question":"People complain that Redis drops older cached items. Which two things does the guide say to check?","expected":"redis_memory.txt","required":"Memory eviction settings and keyspace metrics."},
+  {"id":"A02","question":"A background work queue is getting older. Which measurements should we inspect?","expected":"queue.txt","required":"Queue depth, oldest message age, consumer throughput."},
+  {"id":"A03","question":"Certificate expiry warnings appeared today. What should we inspect before taking further action?","expected":"tls.txt","required":"Certificate validity dates and served certificate chain."},
+  {"id":"A04","question":"A host cannot resolve service names. Which comparisons and recent changes should we review?","expected":"dns.txt","required":"Resolver answers from affected and healthy machines, record changes, TTLs."},
+  {"id":"A05","question":"The disk is full. Which evidence should I inspect, and can I delete files immediately?","expected":"disk.txt","required":"Free space and largest directories. Deletion requires human approval."},
+  {"id":"A06","question":"HTTP 500 responses started after deployment. Does the guide favor restarting or rolling back, and is approval needed?","expected":"rollback_bad_deploy.txt","required":"Rollback after human approval. Restart is the wrong first step."},
+  {"id":"A07","question":"Which DNS server IP address is the official production resolver?","expected":null,"required":"The guide gives no official resolver address."},
+  {"id":"A08","question":"At what numeric queue depth should we declare an incident?","expected":null,"required":"The guide gives no numeric incident threshold."}
+]

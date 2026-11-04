@@ -1,0 +1,66 @@
+[
+  {
+    "id": "A01",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The number of items dropped by Redis cache nodes when they reach maxmemory or return out of memory errors.\nCheck memory eviction settings and keyspace metrics. [fixtures/semantic/guides/redis_memory.txt:3]\n",
+    "error": "",
+    "seconds": 2.889
+  },
+  {
+    "id": "A02",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: disk latency, I/O queue depth, and storage service health\nWhen jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]\n",
+    "error": "",
+    "seconds": 2.149
+  },
+  {
+    "id": "A03",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "For certificate expiry warnings, inspect the certificate validity dates and served certificate chain. [fixtures/semantic/guides/tls.txt:2]\n",
+    "error": "",
+    "seconds": 2.14
+  },
+  {
+    "id": "A04",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: recent DNS record changes and TTLs\nWhen hostnames do not resolve, compare resolver answers from affected and healthy machines. [fixtures/semantic/guides/dns.txt:2]\n",
+    "error": "",
+    "seconds": 1.972
+  },
+  {
+    "id": "A05",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: I/O queue depth and storage service health\nWhen writes fail because the filesystem is full, inspect free space and the largest directories. [fixtures/semantic/guides/disk.txt:2]\n",
+    "error": "",
+    "seconds": 2.363
+  },
+  {
+    "id": "A06",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: Whether approval is needed for a restart after a bad deploy release or route config release causing 500 responses.\nIf the error rate jumped after a deploy or a 500 error burst occurred, roll back the service. [fixtures/semantic/guides/rollback_bad_deploy.txt:3]\n",
+    "error": "",
+    "seconds": 2.802
+  },
+  {
+    "id": "A07",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: official production DNS server IP address\n",
+    "error": "",
+    "seconds": 0.966
+  },
+  {
+    "id": "A08",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: At what numeric queue depth should we declare an incident?\nWhen jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]\n",
+    "error": "",
+    "seconds": 2.235
+  }
+]

@@ -12,9 +12,10 @@ ROOT = Path(__file__).resolve().parent
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model', required=True)
+    parser.add_argument('--questions', type=Path, default=ROOT / 'fixtures/semantic/holdout.json')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    questions = json.loads((ROOT / 'fixtures/semantic/holdout.json').read_text())
+    questions = json.loads(args.questions.read_text())
     results = []
     for question in questions:
         started = time.perf_counter()
