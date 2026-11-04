@@ -1,0 +1,6 @@
+[
+  {"id":"L01","question":"Events stop reaching our webhook receiver. Which evidence should I examine?","required":["fixtures/semantic/guides/webhook.txt:2"]},
+  {"id":"L02","question":"Files take too long to open. What storage measurements should I inspect?","required":["fixtures/semantic/guides/storage_latency.txt:2"]},
+  {"id":"L03","question":"Which command empties the background message queue?","required":[]},
+  {"id":"L04","question":"Which exact certificate expiry date does our production server currently have?","required":[]}
+]
