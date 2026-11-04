@@ -1,0 +1,83 @@
+[
+  {
+    "id": "A01",
+    "selected": [
+      "fixtures/semantic/guides/redis_memory.txt:3",
+      "fixtures/semantic/guides/redis_memory.txt:4"
+    ],
+    "output": "When Redis cache nodes reach maxmemory or return out of memory errors, cache eviction policies apply. [fixtures/semantic/guides/redis_memory.txt:3]\nCheck memory eviction settings and keyspace metrics. [fixtures/semantic/guides/redis_memory.txt:4]",
+    "complete": true,
+    "extra": 1,
+    "abstained": false,
+    "error": null
+  },
+  {
+    "id": "A02",
+    "selected": [],
+    "output": "No supporting lines selected.",
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "error": null
+  },
+  {
+    "id": "A03",
+    "selected": [],
+    "output": "No supporting lines selected.",
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "error": null
+  },
+  {
+    "id": "A04",
+    "selected": [
+      "fixtures/semantic/guides/dns.txt:2"
+    ],
+    "output": "When hostnames do not resolve, compare resolver answers from affected and healthy machines. Check recent DNS record changes and TTLs. [fixtures/semantic/guides/dns.txt:2]",
+    "complete": true,
+    "extra": 0,
+    "abstained": false,
+    "error": null
+  },
+  {
+    "id": "A05",
+    "selected": [],
+    "output": "No supporting lines selected.",
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "error": null
+  },
+  {
+    "id": "A06",
+    "selected": [
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:3",
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:4",
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:5"
+    ],
+    "output": "If the error rate jumped after a deploy or a 500 error burst occurred, roll back the service. [fixtures/semantic/guides/rollback_bad_deploy.txt:3]\nA bad deploy release or route config release causing 500 responses must be rolled back. [fixtures/semantic/guides/rollback_bad_deploy.txt:4]\nRoll back only after a human approves. A restart is the wrong first step. [fixtures/semantic/guides/rollback_bad_deploy.txt:5]",
+    "complete": true,
+    "extra": 2,
+    "abstained": false,
+    "error": null
+  },
+  {
+    "id": "A07",
+    "selected": [],
+    "output": "No supporting lines selected.",
+    "complete": true,
+    "extra": 0,
+    "abstained": true,
+    "error": null
+  },
+  {
+    "id": "A08",
+    "selected": [],
+    "output": "No supporting lines selected.",
+    "complete": true,
+    "extra": 0,
+    "abstained": true,
+    "error": null
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "A01": ["fixtures/semantic/guides/redis_memory.txt:4"],
+  "A02": ["fixtures/semantic/guides/queue.txt:2"],
+  "A03": ["fixtures/semantic/guides/tls.txt:2"],
+  "A04": ["fixtures/semantic/guides/dns.txt:2"],
+  "A05": ["fixtures/semantic/guides/disk.txt:2"],
+  "A06": ["fixtures/semantic/guides/rollback_bad_deploy.txt:5"],
+  "A07": [],
+  "A08": []
+}
