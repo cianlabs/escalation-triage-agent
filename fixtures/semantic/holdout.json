@@ -1,0 +1,14 @@
+[
+  {"id":"T01","question":"Previously saved cache entries disappear as new entries arrive.","expected":"redis_memory.txt"},
+  {"id":"T02","question":"Messages sit around for hours before a consumer handles them.","expected":"queue.txt"},
+  {"id":"T03","question":"HTTPS clients reject our server because its certificate validity period ended.","expected":"tls.txt"},
+  {"id":"T04","question":"Only one laptop fails to translate a hostname into an IP address.","expected":"dns.txt"},
+  {"id":"T05","question":"The filesystem has no free bytes and applications cannot create files.","expected":"disk.txt"},
+  {"id":"T06","question":"Tasks spend their time waiting for reads and writes to complete.","expected":"storage_latency.txt"},
+  {"id":"T07","question":"After publishing a new version, users immediately started getting HTTP 500.","expected":"rollback_bad_deploy.txt"},
+  {"id":"T08","question":"An event fires, but the endpoint subscribed to notifications never receives it.","expected":"webhook.txt"},
+  {"id":"T09","question":"How do I calculate compound interest on my savings?","expected":null},
+  {"id":"T10","question":"What command increases the production Redis maxmemory limit?","expected":null},
+  {"id":"T11","question":"What is the exact filesystem path for connection pooler logs?","expected":null},
+  {"id":"T12","question":"Which certificate renewal command should I execute?","expected":null}
+]
