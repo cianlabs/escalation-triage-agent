@@ -1,0 +1,2 @@
+# API throttling
+When requests receive HTTP 429, inspect Retry-After and the documented quota. Reduce request frequency before retrying.

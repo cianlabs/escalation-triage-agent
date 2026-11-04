@@ -1,0 +1,2 @@
+# Access denied
+When a permitted operation is rejected, inspect the caller identity, resource policy, and recent permission changes.

@@ -20,7 +20,7 @@ def cosine(first, second):
 
 
 def evaluate(min_similarity=0.0, question_file="questions.json"):
-    guides = json.loads((FIXTURES / 'guides.json').read_text())
+    guides = {path.name: path.read_text() for path in sorted((FIXTURES / 'guides').glob('*.txt'))}
     questions = json.loads((FIXTURES / question_file).read_text())
     names = sorted(guides)
     words = {name: terms(guides[name]) for name in names}

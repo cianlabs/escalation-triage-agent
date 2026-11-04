@@ -1,0 +1,5 @@
+# Troubleshoot Redis out of memory and cache eviction
+
+When Redis cache nodes reach maxmemory or return out of memory errors, cache eviction policies apply.
+Check memory eviction settings and keyspace metrics.
+Restart Redis cache nodes only after human approval.
