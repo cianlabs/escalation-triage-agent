@@ -44,3 +44,22 @@ quality or establish a safe semantic relevance threshold.
 
 [Ollama embeddings API](https://docs.ollama.com/api/embed)
 · [EmbeddingGemma](https://ollama.com/library/embeddinggemma)
+
+## Exploratory similarity cutoffs
+
+| Cutoff | Expected guide in top three | Extra results |
+| --- | --- | --- |
+| No cutoff | 15/15 | 30 |
+| 0.3 | 15/15 | 12 |
+| 0.4 | 10/15 | 1 |
+| 0.6 | 0/15 | 0 |
+
+The first trial, 0.6, removed every result. Two lower cutoffs were then
+tested on the same questions. At 0.4, S02, S03, S04, S05, and S10 lost
+their expected guides. At 0.3, all expected guides remained and extra
+results fell from 30 to 12. This threshold was explored on the development
+set and needs fresh questions before adoption.
+
+Reproduce with `python semantic_retrieval_eval.py --min-similarity 0.3`.
+The default comparison still uses no cutoff. The filter applies to results
+from each search, and all 15 guides remain in the corpus.

@@ -1,4 +1,5 @@
 """Compare lexical and local embedding retrieval on a fixed practice corpus."""
+import argparse
 from collections import Counter
 import json
 import math
@@ -18,7 +19,7 @@ def cosine(first, second):
     return sum(a * b for a, b in zip(first, second)) / denominator
 
 
-def evaluate():
+def evaluate(min_similarity=0.0):
     guides = json.loads((FIXTURES / 'guides.json').read_text())
     questions = json.loads((FIXTURES / 'questions.json').read_text())
     names = sorted(guides)
@@ -35,9 +36,10 @@ def evaluate():
         vectors = response.json()['embeddings']
     if len(vectors) != len(inputs):
         raise ValueError('Incomplete embeddings.')
-    totals = dict(keyword=[0, 0], embeddings=[0, 0])
-    print('| Case | Keyword top three | Embedding top three |')
-    print('| --- | --- | --- |')
+    totals = dict(keyword=[0, 0], embeddings=[0, 0], filtered=[0, 0])
+    misses = []
+    print('| Case | Keyword top three | Embedding top three | After cutoff |')
+    print('| --- | --- | --- | --- |')
     for index, row in enumerate(questions):
         query = terms(row['question'])
         lexical = [(sum(math.log(1 + len(names) / frequencies[word])
@@ -47,15 +49,25 @@ def evaluate():
         semantic = sorted(zip(names, vectors[:len(names)]),
                           key=lambda item: (-cosine(item[1], vectors[len(names) + index]), item[0]))
         embeddings = [name for name, _ in semantic[:3]]
-        for method, results in (('keyword', keyword), ('embeddings', embeddings)):
+        filtered = [name for name, vector in semantic[:3]
+                    if cosine(vector, vectors[len(names) + index]) >= min_similarity]
+        if row['expected'] not in filtered:
+            misses.append(row['id'])
+        for method, results in (('keyword', keyword), ('embeddings', embeddings), ('filtered', filtered)):
             totals[method][0] += row['expected'] in results
             totals[method][1] += sum(name != row['expected'] for name in results)
-        print(f"| {row['id']} | {', '.join(keyword) or 'None'} | {', '.join(embeddings)} |")
+        print(f"| {row['id']} | {', '.join(keyword) or 'None'} | {', '.join(embeddings)} | {', '.join(filtered) or 'None'} |")
     print()
     for method, (correct, unrelated) in totals.items():
         print(f'{method}: top-three recall {correct}/{len(questions)}; unrelated results {unrelated}')
+    print(f'Cutoff {min_similarity}; missed expected guides: {misses}')
     print('One expected guide per question. Other results count as unrelated under this rubric.')
 
 
 if __name__ == '__main__':
-    evaluate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--min-similarity', type=float, default=0.0)
+    args = parser.parse_args()
+    if not math.isfinite(args.min_similarity) or not 0 <= args.min_similarity <= 1:
+        parser.error('--min-similarity must be between 0 and 1')
+    evaluate(args.min_similarity)
