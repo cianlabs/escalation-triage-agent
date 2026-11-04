@@ -1,0 +1,66 @@
+[
+  {
+    "id": "A01",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The guide does not mention checking connection pooler service logs or restarting the connection pooler service.\nCheck memory eviction settings and keyspace metrics. [fixtures/semantic/guides/redis_memory.txt:3]\nRestart Redis cache nodes only after human approval. [fixtures/semantic/guides/redis_memory.txt:5]\n",
+    "error": "",
+    "seconds": 5.711
+  },
+  {
+    "id": "A02",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: no further measurements for a background work queue are provided in the given runbook lines.\nWhen jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]\n",
+    "error": "",
+    "seconds": 3.066
+  },
+  {
+    "id": "A03",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: No other guidance is provided for handling certificate expiry warnings in the given text, but options for handling error rates and bad deploy situations are provided in other lines.\nFor certificate expiry warnings, inspect the certificate validity dates and served certificate chain. [fixtures/semantic/guides/tls.txt:2]\n",
+    "error": "",
+    "seconds": 2.922
+  },
+  {
+    "id": "A04",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: recent changes to DNS records and TTLs\nWhen hostnames do not resolve, compare resolver answers from affected and healthy machines. [fixtures/semantic/guides/dns.txt:2]\n",
+    "error": "",
+    "seconds": 1.985
+  },
+  {
+    "id": "A05",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: No mention of inspecting disk latency or storage service health in this runbook for a full filesystem.\nWhen writes fail because the filesystem is full, inspect free space and the largest directories. [fixtures/semantic/guides/disk.txt:2]\nDeleting files requires human approval. [fixtures/semantic/guides/disk.txt:2]\n",
+    "error": "",
+    "seconds": 3.036
+  },
+  {
+    "id": "A06",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: Whether approval is needed for a restart, and if so, who needs approval for a restart.\nIf the error rate jumped after a deploy or a 500 error burst occurred, roll back the service. [fixtures/semantic/guides/rollback_bad_deploy.txt:3]\nA bad deploy release or route config release causing 500 responses must be rolled back. [fixtures/semantic/guides/rollback_bad_deploy.txt:4]\nRoll back only after a human approves. [fixtures/semantic/guides/rollback_bad_deploy.txt:5]\n",
+    "error": "",
+    "seconds": 5.055
+  },
+  {
+    "id": "A07",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The DNS server IP address of the official production resolver is not mentioned in the provided runbook lines.\nWhen hostnames do not resolve, compare resolver answers from affected and healthy machines. [fixtures/semantic/guides/dns.txt:2]\n",
+    "error": "",
+    "seconds": 2.189
+  },
+  {
+    "id": "A08",
+    "model": "qwen2.5:3b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: At what numeric queue depth should we declare an incident?\nWhen jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]\nA sev-1 outage or major customer-facing outage needs an on-call engineer immediately. [fixtures/semantic/guides/customer_outage.txt:4]\nPage oncall only after a human approves. Do not change the service until that human approves a specific action. [fixtures/semantic/guides/customer_outage.txt:5]\n",
+    "error": "",
+    "seconds": 4.505
+  }
+]
