@@ -1,0 +1,98 @@
+[
+  {
+    "id": "T01",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The evidence does not specify how new entries arriving affects previously saved cache entries.\n",
+    "error": "",
+    "seconds": 8.474
+  },
+  {
+    "id": "T02",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The evidence does not specify the exact time or duration messages sit in the queue before being handled by a consumer.\n",
+    "error": "",
+    "seconds": 3.834
+  },
+  {
+    "id": "T03",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: No information on how to handle certificate expiry warnings or procedures for dealing with expired certificates.\n",
+    "error": "",
+    "seconds": 2.615
+  },
+  {
+    "id": "T04",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The evidence does not provide information about the specific number or identity of the laptops experiencing issues.\n",
+    "error": "",
+    "seconds": 2.304
+  },
+  {
+    "id": "T05",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The evidence does not provide information on whether applications are unable to create files due to lack of free bytes or other reasons.\nWhen writes fail because the filesystem is full, inspect free space and the largest directories. Deleting files requires human approval. [fixtures/semantic/guides/disk.txt:2]\n",
+    "error": "",
+    "seconds": 5.234
+  },
+  {
+    "id": "T06",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The evidence does not provide information about tasks waiting for reads and writes to complete.\n",
+    "error": "",
+    "seconds": 2.381
+  },
+  {
+    "id": "T07",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: No information on the specific steps to initiate a rollback or the form of approval required.\nIf the error rate jumped after a deploy or a 500 error burst occurred, roll back the service. [fixtures/semantic/guides/rollback_bad_deploy.txt:3]\nA bad deploy release or route config release causing 500 responses must be rolled back. [fixtures/semantic/guides/rollback_bad_deploy.txt:4]\n",
+    "error": "",
+    "seconds": 7.853
+  },
+  {
+    "id": "T08",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: No specific steps or requirements for human approval are mentioned.\nInspect delivery history, destination URL, and receiver response codes when notifications do not reach the receiver. [fixtures/semantic/guides/webhook.txt:2]\n",
+    "error": "",
+    "seconds": 5.25
+  },
+  {
+    "id": "T09",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "The guides do not provide a supported answer to this question.\n",
+    "error": "",
+    "seconds": 0.451
+  },
+  {
+    "id": "T10",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The evidence does not contain information about commands to increase the production Redis maxmemory limit.\n",
+    "error": "",
+    "seconds": 2.989
+  },
+  {
+    "id": "T11",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The exact filesystem path for connection pooler logs is not specified in the provided evidence.\n",
+    "error": "",
+    "seconds": 2.441
+  },
+  {
+    "id": "T12",
+    "model": "qwen2.5:7b",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The specific certificate renewal command is not provided in the given reference.\n",
+    "error": "",
+    "seconds": 1.942
+  }
+]
