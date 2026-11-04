@@ -1,0 +1,5 @@
+# Manage database connection pool limits
+
+When database connection limits or max connections are reached, pool exhaustion occurs.
+Check connection pooler service logs and clear idle database backends.
+Restart connection pooler only after human approval.

@@ -1,0 +1,2 @@
+# Clock drift
+When timestamps disagree across hosts, compare system time and synchronization status. Clock differences can affect token validation.

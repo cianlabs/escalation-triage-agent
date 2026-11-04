@@ -1,0 +1,2 @@
+# DNS resolution failure
+When hostnames do not resolve, compare resolver answers from affected and healthy machines. Check recent DNS record changes and TTLs.

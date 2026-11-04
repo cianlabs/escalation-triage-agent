@@ -1,0 +1,5 @@
+# Rollback a bad deploy
+
+If the error rate jumped after a deploy or a 500 error burst occurred, roll back the service.
+A bad deploy release or route config release causing 500 responses must be rolled back.
+Roll back only after a human approves. A restart is the wrong first step.

@@ -1,0 +1,4 @@
+# Handle slow dashboard performance
+
+If dashboard or web response time is slow, review database connection pool limits.
+Check query performance and verify connection pooler status before taking action.

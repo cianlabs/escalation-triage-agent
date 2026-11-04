@@ -102,11 +102,23 @@ def main():
     mode.add_argument('--model-answer', action='store_true', help='Ask Gemini to answer from the retrieved guides.')
     mode.add_argument('--answer', action='store_true', help='Quote a supported check or approval requirement.')
     parser.add_argument('--ollama-model', help='Use this installed local Ollama model with --model-answer.')
+    parser.add_argument('--semantic', action='store_true', help='Search the 15-guide practice corpus with local embeddings.')
     parser.add_argument('question')
     args = parser.parse_args()
     if args.ollama_model is not None and not args.model_answer:
         parser.error('--ollama-model requires --model-answer')
-    hits = search(args.question)
+    if args.semantic and args.answer:
+        parser.error('--semantic supports search or --model-answer.')
+    try:
+        if args.semantic:
+            from semantic_runbook_search import search_semantic
+
+            hits = search_semantic(args.question)
+        else:
+            hits = search(args.question)
+    except AgentError as exc:
+        print(exc, file=sys.stderr)
+        return 1
     if args.model_answer:
         from agent import ask_model, make_gemini_summary_client
         from runbook_model_answer import model_answer

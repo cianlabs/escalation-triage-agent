@@ -1,0 +1,5 @@
+# Handle customer-facing outage
+
+Page oncall when a service is down, unavailable, or experiencing a customer-facing outage.
+A sev-1 outage or major customer-facing outage needs an on-call engineer immediately.
+Page oncall only after a human approves. Do not change the service until that human approves a specific action.

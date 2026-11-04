@@ -1,0 +1,74 @@
+[
+  {
+    "id": "T01",
+    "exit_code": 1,
+    "output": "Rule-based fallback\nThe guides do not provide a supported answer to this question.\n",
+    "error": "MODEL_ERROR: The model returned an invalid runbook answer or citation.\n"
+  },
+  {
+    "id": "T02",
+    "exit_code": 1,
+    "output": "Rule-based fallback\nThe guides do not provide a supported answer to this question.\n",
+    "error": "MODEL_ERROR: The model returned an invalid runbook answer or citation.\n"
+  },
+  {
+    "id": "T03",
+    "exit_code": 0,
+    "output": "Not covered by the guides: A solution or next step to fix the certificate expiry issue, such as renewing the certificate or rolling back the service if a bad deploy is suspected.\nInspect the certificate validity dates and served certificate chain for certificate expiry warnings. [fixtures/semantic/guides/tls.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T04",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The runbook does not provide specific details on diagnosing a single failing laptop in terms of hostname translation failure.\n",
+    "error": ""
+  },
+  {
+    "id": "T05",
+    "exit_code": 1,
+    "output": "Rule-based fallback\nThe guides do not provide a supported answer to this question.\n",
+    "error": "MODEL_ERROR: The model returned an invalid runbook answer or citation.\n"
+  },
+  {
+    "id": "T06",
+    "exit_code": 0,
+    "output": "When jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T07",
+    "exit_code": 1,
+    "output": "Rule-based fallback\nThe guides do not provide a supported answer to this question.\n",
+    "error": "MODEL_ERROR: The model returned an invalid runbook answer or citation.\n"
+  },
+  {
+    "id": "T08",
+    "exit_code": 1,
+    "output": "Rule-based fallback\nThe guides do not provide a supported answer to this question.\n",
+    "error": "MODEL_ERROR: The model returned an invalid runbook answer or citation.\n"
+  },
+  {
+    "id": "T09",
+    "exit_code": 0,
+    "output": "The guides do not provide a supported answer to this question.\n",
+    "error": ""
+  },
+  {
+    "id": "T10",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The command to increase the production Redis maxmemory limit is not provided in the given runbook lines.\n",
+    "error": ""
+  },
+  {
+    "id": "T11",
+    "exit_code": 1,
+    "output": "Rule-based fallback\nThe guides do not provide a supported answer to this question.\n",
+    "error": "MODEL_ERROR: The model returned an invalid runbook answer or citation.\n"
+  },
+  {
+    "id": "T12",
+    "exit_code": 1,
+    "output": "Rule-based fallback\nThe guides do not provide a supported answer to this question.\n",
+    "error": "MODEL_ERROR: The model returned an invalid runbook answer or citation.\n"
+  }
+]

@@ -1,0 +1,2 @@
+# Storage latency
+When file operations stall, inspect disk latency, I/O queue depth, and storage service health.

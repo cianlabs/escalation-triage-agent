@@ -1,0 +1,2 @@
+# Disk capacity exhausted
+When writes fail because the filesystem is full, inspect free space and the largest directories. Deleting files requires human approval.

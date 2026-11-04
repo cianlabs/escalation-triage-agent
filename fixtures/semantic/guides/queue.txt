@@ -1,0 +1,2 @@
+# Queue backlog
+When jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput.

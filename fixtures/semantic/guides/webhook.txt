@@ -1,0 +1,2 @@
+# Missing webhook delivery
+When notifications do not reach the receiver, inspect delivery history, destination URL, and receiver response codes.

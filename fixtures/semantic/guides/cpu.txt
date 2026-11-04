@@ -1,0 +1,2 @@
+# CPU saturation
+When processors remain busy, inspect CPU usage by process and request concurrency. Compare traffic with a healthy period.

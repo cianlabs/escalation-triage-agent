@@ -1,0 +1,2 @@
+# Expired TLS certificate
+For certificate expiry warnings, inspect the certificate validity dates and served certificate chain. The renewal procedure is outside this guide.
