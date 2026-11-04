@@ -1,0 +1,77 @@
+[
+  {
+    "id": "S01",
+    "question": "The cache keeps throwing things away. What settings help explain it?",
+    "expected": "redis_memory.txt"
+  },
+  {
+    "id": "S02",
+    "question": "People wait ages before a background task even starts.",
+    "expected": "queue.txt"
+  },
+  {
+    "id": "S03",
+    "question": "The browser says the site identity document is past its valid date.",
+    "expected": "tls.txt"
+  },
+  {
+    "id": "S04",
+    "question": "Names no longer turn into network addresses on one machine.",
+    "expected": "dns.txt"
+  },
+  {
+    "id": "S05",
+    "question": "We cannot save anything because there is no room left.",
+    "expected": "disk.txt"
+  },
+  {
+    "id": "S06",
+    "question": "The processors are pinned and traffic keeps piling in.",
+    "expected": "cpu.txt"
+  },
+  {
+    "id": "S07",
+    "question": "The right user is still forbidden from opening a resource.",
+    "expected": "permissions.txt"
+  },
+  {
+    "id": "S08",
+    "question": "Two servers disagree about what time it is.",
+    "expected": "clock.txt"
+  },
+  {
+    "id": "S09",
+    "question": "The remote endpoint says we are sending too many requests.",
+    "expected": "rate_limit.txt"
+  },
+  {
+    "id": "S10",
+    "question": "Reading files has become painfully slow.",
+    "expected": "storage_latency.txt"
+  },
+  {
+    "id": "S11",
+    "question": "Our callback receiver stopped getting event notifications.",
+    "expected": "webhook.txt"
+  },
+  {
+    "id": "S12",
+    "question": "The database has run out of slots for clients.",
+    "expected": "db_connection_pool.txt"
+  },
+  {
+    "id": "S13",
+    "question": "The dashboard takes forever to display.",
+    "expected": "slow_dashboard.txt"
+  },
+  {
+    "id": "S14",
+    "question": "A release immediately caused lots of internal server errors.",
+    "expected": "rollback_bad_deploy.txt"
+  },
+  {
+    "id": "S15",
+    "question": "Every customer is locked out of a completely unavailable service.",
+    "expected": "customer_outage.txt"
+  }
+]
