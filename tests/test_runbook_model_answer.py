@@ -45,7 +45,8 @@ def test_ollama_cli_uses_same_citation_validation(monkeypatch, capsys):
         assert str(request.url) == 'http://127.0.0.1:11434/api/chat'
         body = json.loads(request.content)
         assert body['model'] == 'qwen2.5:3b'
-        assert body['format'] == 'json'
+        assert body['format']['required'] == ['claims', 'missing']
+        assert 'runbooks/redis_memory.txt:5' in body['format']['properties']['claims']['items']['properties']['citation']['enum']
         assert 'runbooks/redis_memory.txt:5' in body['messages'][1]['content']
         return httpx.Response(200, json={'message': {'content': json.dumps({
             'claims': [{'text': 'Human approval is required.', 'citation': 'runbooks/redis_memory.txt:5'}],

@@ -26,9 +26,9 @@ def model_answer(question, hits, ask):
             'object with claims, a list of objects with text and citation (one exact '
             'line ID from the evidence), and missing, a short string describing any '
             'unanswered part. If nothing supports the answer, use an empty claims list. '
-            'Example claim: {"text":"Check the queue depth.","citation":"runbooks/example.txt:4"}. '
+            ''
             'Write the actual answer in text and put the line ID only in citation. '
-            'The example illustrates the format. Use only the evidence below for this answer.'
+            'Use only the evidence below for this answer.'
         )},
         {'role': 'user', 'content': json.dumps({'question': question, 'evidence': evidence})},
     ]
@@ -56,13 +56,37 @@ def model_answer(question, hits, ask):
 
     return '\n'.join(lines) if lines else 'The guides do not provide a supported answer to this question.'
 
+def answer_schema(messages):
+    evidence = json.loads(messages[-1]['content'])['evidence']
+    return {
+        'type': 'object',
+        'properties': {
+            'claims': {
+                'type': 'array', 'maxItems': 5,
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'text': {'type': 'string', 'minLength': 1},
+                        'citation': {'type': 'string', 'enum': list(evidence)},
+                    },
+                    'required': ['text', 'citation'],
+                    'additionalProperties': False,
+                },
+            },
+            'missing': {'type': 'string'},
+        },
+        'required': ['claims', 'missing'],
+        'additionalProperties': False,
+    }
+
+
 def ask_ollama(model, messages):
     if model.endswith('-cloud') or ':cloud' in model or '/' in model:
         raise AgentError('MODEL_ERROR', 'Choose an installed local Ollama model.')
     try:
         with httpx.Client(trust_env=False, timeout=90) as client:
             response = client.post('http://127.0.0.1:11434/api/chat', json={
-                'model': model, 'messages': messages, 'stream': False, 'format': 'json',
+                'model': model, 'messages': messages, 'stream': False, 'format': answer_schema(messages),
             })
             response.raise_for_status()
             return response.json()['message']['content']

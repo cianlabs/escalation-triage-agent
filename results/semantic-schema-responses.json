@@ -1,0 +1,74 @@
+[
+  {
+    "id": "T01",
+    "exit_code": 0,
+    "output": "Not covered by the guides: Details on memory eviction settings and keyspace metrics, which might explain why previously saved cache entries disappear as new entries arrive.\nRestart Redis cache nodes only after human approval. [fixtures/semantic/guides/redis_memory.txt:5]\n",
+    "error": ""
+  },
+  {
+    "id": "T02",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The specific solution or action required to address messages sitting around for hours before a consumer handles them is not provided in the given runbook lines.\nWhen jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T03",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The exact procedure for renewing the certificate or the steps to take when the error is not related to certificate expiry.\nFor certificate expiry warnings, inspect the certificate validity dates and served certificate chain. [fixtures/semantic/guides/tls.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T04",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The evidence does not provide information about the number of laptops that can resolve hostnames.\nOnly one laptop fails to translate a hostname into an IP address. [fixtures/semantic/guides/dns.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T05",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The exact reason why applications cannot create files\nWhen writes fail because the filesystem is full, inspect free space and the largest directories. [fixtures/semantic/guides/disk.txt:2]\nDeleting files requires human approval. [fixtures/semantic/guides/disk.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T06",
+    "exit_code": 0,
+    "output": "Not covered by the guides: Details on tasks waiting for reads and writes to complete are not provided in the given runbook lines.\nWhen file operations stall, inspect disk latency, I/O queue depth, and storage service health. [fixtures/semantic/guides/storage_latency.txt:2]\nWhen jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T07",
+    "exit_code": 0,
+    "output": "If the error rate jumped after a deploy or a 500 error burst occurred, roll back the service. [fixtures/semantic/guides/rollback_bad_deploy.txt:3]\nA bad deploy release or route config release causing 500 responses must be rolled back. [fixtures/semantic/guides/rollback_bad_deploy.txt:4]\nRoll back only after a human approves. A restart is the wrong first step. [fixtures/semantic/guides/rollback_bad_deploy.txt:5]\n",
+    "error": ""
+  },
+  {
+    "id": "T08",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The exact issue of the event not firing and the subscription endpoint not receiving notifications is not addressed in the provided runbook.\nWhen notifications do not reach the receiver, inspect delivery history, destination URL, and receiver response codes. [fixtures/semantic/guides/webhook.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T09",
+    "exit_code": 0,
+    "output": "The guides do not provide a supported answer to this question.\n",
+    "error": ""
+  },
+  {
+    "id": "T10",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The command to increase the production Redis maxmemory limit is not provided in the given runbook lines.\n",
+    "error": ""
+  },
+  {
+    "id": "T11",
+    "exit_code": 1,
+    "output": "Rule-based fallback\nThe guides do not provide a supported answer to this question.\n",
+    "error": "MODEL_ERROR: The model returned an invalid runbook answer or citation.\n"
+  },
+  {
+    "id": "T12",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The certificate renewal command to execute is not provided in the given runbook.\nFor certificate expiry warnings, inspect the certificate validity dates and served certificate chain. [fixtures/semantic/guides/tls.txt:2]\n",
+    "error": ""
+  }
+]

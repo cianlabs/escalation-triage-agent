@@ -1,0 +1,74 @@
+[
+  {
+    "id": "T01",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The provided runbook does not contain information about cache entries disappearing as new entries arrive. The runbook focuses on Redis cache nodes reaching maxmemory or returning out of memory errors, eviction policies, memory eviction settings, and keyspace metrics. It does not address the issue of saved cache entries disappearing due to new entries arriving.\nCheck the queue depth. [fixtures/semantic/guides/redis_memory.txt:3]\n",
+    "error": ""
+  },
+  {
+    "id": "T02",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The text describes looking at other metrics besides queue depth, but does not mention checking queue depth specifically.\nCheck the queue depth. [fixtures/semantic/guides/queue.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T03",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The issue described in the question (HTTPS clients rejecting server due to certificate validity period ending) is not addressed in the provided runbook. The runbook contains guidelines for certificate expiry warnings and rollback procedures for error bursts and 500 errors, but none of the provided lines mention checking the queue depth.\nCheck the queue depth. [fixtures/semantic/guides/tls.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T04",
+    "exit_code": 0,
+    "output": "Not covered by the guides: No detail provided on how to diagnose a single laptop failing to translate a hostname into an IP address based on the given runbook.\nCheck the queue depth. [fixtures/semantic/guides/dns.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T05",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The evidence does not provide information about checking the queue depth. The evidence discusses inspecting free space and the largest directories to resolve filesystem fullness issues.\nCheck the queue depth. [fixtures/semantic/guides/disk.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T06",
+    "exit_code": 0,
+    "output": "When jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T07",
+    "exit_code": 0,
+    "output": "Not covered by the guides: No other guidance on immediate rollback is provided in the runbook.\nA bad deploy release or route config release causing 500 responses must be rolled back. [fixtures/semantic/guides/rollback_bad_deploy.txt:4]\n",
+    "error": ""
+  },
+  {
+    "id": "T08",
+    "exit_code": 0,
+    "output": "Not covered by the guides: Identify the specific content or issue within the delivery history, destination URL, and receiver response codes that could indicate why notifications are not reaching the endpoint.\nInspect delivery history. [fixtures/semantic/guides/webhook.txt:2]\nCheck the destination URL. [fixtures/semantic/guides/webhook.txt:2]\nVerify the receiver response codes. [fixtures/semantic/guides/webhook.txt:2]\n",
+    "error": ""
+  },
+  {
+    "id": "T09",
+    "exit_code": 0,
+    "output": "The guides do not provide a supported answer to this question.\n",
+    "error": ""
+  },
+  {
+    "id": "T10",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The command to increase Redis maxmemory limit is not provided in the given runbook lines.\nNo command is mentioned for increasing Redis maxmemory limit. [fixtures/semantic/guides/redis_memory.txt:3]\n",
+    "error": ""
+  },
+  {
+    "id": "T11",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The exact filesystem path for connection pooler logs is not provided in the given runbook lines.\n",
+    "error": ""
+  },
+  {
+    "id": "T12",
+    "exit_code": 0,
+    "output": "Not covered by the guides: The certificate renewal command is not mentioned in the provided runbook lines. There are no lines that specifically state or suggest a command for certificate renewal.\n",
+    "error": ""
+  }
+]

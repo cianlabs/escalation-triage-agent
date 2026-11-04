@@ -43,3 +43,28 @@ checks that a line was retrieved, while this evaluation also checks
 whether it supports the model's claim. These cases use synthetic practice
 guides. The answer rubric was applied during review of this first run,
 so these scores are exploratory.
+
+## Schema-constrained local answers
+
+Ollama now receives an explicit response schema, including an enum of
+retrieved citation IDs. The queue-depth example was removed from the
+prompt after an intermediate run copied it into unrelated answers.
+Both intermediate and final responses are saved.
+
+| Measure | Previous | Schema plus revised prompt |
+| --- | --- | --- |
+| Complete supported answer | 1/8 | 3/8 |
+| Unsupported question handled | 2/4 | 3/4 |
+| Model responses rejected | 7/11 | 1/11 |
+
+T02, T03, and T07 passed. T01 suggested a restart and omitted the checks.
+T04 repeated the question as a cited claim. T05 gave appropriate checks
+but claimed the reason for write failure was unknown despite the stated
+full filesystem. T06 and T08 included checks while incorrectly claiming
+the corresponding symptoms were absent from the guides. T11 returned an
+invalid answer. T09, T10, and T12 handled missing information.
+
+The schema improves response format and restricts citation IDs.
+It does not establish that a claim follows from its cited line.
+These cases guided the prompt revision, so these are regression results
+from one local response per question.
