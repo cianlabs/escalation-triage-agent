@@ -69,3 +69,28 @@ def test_rejects_citation_only_approval_answer():
             'claims': [{'text': citation, 'citation': citation}],
             'missing': '',
         }))
+
+
+def test_selected_gemini_model_reaches_provider(monkeypatch, capsys):
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+    import sys
+
+    from runbook_search import main
+
+    def create(*, model, messages, response_format):
+        assert model == 'gemini-3.8-flash'
+        assert response_format == {'type': 'json_object'}
+        return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=json.dumps({
+            'claims': [{'text': 'Human approval is required.', 'citation': 'runbooks/redis_memory.txt:5'}],
+            'missing': 'The guide gives no form.',
+        })))])
+
+    client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    monkeypatch.setattr('agent.make_gemini_summary_client', lambda: nullcontext(client))
+    monkeypatch.setattr(sys, 'argv', [
+        'runbook_search.py', '--model-answer', '--gemini-model', 'gemini-3.8-flash',
+        'What approval form must I file before I restart Redis?',
+    ])
+    assert main() == 0
+    assert 'The guide gives no form.' in capsys.readouterr().out

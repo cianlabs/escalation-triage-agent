@@ -68,3 +68,15 @@ The schema improves response format and restricts citation IDs.
 It does not establish that a claim follows from its cited line.
 These cases guided the prompt revision, so these are regression results
 from one local response per question.
+
+## Compare another Gemini model
+
+Select a cloud model with `--gemini-model`. For example:
+
+```zsh
+GOOGLE_API_KEY='op://Personal/Google API Key/credential' op run -- python runbook_search.py --semantic --model-answer --gemini-model gemini-3.8-flash 'What command increases Redis maxmemory?'
+```
+
+The question and retrieved evidence are sent to Google's API. Use the
+same holdout questions and prompt when comparing with the local model.
+Cloud availability, cost and answer quality need live measurement.
