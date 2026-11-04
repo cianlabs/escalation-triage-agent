@@ -1,0 +1,185 @@
+[
+  {
+    "id": "A01",
+    "labels": {
+      "fixtures/semantic/guides/redis_memory.txt:3": "irrelevant",
+      "fixtures/semantic/guides/redis_memory.txt:4": "context",
+      "fixtures/semantic/guides/redis_memory.txt:5": "irrelevant",
+      "fixtures/semantic/guides/db_connection_pool.txt:3": "irrelevant",
+      "fixtures/semantic/guides/db_connection_pool.txt:4": "irrelevant",
+      "fixtures/semantic/guides/db_connection_pool.txt:5": "irrelevant"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 2.472
+  },
+  {
+    "id": "A02",
+    "labels": {
+      "fixtures/semantic/guides/queue.txt:2": "supports",
+      "fixtures/semantic/guides/storage_latency.txt:2": "irrelevant",
+      "fixtures/semantic/guides/cpu.txt:2": "irrelevant"
+    },
+    "errors": [],
+    "selected": [
+      "fixtures/semantic/guides/queue.txt:2"
+    ],
+    "complete": true,
+    "extra": 0,
+    "abstained": false,
+    "output": "When jobs wait longer for processing, inspect queue depth, oldest message age, and consumer throughput. [fixtures/semantic/guides/queue.txt:2]",
+    "seconds": 0.988
+  },
+  {
+    "id": "A03",
+    "labels": {
+      "fixtures/semantic/guides/tls.txt:2": "context",
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:3": "irrelevant",
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:4": "irrelevant",
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:5": "irrelevant",
+      "fixtures/semantic/guides/permissions.txt:2": "irrelevant"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 1.521
+  },
+  {
+    "id": "A04",
+    "labels": {
+      "fixtures/semantic/guides/dns.txt:2": "context"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 0.493
+  },
+  {
+    "id": "A05",
+    "labels": {
+      "fixtures/semantic/guides/disk.txt:2": "context",
+      "fixtures/semantic/guides/storage_latency.txt:2": "context"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 0.776
+  },
+  {
+    "id": "A06",
+    "labels": {
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:3": "context",
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:4": "context",
+      "fixtures/semantic/guides/rollback_bad_deploy.txt:5": "context",
+      "fixtures/semantic/guides/customer_outage.txt:3": "irrelevant",
+      "fixtures/semantic/guides/customer_outage.txt:4": "irrelevant",
+      "fixtures/semantic/guides/customer_outage.txt:5": "irrelevant",
+      "fixtures/semantic/guides/rate_limit.txt:2": "irrelevant"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 2.024
+  },
+  {
+    "id": "A07",
+    "labels": {
+      "fixtures/semantic/guides/dns.txt:2": "irrelevant"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 0.534
+  },
+  {
+    "id": "A08",
+    "labels": {
+      "fixtures/semantic/guides/queue.txt:2": "irrelevant",
+      "fixtures/semantic/guides/customer_outage.txt:3": "irrelevant",
+      "fixtures/semantic/guides/customer_outage.txt:4": "irrelevant",
+      "fixtures/semantic/guides/customer_outage.txt:5": "irrelevant",
+      "fixtures/semantic/guides/storage_latency.txt:2": "irrelevant"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 1.596
+  },
+  {
+    "id": "L01",
+    "labels": {
+      "fixtures/semantic/guides/webhook.txt:2": "context"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 0.501
+  },
+  {
+    "id": "L02",
+    "labels": {
+      "fixtures/semantic/guides/storage_latency.txt:2": "context",
+      "fixtures/semantic/guides/slow_dashboard.txt:3": "irrelevant",
+      "fixtures/semantic/guides/slow_dashboard.txt:4": "irrelevant",
+      "fixtures/semantic/guides/disk.txt:2": "irrelevant"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 1.263
+  },
+  {
+    "id": "L03",
+    "labels": {
+      "fixtures/semantic/guides/queue.txt:2": "irrelevant"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 0.5
+  },
+  {
+    "id": "L04",
+    "labels": {
+      "fixtures/semantic/guides/tls.txt:2": "irrelevant"
+    },
+    "errors": [],
+    "selected": [],
+    "complete": false,
+    "extra": 0,
+    "abstained": true,
+    "output": "No supporting lines selected.",
+    "seconds": 0.515
+  }
+]
