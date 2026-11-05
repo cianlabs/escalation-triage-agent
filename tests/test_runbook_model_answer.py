@@ -69,3 +69,37 @@ def test_rejects_citation_only_approval_answer():
             'claims': [{'text': citation, 'citation': citation}],
             'missing': '',
         }))
+
+
+def test_openai_runbook_mode_sends_same_evidence_and_checks_citations(monkeypatch, capsys):
+    import sys
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+
+    from runbook_search import main
+
+    def create(*, model, input, store):
+        assert model == 'gpt-6-luna'
+        assert store is False
+        payload = json.loads(input[1]['content'])
+        assert payload['question'] == 'What approval form must I file before I restart Redis?'
+        assert 'human approval' in payload['evidence']['runbooks/redis_memory.txt:5']
+        return SimpleNamespace(output_text=json.dumps({
+            'claims': [{'text': 'Human approval is required.', 'citation': 'runbooks/redis_memory.txt:5'}],
+            'missing': 'The guide provides no approval form.',
+        }))
+
+    client = SimpleNamespace(responses=SimpleNamespace(create=create))
+    monkeypatch.setattr('agent.make_openai_summary_client', lambda: nullcontext(client))
+
+    def unexpected_call():
+        pytest.fail('OpenAI mode must use the selected provider.')
+    monkeypatch.setattr('agent.make_gemini_summary_client', unexpected_call)
+    monkeypatch.setattr(sys, 'argv', [
+        'runbook_search.py', '--model-answer', '--openai-model', 'gpt-6-luna',
+        'What approval form must I file before I restart Redis?',
+    ])
+    assert main() == 0
+    text = capsys.readouterr().out
+    assert 'The guide provides no approval form.' in text
+    assert '[runbooks/redis_memory.txt:5]' in text

@@ -83,3 +83,20 @@ Use this saved baseline for the planned Grok comparison after xAI access
 resets. First confirm a tiny request succeeds, then capture cloud responses
 using a fixed question set, retrieval evidence, prompt and scoring rubric.
 No new Grok answer or quality score is recorded here.
+
+## OpenAI runbook trial
+
+Set OPENAI_API_KEY in the terminal, then select an OpenAI model explicitly:
+
+```sh
+python runbook_search.py --model-answer --openai-model gpt-6-luna 'What approval form must I file before I restart Redis?'
+```
+
+Add --semantic to use the same 15-guide semantic corpus as the local
+model experiments. This requires the local embedding server.
+The default five-guide lexical search can run the first cloud trial
+without that dependency.
+
+The OpenAI option uses the Responses API with store=false, the same
+answer prompt and citation validator. It prints a labeled rule-based
+fallback on provider errors. The live OpenAI result still needs verification.
