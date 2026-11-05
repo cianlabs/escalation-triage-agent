@@ -1,0 +1,68 @@
+{
+  "dataset_id": "agent-eval-holdout-v1",
+  "notes": "Extra synthetic cases locked with the golden set. Do not edit expected stop reasons to make a change look better. Add a new dataset id instead.",
+  "cases": [
+    {
+      "id": "B01-worker-deny",
+      "kind": "triage",
+      "escalation_id": "ESC-1002",
+      "human": "no",
+      "expect": {
+        "stop_reason": "ACTION_DENIED",
+        "proposal_kind": "restart",
+        "action_logged": false,
+        "draft_cites_evidence": true,
+        "log_empty_when_asked": true
+      }
+    },
+    {
+      "id": "B02-page-yes",
+      "kind": "triage",
+      "escalation_id": "ESC-1005",
+      "human": "yes",
+      "expect": {
+        "stop_reason": "TRIAGE_COMPLETE",
+        "proposal_kind": "page_oncall",
+        "action_logged": true,
+        "log_empty_when_asked": true,
+        "draft_not_sent": true
+      }
+    },
+    {
+      "id": "B03-handoff-budget",
+      "kind": "handoff",
+      "request": "What approval form must I file before I restart Redis?",
+      "max_handoffs": 1,
+      "expect": {
+        "stop_reason": "MAX_HANDOFFS",
+        "action_logged": false,
+        "proposal": false
+      }
+    },
+    {
+      "id": "B04-handoff-yes-after-quote",
+      "kind": "handoff",
+      "request": "Which checks should I review for a Redis memory crash?",
+      "human": "y",
+      "proposal": {"kind": "restart", "target": "image-worker", "reason": "practice memory", "approved": true},
+      "expect": {
+        "stop_reason": "TRIAGE_COMPLETE",
+        "citation_prefix": "runbooks/redis_memory.txt",
+        "proposal_kind": "restart",
+        "action_logged": true,
+        "log_empty_when_asked": true
+      }
+    },
+    {
+      "id": "B05-unclear-request",
+      "kind": "handoff",
+      "request": "checkout feels bad",
+      "expect": {
+        "stop_reason": "NEEDS_CLARIFICATION",
+        "action_logged": false,
+        "handoff_count": 0,
+        "proposal": false
+      }
+    }
+  ]
+}
