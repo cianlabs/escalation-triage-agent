@@ -26,7 +26,9 @@ python agent_eval.py --check
 python agent_eval.py --trace-dir /tmp/agent-eval-traces
 ```
 
-`--check` exits 1 when any case fails. CI runs that command. The report prints `pass` or `FAIL` per case id. A failure also prints the check name and the trace path.
+`--check` exits 1 when any case fails. CI runs `python agent_eval.py --check --trace-dir /tmp/agent-eval-traces` from `.github/workflows/tests.yml` on Python 3.11 and 3.13. The report prints `pass` or `FAIL` per case id. A failure also prints the check name and the trace path.
+
+An offline run of the committed files prints `Agent eval: 20/20 passed`: 15/15 on `agent-eval-golden-v1` and 5/5 on `agent-eval-holdout-v1`. That is the practice model. `agent.py --real` is optional, needs `XAI_API_KEY`, and is outside CI.
 
 ## Inspect a trace
 
