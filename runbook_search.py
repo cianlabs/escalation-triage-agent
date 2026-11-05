@@ -1,4 +1,4 @@
-"""Read-only lexical search over the runbook assistant's five guides."""
+"""Read-only lexical search over every text guide in runbooks/."""
 import argparse
 from collections import Counter
 import math
@@ -8,14 +8,12 @@ import sys
 
 from errors import AgentError
 
-GUIDES = (
-    'customer_outage.txt',
-    'db_connection_pool.txt',
-    'redis_memory.txt',
-    'rollback_bad_deploy.txt',
-    'slow_dashboard.txt',
-)
 RUNBOOKS = Path(__file__).resolve().parent / 'runbooks'
+
+
+def guide_names():
+    """Every *.txt under runbooks/, so a new file is searchable without a code edit."""
+    return tuple(sorted(path.name for path in RUNBOOKS.glob('*.txt')))
 STOP_WORDS = set('a an and are at can do for how i in is it of on or our should the there to what when which who with'.split())
 
 
@@ -26,7 +24,7 @@ def terms(text):
 def search(question):
     query = terms(question)
     passages = []
-    for name in GUIDES:
+    for name in guide_names():
         lines = (RUNBOOKS / name).read_text(encoding='utf-8').splitlines()
         passage = '\n'.join(lines)
         passages.append((f'runbooks/{name}:1-{len(lines)}', passage, terms(passage)))
@@ -107,7 +105,7 @@ def main():
     provider.add_argument('--openai-model', help='Use this OpenAI model with --model-answer.')
     provider.add_argument('--gemini-model', help='Use this Gemini model with --model-answer. Gemini is not the default.')
     provider.add_argument('--ollama-model', help='Use this installed local Ollama model with --model-answer.')
-    parser.add_argument('--semantic', action='store_true', help='Search the 15-guide practice corpus with local embeddings.')
+    parser.add_argument('--semantic', action='store_true', help='Search the separate practice corpus with local embeddings.')
     parser.add_argument('question')
     args = parser.parse_args()
     selected_provider = next((

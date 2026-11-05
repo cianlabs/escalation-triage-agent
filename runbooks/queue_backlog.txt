@@ -1,0 +1,5 @@
+# Drain a growing job queue backlog
+
+When queue depth or age climbs and jobs sit unacked, workers are behind the backlog.
+Check consumer count, poison-message rate, and whether publishers outpace workers.
+Purge or drop queued jobs only after a human approves. Scaling workers is the first check, not a delete.

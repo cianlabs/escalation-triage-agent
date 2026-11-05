@@ -1,0 +1,5 @@
+# Clear Postgres lock waits and long queries
+
+When Postgres sessions wait on locks, or one query runs for a long time, other work piles up.
+Check blocking pids, the lock type, and the query text before touching sessions.
+Cancel or terminate a backend only after a human approves. Do not restart the database as the first step.

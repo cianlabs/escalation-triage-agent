@@ -11,9 +11,13 @@ Stop the server with Control-C. If the port is occupied, use --port 8766.
 
 ## Explore the guides
 
-The default keyword search uses the five runbooks from the cited-answer
-experiments. Type a question or choose an example. The page displays the
+The default keyword search reads every `.txt` file in `runbooks/`. Adding
+a guide there makes it searchable on the next query; there is no separate
+index to rebuild. Type a question or choose an example. The page displays the
 rule-based answer alongside up to three retrieved passages with line numbers.
+If nothing in the corpus overlaps the question, the page shows no passages
+and the rule-based answer says the guides do not provide a supported answer.
+That abstention is required: the assistant must not invent a procedure.
 Click an answer citation to highlight its source line.
 
 A retrieved passage can share a topic without supplying the requested

@@ -1,0 +1,5 @@
+# Trace API gateway timeouts
+
+When the API gateway reports timeouts while origin logs are quiet, the deadline may be shorter than the handler.
+Check gateway timeout settings, upstream latency, and which route started timing out.
+Raise the gateway timeout or shed traffic only after a human approves.

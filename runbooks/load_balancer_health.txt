@@ -1,0 +1,5 @@
+# Fix load balancer health and sticky sessions
+
+When a load balancer marks targets unhealthy, or sticky sessions pin traffic to one bad instance, clients see errors.
+Check health-check path, target status, and whether stickiness is enabled.
+Deregister targets or disable sticky sessions only after a human approves.

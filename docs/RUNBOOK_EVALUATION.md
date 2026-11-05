@@ -138,7 +138,7 @@ python runbook_search.py --model-answer --openai-model gpt-6-luna 'What approval
 
 Add --semantic to use the same 15-guide semantic corpus as the local
 model experiments. This requires the local embedding server.
-The default five-guide lexical search can run the first cloud trial
+The default lexical search reads every guide in `runbooks/` and can run the first cloud trial
 without that dependency.
 
 The OpenAI option uses the Responses API with store=false, the same

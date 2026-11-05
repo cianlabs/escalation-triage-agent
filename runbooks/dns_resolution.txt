@@ -1,0 +1,5 @@
+# Debug DNS resolution failures
+
+When clients cannot resolve a hostname, or resolvers serve a stale address, DNS is the suspect.
+Check the authoritative record, TTL, and whether one resolver or every resolver fails.
+Change DNS records or lower TTL only after a human approves. Do not delete the record first.

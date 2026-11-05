@@ -1,0 +1,5 @@
+# Correct clock skew
+
+When tokens fail as expired or not yet valid while the presented certificate is still in date, clocks may disagree.
+Check NTP status, offset from the reference, and whether one host or a whole fleet is skewed.
+Step the clock or disable NTP only after a human approves. Do not rewrite token lifetimes as the first step.

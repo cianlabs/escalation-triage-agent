@@ -45,6 +45,6 @@ The old synthetic records and historical INC-prefixed CLI ids remain available f
 
 ## Practice runbooks
 
-The six files in runbooks are simplified synthetic workflow prompts, not verified operational procedures. They are used by the CLI tests, but public ranking evaluation does not search them. Their old source claims are withdrawn: a general documentation page does not establish that a restart or rollback is the correct response. Never use those prompts as production instructions.
+The text files in `runbooks/` are simplified synthetic prompts, not verified operational procedures. Keyword search loads every `*.txt` file in that directory. They are used by the CLI tests, but public ranking evaluation does not search them. Their old source claims are withdrawn: a general documentation page does not establish that a restart or rollback is the correct response. Never use those prompts as production instructions. If no file overlaps a question, the assistant must say it does not know.
 
 Run python verify_sources.py for an online reachability and section check. A person must still read changed pages to check meaning. Offline CI checks dataset integrity and reproduces the baseline, rather than depending on website availability.

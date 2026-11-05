@@ -1,0 +1,5 @@
+# Respond to a 429 rate-limit storm
+
+When callers receive HTTP 429 or a quota exceeded response, a limit or retry storm is in play.
+Check which route is limited, the current quota, and whether clients retry without backoff.
+Raise or disable a limit only after a human approves. Tightening a limit during an incident needs the same approval.

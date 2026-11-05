@@ -1,0 +1,5 @@
+# Renew an expiring TLS certificate
+
+When HTTPS clients report that certificates expire, or a certificate is expired or not yet valid, treat it as a TLS expiry.
+Check the certificate end date, the hostname on the cert, and which ingress presents it.
+Renew or replace the certificate only after a human approves. Do not delete the current cert first.
