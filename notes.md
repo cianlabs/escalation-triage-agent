@@ -302,3 +302,14 @@ capture the same T01–T12 question set. The runner, CLI and local page now
 have that Grok path. No live call was made here, and no answer-quality
 score was added. Cloud failures remain availability results and receive
 no answer-quality score.
+
+### Grok HTTP 410
+
+A paid-key smoke run of the Redis approval-form question printed the
+rule-based fallback and then `MODEL_ERROR` with `APIStatusError` and HTTP
+410. The Responses call was sending `search_parameters` with `mode` set to
+`off`. xAI's OpenAPI schema for `POST /v1/responses` says live search has
+been removed and that requests which set `search_parameters` fail with
+HTTP 410 Gone. The field is omitted now. `web_search` and `x_search` are
+also omitted, and `tool_choice` stays `none`, so search stays off without
+the removed field. No live xAI call was made for this change.
