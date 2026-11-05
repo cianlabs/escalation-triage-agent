@@ -1,8 +1,86 @@
 # escalation-triage-agent
 
-A practice support agent that searches local runbooks, reads synthetic evidence, ranks hypotheses, drafts an update and asks a human before recording a simulated action. It saves each case so an investigation can resume later. Nothing restarts, rolls back, pages anyone or sends a message.
+A practice support agent that triages a synthetic escalation, cites local runbooks, and stops for a human before it records any simulated action.
 
-The public incident evaluation is separate from those synthetic workflow fixtures. It uses verified user-impact observations from 30 distinct incidents and calls this repository's unchanged ranking tool.
+It is a small, inspectable example of a human-approved agent for support and SRE work: the model can search, rank, and draft, and a person still has to type `y` or `yes` before one simulated line is written. Nothing restarts a process, rolls back a deploy, pages anyone, or sends a customer message. Every ticket, log, and runbook in the demo path is synthetic.
+
+## Architecture
+
+The triage loop, the human gate, the runbook specialist, and the read-only MCP server stay separate. A fuller walk-through is in [How it works](docs/HOW_IT_WORKS.md).
+
+```mermaid
+flowchart TD
+  ticket[Synthetic escalation] --> loop[Practice triage loop]
+  loop --> search[Search local runbooks]
+  loop --> evidence[Read synthetic logs and deploys]
+  search --> rank[Rank unverified hypotheses]
+  evidence --> rank
+  rank --> draft[Draft an update that is not sent]
+  draft --> propose["propose_action stays pending"]
+  propose --> human{Human types y or yes?}
+  human -->|yes| sim[Append one simulated line]
+  human -->|any other answer| denied[Write nothing]
+  question[Runbook question] --> specialist[Runbook specialist]
+  specialist --> cite[Return a cited line or abstain]
+  cite --> coordinator[Coordinator keeps the stop reason]
+  coordinator --> propose
+  mcp[MCP stdio: four read-only tools] --> search
+```
+
+`propose_action` and `record_simulated_action` are not MCP tools. The specialist can search and cite. It cannot approve or log an action.
+
+## Quickstart
+
+Offline. No API key.
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python agent.py --sample --fresh --defer-approval
+.venv/bin/python agent_eval.py --check
+.venv/bin/python -m pytest -q
+```
+
+The third command runs one synthetic case and saves a pending proposal without asking. Resume it with `.venv/bin/python agent.py --sample` if you want the approval prompt. `y` or `yes` appends one line to `action.log`. Any other answer writes nothing.
+
+## Agent eval
+
+`agent_eval.py` scores the practice model, the handoff demo, and the MCP tool list on synthetic fixtures. It does not read `XAI_API_KEY`. A live Grok run (`agent.py --sample --fresh --real`) is optional and is outside CI.
+
+This table is the report from an offline run of the committed sets. Golden is `fixtures/agent-eval/golden.json` (`agent-eval-golden-v1`). Holdout is `fixtures/agent-eval/holdout.json` (`agent-eval-holdout-v1`).
+
+| Set | Cases | Passed |
+| --- | --- | --- |
+| Golden | 15 | 15 |
+| Holdout | 5 | 5 |
+| Both, which is what CI runs | 20 | 20 |
+
+The command prints `Agent eval: 20/20 passed`. CI runs `python agent_eval.py --check --trace-dir /tmp/agent-eval-traces` on Python 3.11 and 3.13 (see `.github/workflows/tests.yml`). `--check` exits 1 if any case fails. Case ids, what each check means, and how to open a trace are in [Agent eval](docs/AGENT_EVAL.md).
+
+This 20/20 is the practice path only. It is not a Grok tool-choice score. The separate public incident ranker is much weaker: top-1 is 10/26. That table is below.
+
+## MCP and handoff
+
+```sh
+.venv/bin/python mcp_server.py
+.venv/bin/python handoff.py "What approval form must I file before I restart Redis?"
+```
+
+The server speaks newline-delimited JSON-RPC on stdin and stdout. Its tools are `search_runbooks`, `cited_runbook_answer`, `read_practice_logs`, and `list_practice_escalations`. `handoff.py` is a two-role demo: a triage coordinator may ask the runbook specialist once, then still waits for a human yes before a simulated log line. Commands, stop reasons, and the request shape are in [MCP and handoff](docs/MCP_AND_HANDOFF.md).
+
+## Limits
+
+- Fixtures, logs, deploys, and runbooks on the agent path are synthetic. They are not customer data and not verified production procedures.
+- Actions are simulated. A yes appends a local line. It does not change a service.
+- The practice model follows a fixed checklist. The eval does not measure a live model.
+- The public incident baseline uses paraphrased observations from 30 published incidents and the unchanged ranker. Those scores are not the 20/20 above.
+- Saved case files under `memory/` are local JSON, not a shared memory store.
+
+Optional live model calls are described later in this file. Copy [`.env.example`](.env.example) only if you set a key yourself. This repository does not load a dotenv file, and CI never calls a paid model.
+
+## What else is in this repo
+
+The sections below are the existing notes for the runbook desk, the public baseline, GitHub status, and the optional Grok path. Start with the quickstart if you only want the offline demo.
 
 ## Local runbook workspace
 
@@ -181,7 +259,7 @@ Evaluation is offline, needs no key and executes no actions. It measures the ran
 .venv/bin/python verify_sources.py
 ```
 
-`--check` reproduces the committed report and predictions. `--write` records them. `verify_sources.py` explicitly goes online to re-fetch every citation and find its named section. It does not replace a person checking what the page says. Fetch receipts are in incidents/source_checks.json. CI runs tests and reproduces the baseline offline on Python 3.11 and 3.13.
+`--check` reproduces the committed report and predictions. `--write` records them. `verify_sources.py` explicitly goes online to re-fetch every citation and find its named section. It does not replace a person checking what the page says. Fetch receipts are in incidents/source_checks.json. CI runs tests, this baseline, the investigation challenge, and `python agent_eval.py --check` offline on Python 3.11 and 3.13.
 
 ## Try the synthetic workflow
 
@@ -218,13 +296,7 @@ The key is read from the environment and not printed or saved. `--real` still re
 
 ## Agent eval and traces
 
-The escalation loop, the handoff demo, and the MCP tool list have their own synthetic eval set. It scores tool order, stop reasons, cited runbook lines, and the rule that a simulated write stays pending until a human answers `y` or `yes`. The practice model is the default. CI does not call Grok.
-
-```sh
-.venv/bin/python agent_eval.py --check
-```
-
-One JSON trace per case is written under `traces/agent-eval/`. That directory is local output. Open the case file named in a failure to see the tool calls, citations, stop reason, and elapsed time. See [how to run it](docs/AGENT_EVAL.md). This set is not the public incident baseline above.
+The score for this set is the table near the top of this file: 15/15 golden, 5/5 holdout, 20/20 together. One JSON trace per case is written under `traces/agent-eval/`. That directory is local output. Open the case file named in a failure to see the tool calls, citations, stop reason, and elapsed time. See [how to run it](docs/AGENT_EVAL.md). This set is not the public incident baseline above.
 
 ## Tests
 
@@ -234,7 +306,7 @@ One JSON trace per case is written under `traces/agent-eval/`. That directory is
 
 Tests cover tools, memory, approval, step limits, named stops, model adapters, source receipts, dataset loading, input isolation, top-k scoring and caution failures. The old tests that required a perfect 12/12 score were replaced with checks for the corrected evaluation. Existing workflow tests remain in place.
 
-## Limits
+## Public ranker limits
 
 The ranker returns three fixed titles. Only Bad deploy describes a cause family, mapped to change regression; Process needs a restart describes a remedy and Customer-facing outage describes impact. Neither earns cause credit. The top-3 score is therefore a vocabulary-coverage ceiling, not strong ranking performance. All 10 top-1 hits have no supporting evidence: the ranker keeps Bad deploy first when evidence counts tie. These are guesses, not successful investigations. No ranking rules were tuned for this set.
 

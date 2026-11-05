@@ -56,6 +56,25 @@ Seven original events were re-annotated from their actual pages. The AWS citatio
 
 ## The synthetic agent workflow
 
+```mermaid
+flowchart TD
+  ticket[Synthetic escalation or saved state] --> model[PracticeModel checklist or optional RealModel]
+  model --> tools[Registered read tools and propose_action]
+  tools --> state[EscalationState saved as local JSON]
+  state --> model
+  tools --> pending[Proposal status pending]
+  pending --> human{Human answer}
+  human -->|y or yes| log[One simulated action.log line]
+  human -->|anything else| none[No write]
+  question[Question on handoff.py] --> specialist[Runbook specialist]
+  specialist --> mcp[invoke_tool: search or cited answer only]
+  mcp --> coordinator[Coordinator owns the stop reason]
+  coordinator --> pending
+  server[mcp_server.py stdio] --> mcp
+```
+
+The triage loop and the handoff demo share the human gate. `record_simulated_action` is not offered to the model and is not an MCP tool. A model flag named `approved` is ignored. The specialist returns citations and stops.
+
 agent.py loads a synthetic fixture and saved EscalationState. The model picks a tool, the loop applies the result and saves state. The default PracticeModel follows a checklist. RealModel can choose tools through the same interface. Both use the same deterministic ranker.
 
 The state stores completed checks, evidence, hypotheses, customer draft, pending approval, settlements, step count and stop reason. JSON files preserve them across runs. This is local saved state, not a shared database or vector memory.

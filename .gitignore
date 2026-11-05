@@ -6,6 +6,7 @@ env/
 # Key and secret files. Never commit these.
 .env
 .env.*
+!.env.example
 *.key
 *.pem
 secrets/
