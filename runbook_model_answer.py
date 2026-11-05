@@ -1,10 +1,80 @@
 """Produce a model answer with citations restricted to the retrieved guides."""
 import json
+import os
+import re
+import time
 
 import httpx
 
 from errors import AgentError
 from workflow_error_details import clip_text
+
+# Chat model recommended for general use on https://docs.x.ai/developers/models.
+# The triage loop's grok-build-0.1 default is a different priced model and is
+# not assumed here. Search is on unless a request sets mode off, and grok-4.7
+# reasons at high effort unless a request says otherwise. Visible output is
+# capped separately from reasoning tokens, so this path stays on low effort.
+XAI_RUNBOOK_MODEL = 'grok-4.7'
+XAI_TIMEOUT_SECONDS = 90
+XAI_MAX_OUTPUT_TOKENS = 800
+XAI_REASONING_EFFORT = 'low'
+XAI_MAX_ATTEMPTS = 2
+XAI_RETRY_STATUSES = frozenset({429, 503})
+XAI_RESPONSES_API = 'https://api.x.ai/v1/responses'
+XAI_UI_MODELS = ('grok-4.7', 'grok-4.6', 'grok-4.5', 'grok-4.3')
+MODEL_ID = re.compile(r'[A-Za-z0-9][A-Za-z0-9._:-]{0,63}')
+
+
+def model_id_error(model):
+    if isinstance(model, str) and MODEL_ID.fullmatch(model):
+        return None
+    return 'Use a model id of letters, numbers, and . _ : - up to 64 characters.'
+
+
+def ask_xai(model, messages):
+    """One bounded xAI Responses call. A failure does not try another provider."""
+    problem = model_id_error(model)
+    if problem:
+        raise AgentError('MODEL_ERROR', problem)
+    if not os.environ.get('XAI_API_KEY', '').strip():
+        raise AgentError(
+            'MISSING_KEY',
+            'Set XAI_API_KEY in this terminal. The key is not read from a file or from the browser. '
+            'A Grok chat subscription is billed separately and does not supply this key.',
+        )
+    from agent import make_client, public_model_error
+
+    with make_client(timeout=XAI_TIMEOUT_SECONDS) as client:
+        for attempt in range(XAI_MAX_ATTEMPTS):
+            try:
+                response = client.responses.create(
+                    model=model,
+                    input=messages,
+                    store=False,
+                    max_output_tokens=XAI_MAX_OUTPUT_TOKENS,
+                    max_tool_calls=0,
+                    tool_choice='none',
+                    temperature=0,
+                    reasoning={'effort': XAI_REASONING_EFFORT},
+                    extra_body={'search_parameters': {'mode': 'off'}},
+                )
+                text = getattr(response, 'output_text', None)
+                if getattr(response, 'status', None) == 'incomplete' or not isinstance(text, str) or not text.strip():
+                    raise AgentError('MODEL_ERROR', 'xAI returned an empty or incomplete runbook answer.')
+                return text
+            except AgentError:
+                raise
+            except Exception as exc:
+                status = getattr(exc, 'status_code', None)
+                if status in XAI_RETRY_STATUSES and attempt + 1 < XAI_MAX_ATTEMPTS:
+                    time.sleep(1)
+                    continue
+                if status in XAI_RETRY_STATUSES:
+                    raise AgentError(
+                        'MODEL_ERROR',
+                        f'xAI is still unavailable after one retry (HTTP {status}). No other provider was called.',
+                    ) from None
+                raise public_model_error(exc, 'xai') from None
 
 
 def model_answer(question, hits, ask):

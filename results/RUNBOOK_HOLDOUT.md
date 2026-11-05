@@ -37,11 +37,14 @@ An abstention point requires withholding an answer to an unsupported request.
 H09 correctly received an abstention. The holdout uses the same five
 guides, so it measures unfamiliar questions within that corpus.
 
-## Compare Gemini on the same questions
+## Compare a cloud model on the same questions
 
-Use `--model-answer` in place of `--answer` to send the question and the
-same retrieved lines to Gemini. The CLI checks that each cited line was
-retrieved. Check separately that each line actually supports its claim.
+`--model-answer` now sends the question and the same retrieved lines to
+xAI Grok unless another provider is named. The older bare command used
+Gemini. To keep that provider, pass `--gemini-model` and `GOOGLE_API_KEY`.
+The CLI checks that each cited line was retrieved. Check separately that
+each line actually supports its claim. A provider error does not switch
+to a different model.
 
 For H10, award the abstention point if the answer explicitly says the
 guides give no approval form. It may also cite the general human approval
@@ -49,7 +52,7 @@ requirement. Record API errors as unavailable and leave those answers
 unscored. Output labeled Rule-based fallback belongs to the rules.
 
 ```zsh
-GOOGLE_API_KEY='op://Personal/Google API Key/credential' op run -- python runbook_search.py --model-answer 'What approval form must I file before I restart Redis?'
+GOOGLE_API_KEY='op://Personal/Google API Key/credential' op run -- python runbook_search.py --model-answer --gemini-model gemini-3.1-flash-lite 'What approval form must I file before I restart Redis?'
 ```
 
 The rules scored 6/8 for complete cited answers and 1/2 for abstention.

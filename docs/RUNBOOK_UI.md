@@ -19,16 +19,19 @@ Click an answer citation to highlight its source line.
 A retrieved passage can share a topic without supplying the requested
 detail. The rule-based answer can abstain while passages remain visible.
 
-## Compare locally
+## Compare a model
 
 Choose Semantic to search the separate 15-guide practice corpus using the
 fixed 0.3 cutoff. This requires Ollama running with embeddinggemma installed.
 The rule-based answer has limited coverage in the expanded corpus.
 
-Generate answer sends the question and the retrieved passages to the chosen
-local Qwen model. The comparison request repeats retrieval and refreshes
-the displayed passages and rules, so the model's citations refer to that
-request's evidence. Select one of the two supported local model tags.
+Generate answer sends the question and the retrieved passages to the
+chosen model. The menu opens on xAI Grok 4.7. Choose Local Ollama for a
+Qwen model. The comparison request repeats retrieval and refreshes the
+displayed passages and rules, so the model's citations refer to that
+request's evidence. A failed Grok request stays on Grok: it does not call
+Ollama or Gemini. The page has no key field. The server reads `XAI_API_KEY`
+from its own environment.
 
 ```sh
 ollama pull embeddinggemma
@@ -43,7 +46,9 @@ visible if generation fails.
 ## Scope
 
 The server binds to 127.0.0.1 and has no added package dependencies.
-The page runs from local assets and makes no cloud API calls. Search and
-generation use the existing retrieval and answer functions. It does not
-run operational actions. Questions and answers are not persisted, and the
-server does not log their text.
+The page runs from local assets. Keyword and semantic search make no cloud
+call. Generate answer calls xAI only when Grok is selected and
+`XAI_API_KEY` is set; otherwise it reports the error and keeps the rules.
+Search and generation use the existing retrieval and answer functions. It
+does not run operational actions. Questions and answers are not persisted,
+and the server does not log their text or the API key.

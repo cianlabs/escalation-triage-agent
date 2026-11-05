@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from errors import AgentError
+from runbook_model_answer import XAI_UI_MODELS
 from runbook_search import answer, search
 
 ROOT = Path(__file__).resolve().parent
@@ -15,19 +16,26 @@ ASSETS = {
     '/style.css': ('style.css', 'text/css; charset=utf-8'),
 }
 MODELS = ('qwen2.5:3b', 'qwen2.5:7b')
+SECRET_FIELDS = {'api_key', 'xai_api_key', 'openai_api_key', 'google_api_key', 'authorization', 'token', 'key'}
 
 
 def query_runbooks(payload):
     if not isinstance(payload, dict):
         raise ValueError('Send a question and search mode.')
+    if any(str(name).lower() in SECRET_FIELDS for name in payload):
+        raise ValueError('Send a question, not an API key. The server reads XAI_API_KEY from its environment.')
     question = payload.get('question')
     mode = payload.get('mode', 'keyword')
     compare = payload.get('compare', False)
-    model = payload.get('model', MODELS[0])
+    provider = payload.get('provider', 'ollama')
+    model = payload.get('model', XAI_UI_MODELS[0] if provider == 'xai' else MODELS[0])
     if not isinstance(question, str) or not question.strip() or len(question) > 2000:
         raise ValueError('Enter a question of up to 2,000 characters.')
-    if mode not in ('keyword', 'semantic') or type(compare) is not bool or model not in MODELS:
-        raise ValueError('Choose a supported search mode and local model.')
+    if mode not in ('keyword', 'semantic') or type(compare) is not bool or provider not in ('ollama', 'xai'):
+        raise ValueError('Choose keyword or semantic search, and either the local model or xAI.')
+    if ((provider == 'ollama' and model not in MODELS)
+            or (provider == 'xai' and model not in XAI_UI_MODELS)):
+        raise ValueError('Choose one of the listed models. A failed request does not switch providers.')
     question = question.strip()
     if mode == 'semantic':
         from semantic_runbook_search import search_semantic
@@ -40,15 +48,19 @@ def query_runbooks(payload):
         'passages': [{'citation': citation, 'text': passage} for _, citation, passage in hits],
         'rule_answer': [{'citation': citation, 'text': text} for citation, text in excerpts],
         'model_answer': None, 'model_error': None,
+        'model_provider': None, 'model_name': None,
     }
     if compare:
+        result['model_provider'] = provider
+        result['model_name'] = model
         if not hits:
             result['model_answer'] = 'The guides do not provide a supported answer to this question.'
         else:
-            from runbook_model_answer import ask_ollama, model_answer
+            from runbook_model_answer import ask_ollama, ask_xai, model_answer
+            ask = ask_xai if provider == 'xai' else ask_ollama
             try:
                 result['model_answer'] = model_answer(
-                    question, hits, lambda messages: ask_ollama(model, messages))
+                    question, hits, lambda messages: ask(model, messages))
             except AgentError as exc:
                 result['model_error'] = str(exc)
     return result

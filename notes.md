@@ -298,6 +298,7 @@ It is a sequence of observed UI states, and does not show continuous
 screen activity.
 
 Next, confirm a tiny Grok request after xAI usage resets. If access works,
-add cloud capture to the evaluation runner and score the same question set,
-evidence and prompt against the preserved local baselines. Cloud failures
-remain availability results and receive no answer-quality score.
+capture the same T01–T12 question set. The runner, CLI and local page now
+have that Grok path. No live call was made here, and no answer-quality
+score was added. Cloud failures remain availability results and receive
+no answer-quality score.

@@ -10,9 +10,69 @@ Run `python runbook_ui.py` from the repository, then open
 [Runbook desk](http://127.0.0.1:8765). Ask a question, inspect the ranked
 source passages, and click a citation to highlight its exact line.
 Keyword search and rule-based answers work without an API key.
-Semantic search and optional local-model comparisons use Ollama.
-See [setup and scope](docs/RUNBOOK_UI.md) and the
-[three-case walkthrough](docs/LOCAL_DEMO_WALKTHROUGH.md).
+Semantic search uses local Ollama embeddings. Optional comparisons can use
+a local Qwen model or xAI Grok. See [setup and scope](docs/RUNBOOK_UI.md)
+and the [three-case walkthrough](docs/LOCAL_DEMO_WALKTHROUGH.md).
+
+## Grok runbook answers
+
+Grok is the default cloud model for runbook answers. OpenAI, Gemini and
+local Ollama remain available when you name them. A failed Grok call stops.
+It does not try another provider.
+
+The model id comes from the xAI models guide, which recommends `grok-4.7`
+for chat. Pass another id with `--xai-model` if you want a different model
+listed for your key. This path does not assume `grok-build-0.1`. That name
+is still the separate `--real` triage default below.
+
+A Grok chat subscription and the xAI API can share an account, but xAI's
+account FAQ says their billing is separate. Chat billing is managed at
+grok.com. API calls are billed from xAI Console credits or the monthly
+invoice. This program reads `XAI_API_KEY` from the environment only. It
+does not read a key from a file, a browser login, or the page, and it does
+not print or save the key.
+
+Each runbook call uses the Responses API at `https://api.x.ai/v1/responses`
+with search turned off, `store` false, temperature 0, reasoning effort
+`low`, at most 800 visible output tokens, a 90 second timeout, and one
+retry only after HTTP 429 or 503. Reasoning tokens are not part of the
+800 token cap. Twelve frozen questions therefore allow at most 24 model
+calls. Offline tests do not make those calls.
+
+The commands below are for a later run in your own terminal. No live Grok
+result is recorded in this repository. `pytest` checks routing, citations,
+errors, saved-run metadata and the safety guards. A passing test is not an
+answer-quality score.
+
+One smoke question, on the five local guides, before spending a full run.
+This question is not one of the T01–T12 comparison cases:
+
+```sh
+export XAI_API_KEY='paste the xAI Console key here'
+.venv/bin/python runbook_search.py --model-answer --xai-model grok-4.7 'What approval form must I file before I restart Redis?'
+```
+
+Unset the variable when you are finished. Do not commit the key or paste
+it into a saved file.
+
+Then capture the same frozen semantic questions used for the Qwen
+comparison, `fixtures/semantic/holdout.json` (T01–T12). Retrieval still
+uses the local `embeddinggemma` model and the 0.3 cutoff. If that server
+is down, the case fails and Grok is not called. There is no keyword or
+Gemini substitute.
+
+```sh
+ollama pull embeddinggemma
+.venv/bin/python runbook_model_eval.py --xai-model grok-4.7 --questions fixtures/semantic/holdout.json --output /tmp/grok-semantic-holdout.json
+.venv/bin/python runbook_model_eval.py --replay /tmp/grok-semantic-holdout.json --questions fixtures/semantic/holdout.json --review-template /tmp/grok-reviews.json
+```
+
+The saved file records the provider, model id, dataset path, dataset id
+`semantic-holdout-t01-t12`, and the question-file SHA-256. Review the
+answers against the guides. Do not change the prompt, cutoff or scorer to
+make this holdout look better. These questions already guided earlier
+prompt edits. Leave the capture outside the repository until a person
+reviews it. See [the evaluation notes](docs/RUNBOOK_EVALUATION.md).
 
 ## Inspect a specific public Actions run
 
@@ -128,7 +188,7 @@ export XAI_API_KEY='your key'
 .venv/bin/python agent.py --sample --fresh --real
 ```
 
-The key is read from the environment and not printed or saved. This uses the live model to choose tools on the same synthetic fixtures; ranking remains deterministic and actions remain simulated. The owner reported one live run on November 1, 2026, against the previous version of the sample. That is not validation of these public incidents. CI uses fake clients and never calls a paid model.
+The key is read from the environment and not printed or saved. `--real` still requests `grok-build-0.1` for tool choice on the synthetic escalation. Runbook answers use `grok-4.7` unless `--xai-model` says otherwise. Ranking remains deterministic and actions remain simulated. The owner reported one live triage run on November 1, 2026, against the previous version of the sample. That is not a runbook score and not validation of these public incidents. CI uses fake clients and never calls a paid model.
 
 ## Tests
 

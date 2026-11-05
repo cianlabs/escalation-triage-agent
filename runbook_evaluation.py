@@ -82,8 +82,13 @@ def report(questions, metadata, results, reviews):
     models = sorted({str(row.get('model', 'unknown')) for row in results.values()})
     lines = ['# Runbook evaluation', '',
              'Model — ' + ', '.join(models or ['unknown']),
+             'Provider — ' + str(metadata.get('provider', 'unrecorded')),
+             'Dataset — ' + str(metadata.get('dataset', 'unrecorded')),
+             'Dataset id — ' + str(metadata.get('dataset_id', 'unrecorded')),
+             'Dataset SHA-256 — ' + str(metadata.get('dataset_sha256', metadata.get('questions_sha256', 'unrecorded'))),
              'Model digest — ' + str(metadata.get('model_digest', 'unknown')),
              'Prompt SHA-256 — ' + str(metadata.get('prompt_sha256', 'unknown')),
+             'Configured model-call budget — ' + str(metadata.get('max_model_calls', 'unrecorded')),
              'Corpus SHA-256 — ' + str(metadata.get('corpus_sha256', 'unknown')),
              'Legacy records without provenance remain unknown. Citation checks use the current corpus.',
              '', '| Case | Response | Citation IDs | Complete | Claims supported | Missing detail |',
