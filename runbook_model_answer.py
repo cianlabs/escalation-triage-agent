@@ -15,9 +15,10 @@ from workflow_error_details import clip_text
 # schema says any request that sets that field fails with HTTP 410 Gone, even
 # when mode is off. Do not send max_tool_calls. ModelRequest does not define
 # it; max_turns is the agentic-turn field and this path does not send that
-# either. Search stays off by omitting web_search and x_search. tool_choice
-# none is valid and means the model generates a message instead of calling a
-# tool. temperature 0 is inside the schema range. grok-4.7 accepts reasoning
+# either. Search stays off by omitting web_search and x_search. Do not send
+# tool_choice when no tools are sent. The live API rejects that combination:
+# "A tool_choice was set on the request but no tools were specified."
+# temperature 0 is inside the schema range. grok-4.7 accepts reasoning
 # effort low (the default is high). Visible output is capped separately from
 # reasoning tokens.
 XAI_RUNBOOK_MODEL = 'grok-4.7'
@@ -58,7 +59,6 @@ def ask_xai(model, messages):
                     input=messages,
                     store=False,
                     max_output_tokens=XAI_MAX_OUTPUT_TOKENS,
-                    tool_choice='none',
                     temperature=0,
                     reasoning={'effort': XAI_REASONING_EFFORT},
                 )

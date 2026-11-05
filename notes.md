@@ -311,8 +311,8 @@ rule-based fallback and then `MODEL_ERROR` with `APIStatusError` and HTTP
 `off`. xAI's OpenAPI schema for `POST /v1/responses` says live search has
 been removed and that requests which set `search_parameters` fail with
 HTTP 410 Gone. The field is omitted now. `web_search` and `x_search` are
-also omitted, and `tool_choice` stays `none`, so search stays off without
-the removed field. No live xAI call was made for this change.
+also omitted. Search stays off without those tools. No live xAI call was
+made for this change.
 
 ### Grok HTTP 400
 
@@ -320,9 +320,18 @@ The same smoke command, after that change, printed the rule-based fallback
 and then `MODEL_ERROR` with `BadRequestError`, HTTP 400, and provider code
 unavailable. The Responses call was still sending `max_tool_calls` set to
 0. The current `ModelRequest` schema does not list that field. `max_turns`
-is the agentic-turn field, and this path does not send it. `tool_choice`
-`none`, temperature 0, and `reasoning.effort` `low` are in the schema; the
-reasoning guide lists `low` for grok-4.7. `max_tool_calls` is omitted now.
+is the agentic-turn field, and this path does not send it. Temperature 0
+and `reasoning.effort` `low` are in the schema; the reasoning guide lists
+`low` for grok-4.7. `max_tool_calls` is omitted now.
 A rejected call includes the provider message from the error body when one
 is present, with key text removed. The raw exception text stays hidden.
 No live xAI call was made for this change.
+
+### Grok tool_choice without tools
+
+After `max_tool_calls` was removed, the same smoke command returned the
+provider message `Invalid request content: A tool_choice was set on the
+request but no tools were specified.` The call was still sending
+`tool_choice` `none` and no tools. `tool_choice` is omitted now. Search
+stays off because `search_parameters`, `web_search`, and `x_search` are
+omitted. No live xAI call was made for this change.

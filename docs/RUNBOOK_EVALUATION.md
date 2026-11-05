@@ -71,12 +71,14 @@ The request uses `POST https://api.x.ai/v1/responses` and must not include
 Live Search `search_parameters`. xAI's Responses schema says any request
 that sets that field fails with HTTP 410 Gone, including `mode: off`.
 This path leaves the field out. It also leaves out `web_search`,
-`x_search`, and `max_tool_calls`. `ModelRequest` does not define
-`max_tool_calls`. `tool_choice` is `none`, temperature is 0, and
-`reasoning.effort` is `low`, which the grok-4.7 reasoning guide allows.
-Server-side search stays off. A 400 or 410 is a request error, not a
-reason to try another provider. The printed error includes the provider
-message from the response body when that message is present.
+`x_search`, `max_tool_calls`, and `tool_choice`. `ModelRequest` does not
+define `max_tool_calls`. Setting `tool_choice` without tools is rejected
+with `A tool_choice was set on the request but no tools were specified.`
+Temperature is 0, and `reasoning.effort` is `low`, which the grok-4.7
+reasoning guide allows. Server-side search stays off. A 400 or 410 is a
+request error, not a reason to try another provider. The printed error
+includes the provider message from the response body when that message
+is present.
 
 ```sh
 python runbook_model_eval.py --xai-model grok-4.7 --questions fixtures/semantic/holdout.json --output /tmp/grok-semantic-holdout.json
