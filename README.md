@@ -33,11 +33,19 @@ does not read a key from a file, a browser login, or the page, and it does
 not print or save the key.
 
 Each runbook call uses the Responses API at `https://api.x.ai/v1/responses`
-with search turned off, `store` false, temperature 0, reasoning effort
-`low`, at most 800 visible output tokens, a 90 second timeout, and one
-retry only after HTTP 429 or 503. Reasoning tokens are not part of the
-800 token cap. Twelve frozen questions therefore allow at most 24 model
-calls. Offline tests do not make those calls.
+with `store` false, temperature 0, reasoning effort `low`, at most 800
+visible output tokens, a 90 second timeout, and one retry only after HTTP
+429 or 503. Reasoning tokens are not part of the 800 token cap. Twelve
+frozen questions therefore allow at most 24 model calls. Offline tests do
+not make those calls.
+
+Do not send Live Search `search_parameters` on this path. The current xAI
+OpenAPI schema for `POST /v1/responses` says live search has been removed
+and that a request which sets that field fails with HTTP 410 Gone. That
+includes a body that only sets `mode` to `off`. Search stays off because
+the call does not include the `web_search` or `x_search` tools and sets
+`tool_choice` to `none`. `none` is the documented choice when no tools are
+present: the model generates a message and does not call a tool.
 
 The commands below are for a later run in your own terminal. No live Grok
 result is recorded in this repository. `pytest` checks routing, citations,

@@ -67,6 +67,14 @@ separately from the xAI API and does not fill in that variable. The capture
 calls only xAI. It does not fall back to Gemini, OpenAI or Ollama when a
 request fails.
 
+The request uses `POST https://api.x.ai/v1/responses` and must not include
+Live Search `search_parameters`. xAI's Responses schema says any request
+that sets that field fails with HTTP 410 Gone, including `mode: off`.
+This path leaves the field out. It also leaves out `web_search` and
+`x_search`, and it sets `tool_choice` to `none`, so server-side search
+stays off. A 410 from an older build that still sent `search_parameters`
+is a request error, not a reason to try another provider.
+
 ```sh
 python runbook_model_eval.py --xai-model grok-4.7 --questions fixtures/semantic/holdout.json --output /tmp/grok-semantic-holdout.json
 ```

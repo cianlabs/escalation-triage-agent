@@ -11,9 +11,13 @@ from workflow_error_details import clip_text
 
 # Chat model recommended for general use on https://docs.x.ai/developers/models.
 # The triage loop's grok-build-0.1 default is a different priced model and is
-# not assumed here. Search is on unless a request sets mode off, and grok-4.7
-# reasons at high effort unless a request says otherwise. Visible output is
-# capped separately from reasoning tokens, so this path stays on low effort.
+# not assumed here. Do not send search_parameters (Live Search). The Responses
+# schema says any request that sets that field fails with HTTP 410 Gone, even
+# when mode is off. Search stays off by omitting web_search and x_search.
+# tool_choice none is the documented default when no tools are present, and
+# this path sets it explicitly. grok-4.7 reasons at high effort unless a
+# request says otherwise. Visible output is capped separately from reasoning
+# tokens, so this path stays on low effort.
 XAI_RUNBOOK_MODEL = 'grok-4.7'
 XAI_TIMEOUT_SECONDS = 90
 XAI_MAX_OUTPUT_TOKENS = 800
@@ -56,7 +60,6 @@ def ask_xai(model, messages):
                     tool_choice='none',
                     temperature=0,
                     reasoning={'effort': XAI_REASONING_EFFORT},
-                    extra_body={'search_parameters': {'mode': 'off'}},
                 )
                 text = getattr(response, 'output_text', None)
                 if getattr(response, 'status', None) == 'incomplete' or not isinstance(text, str) or not text.strip():

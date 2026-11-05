@@ -54,7 +54,16 @@ def test_grok_request_is_bounded_and_keeps_citations(monkeypatch, capsys):
         assert kwargs['tool_choice'] == 'none'
         assert kwargs['temperature'] == 0
         assert kwargs['reasoning'] == {'effort': 'low'}
-        assert kwargs['extra_body'] == {'search_parameters': {'mode': 'off'}}
+        # Live Search is removed. Setting search_parameters, even to mode off,
+        # fails the Responses request with HTTP 410. Omit the field and do not
+        # attach web_search or x_search.
+        encoded = json.dumps(kwargs)
+        assert 'search_parameters' not in encoded
+        assert 'extra_body' not in kwargs
+        assert 'tools' not in kwargs
+        assert 'web_search' not in encoded
+        assert 'x_search' not in encoded
+        assert 'live_search' not in encoded
         payload = json.loads(kwargs['input'][1]['content'])
         assert payload['question'] == QUESTION
         assert 'human approval' in payload['evidence']['runbooks/redis_memory.txt:5']
