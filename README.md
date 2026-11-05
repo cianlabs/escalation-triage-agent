@@ -210,6 +210,12 @@ export XAI_API_KEY='your key'
 
 The key is read from the environment and not printed or saved. `--real` still requests `grok-build-0.1` for tool choice on the synthetic escalation. Runbook answers use `grok-4.7` unless `--xai-model` says otherwise. Ranking remains deterministic and actions remain simulated. The owner reported one live triage run on November 1, 2026, against the previous version of the sample. That is not a runbook score and not validation of these public incidents. CI uses fake clients and never calls a paid model.
 
+## MCP server and a two-agent handoff
+
+`python mcp_server.py` serves four read-only tools over MCP stdio: runbook search, a cited answer, practice log rows, and the practice escalation list. It does not propose or log an action.
+
+`python handoff.py` runs a triage coordinator that can delegate one question to a runbook specialist. A simulated restart, rollback, or page is still recorded only after a human answers `y` or `yes`. See [how to run both](docs/MCP_AND_HANDOFF.md).
+
 ## Tests
 
 ```sh
