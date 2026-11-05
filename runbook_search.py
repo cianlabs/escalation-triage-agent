@@ -99,16 +99,25 @@ def approval_answer(query, path, lines):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group()
-    mode.add_argument('--model-answer', action='store_true', help='Ask a model to answer from the retrieved guides.')
+    mode.add_argument('--model-answer', action='store_true',
+                      help='Ask xAI Grok, unless another provider flag is set.')
     mode.add_argument('--answer', action='store_true', help='Quote a supported check or approval requirement.')
     provider = parser.add_mutually_exclusive_group()
+    provider.add_argument('--xai-model', help='xAI model id for --model-answer. Defaults to grok-4.7.')
     provider.add_argument('--openai-model', help='Use this OpenAI model with --model-answer.')
+    provider.add_argument('--gemini-model', help='Use this Gemini model with --model-answer. Gemini is not the default.')
     provider.add_argument('--ollama-model', help='Use this installed local Ollama model with --model-answer.')
     parser.add_argument('--semantic', action='store_true', help='Search the 15-guide practice corpus with local embeddings.')
     parser.add_argument('question')
     args = parser.parse_args()
-    if (args.ollama_model is not None or args.openai_model is not None) and not args.model_answer:
-        parser.error('--ollama-model and --openai-model require --model-answer')
+    selected_provider = next((
+        flag for flag, value in (
+            ('--xai-model', args.xai_model), ('--openai-model', args.openai_model),
+            ('--gemini-model', args.gemini_model), ('--ollama-model', args.ollama_model),
+        ) if value is not None
+    ), None)
+    if selected_provider and not args.model_answer:
+        parser.error(f'{selected_provider} requires --model-answer')
     if args.semantic and args.answer:
         parser.error('--semantic supports search or --model-answer.')
     try:
@@ -123,7 +132,7 @@ def main():
         return 1
     if args.model_answer:
         from agent import ask_model, make_gemini_summary_client, make_openai_summary_client
-        from runbook_model_answer import model_answer
+        from runbook_model_answer import XAI_RUNBOOK_MODEL, ask_xai, model_answer, model_id_error
 
         try:
             if not hits:
@@ -134,16 +143,23 @@ def main():
 
                 print(model_answer(args.question, hits, lambda messages: ask_ollama(args.ollama_model, messages)))
                 return 0
-            client_factory = make_openai_summary_client if args.openai_model else make_gemini_summary_client
-            provider_name = 'openai' if args.openai_model else 'gemini'
-            selected_model = args.openai_model or 'gemini-3.1-flash-lite'
-            with client_factory() as client:
-                print(model_answer(args.question, hits, lambda messages: ask_model(
-                    client, messages, None, comparison_summary=True,
-                    model=selected_model, provider=provider_name,
-                )))
+            if args.openai_model or args.gemini_model:
+                selected_model = args.openai_model or args.gemini_model
+                problem = model_id_error(selected_model)
+                if problem:
+                    raise AgentError('MODEL_ERROR', problem)
+                client_factory = make_openai_summary_client if args.openai_model else make_gemini_summary_client
+                provider_name = 'openai' if args.openai_model else 'gemini'
+                with client_factory() as client:
+                    print(model_answer(args.question, hits, lambda messages: ask_model(
+                        client, messages, None, comparison_summary=True,
+                        model=selected_model, provider=provider_name,
+                    )))
+            else:
+                print(model_answer(args.question, hits, lambda messages: ask_xai(args.xai_model or XAI_RUNBOOK_MODEL, messages)))
         except AgentError as exc:
             print('Rule-based fallback')
+            print('No other model provider was called.')
             excerpts = answer(args.question, hits)
             if not excerpts:
                 print('The guides do not provide a supported answer to this question.')

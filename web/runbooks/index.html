@@ -47,15 +47,27 @@
           <p class="quiet">Each citation opens its source passage.</p>
         </article>
         <article class="answer-card model-card">
-          <div class="card-top"><h2>Compare a local model</h2><span class="tag outline">OPTIONAL</span></div>
-          <p class="model-description">Use the same question and search method to see how a local model answers.</p>
+          <div class="card-top"><h2>Compare a model</h2><span class="tag outline">OPTIONAL</span></div>
+          <p class="model-description">Grok answers through the xAI API. Local Qwen stays on this computer. A failed request does not switch providers.</p>
           <div class="model-controls">
-            <label for="model" class="sr-only">Local model</label>
-            <select id="model"><option value="qwen2.5:3b">Qwen 2.5 · 3B</option><option value="qwen2.5:7b">Qwen 2.5 · 7B</option></select>
+            <label class="field" for="provider">Provider
+              <select id="provider">
+                <option value="xai" selected>xAI Grok</option>
+                <option value="ollama">Local Ollama</option>
+              </select>
+            </label>
+            <label class="field" for="model">Model
+              <select id="model">
+                <option value="grok-4.7">Grok 4.7</option>
+                <option value="grok-4.6">Grok 4.6</option>
+                <option value="grok-4.5">Grok 4.5</option>
+                <option value="grok-4.3">Grok 4.3</option>
+              </select>
+            </label>
             <button type="button" id="compare">Generate answer</button>
           </div>
           <div id="model-answer" class="answer-content" aria-live="polite"></div>
-          <p class="quiet">Experimental output. Check each claim against its source. Requires Ollama.</p>
+          <p class="quiet">Check each claim against its source. xAI reads XAI_API_KEY from the server environment. This page never sends a key.</p>
         </article>
       </div>
       <aside class="sources" aria-label="Retrieved passages">

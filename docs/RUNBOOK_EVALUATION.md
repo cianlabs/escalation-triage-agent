@@ -56,9 +56,40 @@ against their recorded evidence before deciding whether a citation is valid.
 A successful process exit with output is counted as usable and is not an
 automatic correctness score. Failed and absent responses remain unscored for
 quality. Every quality summary shows its reviewed denominator and pending count.
-API cost is unrecorded. Capture currently supports local Ollama runs; replay
-works with the existing saved local runs. A cloud capture adapter can use the
-same versioned results format when xAI access is available.
+API cost is unrecorded. The configured call budget is recorded for an xAI
+capture, but measured token use is not, because these commands do not call
+the API while they are tested offline.
+
+## Capture a Grok run
+
+Set `XAI_API_KEY` in the terminal first. A Grok chat subscription is billed
+separately from the xAI API and does not fill in that variable. The capture
+calls only xAI. It does not fall back to Gemini, OpenAI or Ollama when a
+request fails.
+
+```sh
+python runbook_model_eval.py --xai-model grok-4.7 --questions fixtures/semantic/holdout.json --output /tmp/grok-semantic-holdout.json
+```
+
+That question file is the frozen T01–T12 set used for the Qwen comparison.
+Semantic retrieval still needs local `embeddinggemma`. A retrieval failure
+is stored as a failed case and does not call Grok or switch to keyword
+search. The saved metadata names the provider, model, dataset file, dataset
+id `semantic-holdout-t01-t12`, and the SHA-256 of the question file.
+
+Try one non-holdout question before the full capture:
+
+```sh
+python runbook_search.py --model-answer --xai-model grok-4.7 'What approval form must I file before I restart Redis?'
+```
+
+`--model-answer` without a provider flag also selects xAI `grok-4.7`.
+Gemini requires `--gemini-model`. OpenAI requires `--openai-model`.
+Local Ollama capture is still `--model qwen2.5:3b`.
+
+No live Grok score is checked in by the tests. Replay and human review work
+on a saved file without calling a model. Do not edit the prompt from the
+holdout answers.
 
 ## Reviewed 7B baseline
 

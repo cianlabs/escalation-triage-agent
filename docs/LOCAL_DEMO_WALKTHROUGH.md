@@ -39,7 +39,9 @@ the specific question.
 
 ## 3. Compare a local model
 
-Select an installed Qwen model and click Generate answer.
+The model menu opens on xAI Grok. For this offline demo, change Provider
+to Local Ollama, select an installed Qwen model, and click Generate answer.
+Leave Grok unselected unless `XAI_API_KEY` is set for a separate API run.
 
 Read its answer against the source lines. It should identify the missing
 path and avoid inventing one. If output fails validation, the page reports

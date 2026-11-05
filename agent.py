@@ -165,7 +165,7 @@ def human_said_yes(answer):
     return answer.strip().lower() in {"y", "yes"}
 
 
-def make_client():
+def make_client(timeout=60):
     """Build the xAI client. The key stays in the client. It is not returned or printed."""
     key = os.environ.get("XAI_API_KEY", "").strip()
     if not key:
@@ -175,7 +175,34 @@ def make_client():
         )
     from openai import OpenAI  # imported here so the practice path does not need the package
 
-    return OpenAI(api_key=key, base_url=XAI_BASE_URL, timeout=60, max_retries=0)
+    return OpenAI(api_key=key, base_url=XAI_BASE_URL, timeout=timeout, max_retries=0)
+
+
+def public_model_error(exc, provider):
+    """Describe a provider failure without keeping the exception text.
+
+    Some client errors quote the request. The request can contain the key,
+    so the public message keeps only the exception type, HTTP status and
+    known provider codes.
+    """
+    if type(exc).__name__ == "AuthenticationError":
+        key_name = {"openai": "OPENAI_API_KEY", "gemini": "GOOGLE_API_KEY", "xai": "XAI_API_KEY"}[provider]
+        return AgentError("BAD_KEY", f"The provider rejected the key. Check {key_name} in this terminal.")
+    status = getattr(exc, "status_code", None)
+    code = getattr(exc, "code", None)
+    safe_codes = {
+        "invalid_request_error", "model_not_found", "invalid_model",
+        "unsupported_parameter", "invalid_parameter", "rate_limit_exceeded",
+        "insufficient_quota", "permission_denied",
+    }
+    detail = f"the model call failed ({type(exc).__name__})"
+    if type(status) is int and 400 <= status <= 599:
+        detail += f", HTTP {status}"
+    if isinstance(code, str) and code in safe_codes:
+        detail += f", provider code {code}"
+    if status == 400 and not (isinstance(code, str) and code in safe_codes):
+        detail += ", provider code unavailable"
+    return AgentError("MODEL_ERROR", detail + ".")
 
 
 def make_openai_summary_client():
@@ -198,11 +225,7 @@ def make_gemini_summary_client():
 
 
 def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL, provider="xai"):
-    """Call the model and translate failures without retaining raw error text.
-
-    Some client errors quote the request. The request can contain the key,
-    so we report only the exception type, HTTP status and known provider codes.
-    """
+    """Call the model and translate failures without retaining raw error text."""
     try:
         if comparison_summary and provider == "gemini":
             for attempt in range(2):
@@ -229,24 +252,7 @@ def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL,
     except AgentError:
         raise
     except Exception as exc:
-        if type(exc).__name__ == "AuthenticationError":
-            key_name = {"openai": "OPENAI_API_KEY", "gemini": "GOOGLE_API_KEY", "xai": "XAI_API_KEY"}[provider]
-            raise AgentError("BAD_KEY", f"The provider rejected the key. Check {key_name} in this terminal.") from None
-        status = getattr(exc, "status_code", None)
-        code = getattr(exc, "code", None)
-        safe_codes = {
-            "invalid_request_error", "model_not_found", "invalid_model",
-            "unsupported_parameter", "invalid_parameter", "rate_limit_exceeded",
-            "insufficient_quota", "permission_denied",
-        }
-        detail = f"the model call failed ({type(exc).__name__})"
-        if type(status) is int and 400 <= status <= 599:
-            detail += f", HTTP {status}"
-        if isinstance(code, str) and code in safe_codes:
-            detail += f", provider code {code}"
-        if status == 400 and not (isinstance(code, str) and code in safe_codes):
-            detail += ", provider code unavailable"
-        raise AgentError("MODEL_ERROR", detail + ".") from None
+        raise public_model_error(exc, provider) from None
 
 
 def _opening_message(state):

@@ -63,7 +63,7 @@ def test_capture_saves_provenance_and_prints_pending_quality_report(tmp_path, mo
     questions = tmp_path / 'questions.json'
     questions.write_text(json.dumps(QUESTIONS[:1]))
     output = tmp_path / 'capture.json'
-    monkeypatch.setattr('runbook_model_eval.capture_metadata', lambda rows, model: {
+    monkeypatch.setattr('runbook_model_eval.capture_metadata', lambda rows, model, **kwargs: {
         'prompt_sha256': 'fixed-prompt', 'model_digest': 'fixed-model'})
     monkeypatch.setattr('runbook_model_eval.subprocess.run', lambda *args, **kwargs: SimpleNamespace(
         returncode=0, stdout='A cited response', stderr=''))

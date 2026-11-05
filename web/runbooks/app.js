@@ -8,9 +8,27 @@ const passages = document.getElementById('passages');
 const rule = document.getElementById('rule-answer');
 const modelOutput = document.getElementById('model-answer');
 const compare = document.getElementById('compare');
+const provider = document.getElementById('provider');
+const model = document.getElementById('model');
 let lastQuery = null;
 let busy = false;
 const sourceLines = new Map();
+const MODEL_OPTIONS = {
+  xai: [['grok-4.7', 'Grok 4.7'], ['grok-4.6', 'Grok 4.6'], ['grok-4.5', 'Grok 4.5'], ['grok-4.3', 'Grok 4.3']],
+  ollama: [['qwen2.5:3b', 'Qwen 2.5 · 3B'], ['qwen2.5:7b', 'Qwen 2.5 · 7B']],
+};
+
+function fillModels() {
+  const current = model.value;
+  model.replaceChildren();
+  MODEL_OPTIONS[provider.value].forEach(([value, label]) => {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = label;
+    model.append(option);
+  });
+  if ([...model.options].some(option => option.value === current)) model.value = current;
+}
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -80,6 +98,9 @@ function renderRules(data) {
 
 function renderModel(data) {
   modelOutput.replaceChildren();
+  if (data.model_name) {
+    modelOutput.append(element('p', 'quiet', (data.model_provider || 'model') + ' · ' + data.model_name));
+  }
   if (data.model_error) {
     modelOutput.append(element('p', 'error', data.model_error));
     return;
@@ -147,9 +168,11 @@ compare.addEventListener('click', async () => {
   error.hidden = true;
   modelOutput.replaceChildren();
   setBusy(true, true);
-  status.textContent = 'Asking the local model. The first answer can take longer while Ollama loads.';
+  status.textContent = provider.value === 'xai'
+    ? 'Asking xAI. The server reads XAI_API_KEY from its environment. This page never sends a key.'
+    : 'Asking the local model. The first answer can take longer while Ollama loads.';
   try {
-    const data = await query({...lastQuery, compare: true, model: document.getElementById('model').value});
+    const data = await query({...lastQuery, compare: true, provider: provider.value, model: model.value});
     renderSources(data);
     renderRules(data);
     renderModel(data);
@@ -162,6 +185,9 @@ compare.addEventListener('click', async () => {
     setBusy(false);
   }
 });
+
+provider.addEventListener('change', fillModels);
+fillModels();
 
 document.querySelectorAll('[data-question]').forEach(button => {
   button.addEventListener('click', () => {
