@@ -32,9 +32,10 @@ displayed passages and rules, so the model's citations refer to that
 request's evidence. A failed Grok request stays on Grok: it does not call
 Ollama or Gemini. The page has no key field. The server reads `XAI_API_KEY`
 from its own environment. The Grok call is the same Responses request as
-the CLI. It must not send Live Search `search_parameters`; setting that
-field returns HTTP 410. The call omits `web_search` and `x_search` and
-sets `tool_choice` to `none`.
+the CLI. It must not send Live Search `search_parameters` or
+`max_tool_calls`. Setting `search_parameters` returns HTTP 410, and
+`max_tool_calls` is not a field on the Responses request. The call omits
+`web_search` and `x_search` and sets `tool_choice` to `none`.
 
 ```sh
 ollama pull embeddinggemma

@@ -13,11 +13,13 @@ from workflow_error_details import clip_text
 # The triage loop's grok-build-0.1 default is a different priced model and is
 # not assumed here. Do not send search_parameters (Live Search). The Responses
 # schema says any request that sets that field fails with HTTP 410 Gone, even
-# when mode is off. Search stays off by omitting web_search and x_search.
-# tool_choice none is the documented default when no tools are present, and
-# this path sets it explicitly. grok-4.7 reasons at high effort unless a
-# request says otherwise. Visible output is capped separately from reasoning
-# tokens, so this path stays on low effort.
+# when mode is off. Do not send max_tool_calls. ModelRequest does not define
+# it; max_turns is the agentic-turn field and this path does not send that
+# either. Search stays off by omitting web_search and x_search. tool_choice
+# none is valid and means the model generates a message instead of calling a
+# tool. temperature 0 is inside the schema range. grok-4.7 accepts reasoning
+# effort low (the default is high). Visible output is capped separately from
+# reasoning tokens.
 XAI_RUNBOOK_MODEL = 'grok-4.7'
 XAI_TIMEOUT_SECONDS = 90
 XAI_MAX_OUTPUT_TOKENS = 800
@@ -56,7 +58,6 @@ def ask_xai(model, messages):
                     input=messages,
                     store=False,
                     max_output_tokens=XAI_MAX_OUTPUT_TOKENS,
-                    max_tool_calls=0,
                     tool_choice='none',
                     temperature=0,
                     reasoning={'effort': XAI_REASONING_EFFORT},
