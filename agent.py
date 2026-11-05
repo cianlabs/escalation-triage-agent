@@ -42,12 +42,14 @@ Named failures (these raise AgentError instead of stopping quietly):
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
 
 from errors import AgentError
+from workflow_error_details import clip_text
 from practice_model import PracticeModel
 from sample_data import SAMPLE_ID, get_escalation, list_escalations
 from state import EscalationState, add_evidence, load_state, memory_path, save_state
@@ -178,30 +180,86 @@ def make_client(timeout=60):
     return OpenAI(api_key=key, base_url=XAI_BASE_URL, timeout=timeout, max_retries=0)
 
 
-def public_model_error(exc, provider):
-    """Describe a provider failure without keeping the exception text.
+_SAFE_PROVIDER_CODES = {
+    "invalid_request_error", "model_not_found", "invalid_model",
+    "unsupported_parameter", "invalid_parameter", "rate_limit_exceeded",
+    "insufficient_quota", "permission_denied",
+}
+_SECRET_ENV = ("XAI_API_KEY", "OPENAI_API_KEY", "GOOGLE_API_KEY")
+_BEARER = re.compile(r"(?i)\bBearer\s+[A-Za-z0-9._\-]{8,}")
+_KEYISH = re.compile(r"\b(?:sk|xai)-[A-Za-z0-9_\-]{8,}")
 
-    Some client errors quote the request. The request can contain the key,
-    so the public message keeps only the exception type, HTTP status and
-    known provider codes.
+
+def _provider_error_fields(exc):
+    """Read the structured error body. Do not use the exception string.
+
+    Client libraries sometimes quote the request in ``str(exc)``. That quote
+    can contain the API key. The OpenAI SDK puts the provider text on
+    ``body["error"]``, either as a string or as an object with ``message``,
+    ``code``, and ``type``.
+    """
+    code = getattr(exc, "code", None)
+    body = getattr(exc, "body", None)
+    message = None
+    nested_code = None
+    nested_type = None
+    if isinstance(body, dict):
+        error = body.get("error", body)
+        if isinstance(error, str):
+            message = error
+        elif isinstance(error, dict):
+            if isinstance(error.get("message"), str):
+                message = error["message"]
+            nested_code = error.get("code")
+            nested_type = error.get("type")
+        if message is None and isinstance(body.get("message"), str):
+            message = body["message"]
+    elif isinstance(body, str):
+        message = body
+    return code, nested_code, nested_type, message
+
+
+def _redact_provider_text(text):
+    cleaned = text
+    secrets = [os.environ.get(name, "").strip() for name in _SECRET_ENV]
+    for secret in sorted((item for item in secrets if len(item) >= 8), key=len, reverse=True):
+        cleaned = cleaned.replace(secret, "[redacted]")
+    cleaned = _BEARER.sub("Bearer [redacted]", cleaned)
+    cleaned = _KEYISH.sub("[redacted]", cleaned)
+    clipped, truncated = clip_text(cleaned, 300)
+    clipped = " ".join(clipped.split())
+    if truncated and clipped:
+        clipped += "..."
+    return clipped
+
+
+def public_model_error(exc, provider):
+    """Describe a provider failure without quoting the request or the key.
+
+    The public message keeps the exception type, HTTP status, a known
+    provider code, and the provider's own error message when the body has
+    one. Raw exception text is dropped.
     """
     if type(exc).__name__ == "AuthenticationError":
         key_name = {"openai": "OPENAI_API_KEY", "gemini": "GOOGLE_API_KEY", "xai": "XAI_API_KEY"}[provider]
         return AgentError("BAD_KEY", f"The provider rejected the key. Check {key_name} in this terminal.")
     status = getattr(exc, "status_code", None)
-    code = getattr(exc, "code", None)
-    safe_codes = {
-        "invalid_request_error", "model_not_found", "invalid_model",
-        "unsupported_parameter", "invalid_parameter", "rate_limit_exceeded",
-        "insufficient_quota", "permission_denied",
-    }
+    code, nested_code, nested_type, message = _provider_error_fields(exc)
     detail = f"the model call failed ({type(exc).__name__})"
     if type(status) is int and 400 <= status <= 599:
         detail += f", HTTP {status}"
-    if isinstance(code, str) and code in safe_codes:
-        detail += f", provider code {code}"
-    if status == 400 and not (isinstance(code, str) and code in safe_codes):
+    shown = next(
+        (item for item in (code, nested_code, nested_type) if isinstance(item, str) and item in _SAFE_PROVIDER_CODES),
+        None,
+    )
+    if shown:
+        detail += f", provider code {shown}"
+    elif status == 400:
         detail += ", provider code unavailable"
+    if isinstance(message, str):
+        safe = _redact_provider_text(message).rstrip(".")
+        if safe and safe != "[redacted]":
+            detail += f", provider message: {safe}"
     return AgentError("MODEL_ERROR", detail + ".")
 
 

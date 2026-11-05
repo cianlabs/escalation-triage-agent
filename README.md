@@ -44,8 +44,17 @@ OpenAPI schema for `POST /v1/responses` says live search has been removed
 and that a request which sets that field fails with HTTP 410 Gone. That
 includes a body that only sets `mode` to `off`. Search stays off because
 the call does not include the `web_search` or `x_search` tools and sets
-`tool_choice` to `none`. `none` is the documented choice when no tools are
-present: the model generates a message and does not call a tool.
+`tool_choice` to `none`. `none` is a documented value: the model generates
+a message and does not call a tool. It is also the default when no tools
+are present.
+
+Do not send `max_tool_calls`. `ModelRequest` does not define that field.
+The schema's agentic-turn cap is `max_turns`, and this path does not send
+that either. `store` false, temperature 0, and `reasoning.effort` `low`
+are defined. The reasoning guide lists `low` for `grok-4.7`; the default
+is `high`. A rejected call prints the provider's error message when the
+response body includes one. It does not print the API key or the raw
+client exception, which can quote the request.
 
 The commands below are for a later run in your own terminal. No live Grok
 result is recorded in this repository. `pytest` checks routing, citations,

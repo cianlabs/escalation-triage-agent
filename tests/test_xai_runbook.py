@@ -50,15 +50,16 @@ def test_grok_request_is_bounded_and_keeps_citations(monkeypatch, capsys):
         seen.update(kwargs)
         assert kwargs['store'] is False
         assert kwargs['max_output_tokens'] == 800
-        assert kwargs['max_tool_calls'] == 0
         assert kwargs['tool_choice'] == 'none'
         assert kwargs['temperature'] == 0
         assert kwargs['reasoning'] == {'effort': 'low'}
         # Live Search is removed. Setting search_parameters, even to mode off,
-        # fails the Responses request with HTTP 410. Omit the field and do not
-        # attach web_search or x_search.
+        # fails the Responses request with HTTP 410. max_tool_calls is not a
+        # ModelRequest field. Omit both, and do not attach web_search or x_search.
         encoded = json.dumps(kwargs)
         assert 'search_parameters' not in encoded
+        assert 'max_tool_calls' not in encoded
+        assert 'max_turns' not in encoded
         assert 'extra_body' not in kwargs
         assert 'tools' not in kwargs
         assert 'web_search' not in encoded
@@ -137,6 +138,35 @@ def test_provider_error_hides_the_key_and_retries_only_transient_status(monkeypa
     assert 'HTTP 400' in captured.err
     assert 'provider code invalid_request_error' in captured.err
     assert SECRET not in captured.out + captured.err
+    assert 'No other model provider was called.' in captured.out
+
+
+def test_bad_request_prints_the_provider_message_and_hides_the_key(monkeypatch, capsys):
+    class Denied(Exception):
+        status_code = 400
+        code = None
+        body = {
+            'error': {
+                'message': f'Unknown parameter: max_tool_calls. Sent key {SECRET}.',
+                'type': 'invalid_request_error',
+            },
+        }
+
+        def __str__(self):
+            return f'Authorization: Bearer {SECRET}'
+
+    def create(**kwargs):
+        raise Denied()
+
+    install_xai(monkeypatch, create)
+    assert run_search(monkeypatch, ['--model-answer', QUESTION]) == 1
+    captured = capsys.readouterr()
+    assert 'HTTP 400' in captured.err
+    assert 'provider code invalid_request_error' in captured.err
+    assert 'provider message: Unknown parameter: max_tool_calls' in captured.err
+    assert '[redacted]' in captured.err
+    assert SECRET not in captured.out + captured.err
+    assert 'Authorization' not in captured.err
     assert 'No other model provider was called.' in captured.out
 
 
