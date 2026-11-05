@@ -99,14 +99,16 @@ def approval_answer(query, path, lines):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group()
-    mode.add_argument('--model-answer', action='store_true', help='Ask Gemini to answer from the retrieved guides.')
+    mode.add_argument('--model-answer', action='store_true', help='Ask a model to answer from the retrieved guides.')
     mode.add_argument('--answer', action='store_true', help='Quote a supported check or approval requirement.')
-    parser.add_argument('--ollama-model', help='Use this installed local Ollama model with --model-answer.')
+    provider = parser.add_mutually_exclusive_group()
+    provider.add_argument('--openai-model', help='Use this OpenAI model with --model-answer.')
+    provider.add_argument('--ollama-model', help='Use this installed local Ollama model with --model-answer.')
     parser.add_argument('--semantic', action='store_true', help='Search the 15-guide practice corpus with local embeddings.')
     parser.add_argument('question')
     args = parser.parse_args()
-    if args.ollama_model is not None and not args.model_answer:
-        parser.error('--ollama-model requires --model-answer')
+    if (args.ollama_model is not None or args.openai_model is not None) and not args.model_answer:
+        parser.error('--ollama-model and --openai-model require --model-answer')
     if args.semantic and args.answer:
         parser.error('--semantic supports search or --model-answer.')
     try:
@@ -120,7 +122,7 @@ def main():
         print(exc, file=sys.stderr)
         return 1
     if args.model_answer:
-        from agent import ask_model, make_gemini_summary_client
+        from agent import ask_model, make_gemini_summary_client, make_openai_summary_client
         from runbook_model_answer import model_answer
 
         try:
@@ -132,10 +134,13 @@ def main():
 
                 print(model_answer(args.question, hits, lambda messages: ask_ollama(args.ollama_model, messages)))
                 return 0
-            with make_gemini_summary_client() as client:
+            client_factory = make_openai_summary_client if args.openai_model else make_gemini_summary_client
+            provider_name = 'openai' if args.openai_model else 'gemini'
+            selected_model = args.openai_model or 'gemini-3.1-flash-lite'
+            with client_factory() as client:
                 print(model_answer(args.question, hits, lambda messages: ask_model(
                     client, messages, None, comparison_summary=True,
-                    model='gemini-3.1-flash-lite', provider='gemini',
+                    model=selected_model, provider=provider_name,
                 )))
         except AgentError as exc:
             print('Rule-based fallback')
