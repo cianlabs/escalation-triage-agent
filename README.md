@@ -11,7 +11,8 @@ Run `python runbook_ui.py` from the repository, then open
 source passages, and click a citation to highlight its exact line.
 Keyword search and rule-based answers work without an API key.
 Semantic search and optional local-model comparisons use Ollama.
-See [setup and scope](docs/RUNBOOK_UI.md).
+See [setup and scope](docs/RUNBOOK_UI.md) and the
+[three-case walkthrough](docs/LOCAL_DEMO_WALKTHROUGH.md).
 
 ## Inspect a specific public Actions run
 
