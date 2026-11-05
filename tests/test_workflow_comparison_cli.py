@@ -240,17 +240,15 @@ def test_gemini_summary_replays_saved_evidence(monkeypatch, capsys):
     from contextlib import nullcontext
     from types import SimpleNamespace
 
-    def create(*, model, messages, response_format):
-        assert response_format == {"type": "json_object"}
+    def create(*, model, messages):
         assert model == 'gemini-3.1-flash-lite'
         assert 'Expected 200, got 503' in json.loads(messages[1]['content'])['before']
-        message = SimpleNamespace(content='{"summary":"The check recovered.","sources":["after"]}')
-        return SimpleNamespace(choices=[SimpleNamespace(message=message)])
+        return '{"summary":"The check recovered.","sources":["after"]}'
 
     def unexpected(*args, **kwargs):
         pytest.fail('Gemini replay must use saved evidence and only the selected provider')
 
-    client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    client = SimpleNamespace(generate=create)
     monkeypatch.setattr('agent.make_gemini_summary_client', lambda: nullcontext(client))
     monkeypatch.setattr('agent.make_client', unexpected)
     monkeypatch.setattr('agent.make_openai_summary_client', unexpected)
@@ -286,10 +284,9 @@ def test_gemini_retries_http_503_once(monkeypatch, capsys, recovers):
         calls.append(kwargs)
         if len(calls) == 1 or not recovers:
             raise ServiceUnavailable('private provider details')
-        message = SimpleNamespace(content='{"summary":"The check recovered.","sources":["after"]}')
-        return SimpleNamespace(choices=[SimpleNamespace(message=message)])
+        return '{"summary":"The check recovered.","sources":["after"]}'
 
-    client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    client = SimpleNamespace(generate=create)
     monkeypatch.setattr('agent.make_gemini_summary_client', lambda: nullcontext(client))
     monkeypatch.setattr('agent.time.sleep', delays.append)
     result = main(['--replay-comparison', '--model-summary', '--summary-provider', 'gemini'])

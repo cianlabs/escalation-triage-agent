@@ -102,9 +102,12 @@ def main():
     mode.add_argument('--model-answer', action='store_true', help='Ask Gemini to answer from the retrieved guides.')
     mode.add_argument('--answer', action='store_true', help='Quote a supported check or approval requirement.')
     parser.add_argument('--ollama-model', help='Use this installed local Ollama model with --model-answer.')
+    parser.add_argument('--gemini-model', help='Gemini model ID for --model-answer.')
     parser.add_argument('--semantic', action='store_true', help='Search the 15-guide practice corpus with local embeddings.')
     parser.add_argument('question')
     args = parser.parse_args()
+    if args.gemini_model and (not args.model_answer or args.ollama_model):
+        parser.error('--gemini-model requires --model-answer and cannot be combined with --ollama-model')
     if args.ollama_model is not None and not args.model_answer:
         parser.error('--ollama-model requires --model-answer')
     if args.semantic and args.answer:
@@ -135,7 +138,7 @@ def main():
             with make_gemini_summary_client() as client:
                 print(model_answer(args.question, hits, lambda messages: ask_model(
                     client, messages, None, comparison_summary=True,
-                    model='gemini-3.1-flash-lite', provider='gemini',
+                    model=args.gemini_model or 'gemini-3.1-flash-lite', provider='gemini',
                 )))
         except AgentError as exc:
             print('Rule-based fallback')

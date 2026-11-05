@@ -83,3 +83,22 @@ Use this saved baseline for the planned Grok comparison after xAI access
 resets. First confirm a tiny request succeeds, then capture cloud responses
 using a fixed question set, retrieval evidence, prompt and scoring rubric.
 No new Grok answer or quality score is recorded here.
+
+## Gemini native generation
+
+Gemini calls now use Google's native generateContent endpoint with JSON
+responses and the terminal's normal HTTP proxy configuration. A minimal
+native generation request succeeded in the user's terminal. This identifies
+a working request path. It does not establish the cause of the earlier
+503 responses and timeouts.
+
+To test a cited answer with the same cloud model:
+
+```zsh
+GOOGLE_API_KEY='op://Personal/Google API Key/credential' op run -- python runbook_search.py --semantic --model-answer --gemini-model gemini-3.8-flash 'What command increases Redis maxmemory?'
+```
+
+The key is sent in the x-goog-api-key header. System instructions and
+retrieved evidence are mapped to native request fields. The existing
+one-retry behavior on HTTP 503 and citation validation remain in use.
+Full runbook answer quality on this endpoint still needs live evaluation.

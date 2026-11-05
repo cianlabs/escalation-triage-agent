@@ -191,10 +191,9 @@ def make_gemini_summary_client():
     key = os.environ.get("GOOGLE_API_KEY", "").strip()
     if not key:
         raise AgentError("MISSING_KEY", "Set GOOGLE_API_KEY in this terminal.")
-    from openai import OpenAI
+    from gemini_client import GeminiClient
 
-    return OpenAI(api_key=key, base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-                  timeout=60, max_retries=0)
+    return GeminiClient(key)
 
 
 def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL, provider="xai"):
@@ -207,9 +206,7 @@ def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL,
         if comparison_summary and provider == "gemini":
             for attempt in range(2):
                 try:
-                    completion = client.chat.completions.create(
-                        model=model, messages=messages, response_format={"type": "json_object"},
-                    )
+                    text = client.generate(model=model, messages=messages)
                     break
                 except Exception as exc:
                     if getattr(exc, "status_code", None) != 503:
@@ -220,7 +217,7 @@ def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL,
                             "The rule-based report is available.",
                         ) from None
                     time.sleep(1)
-            return completion.choices[0].message.content
+            return text
         if comparison_summary:
             response = client.responses.create(model=model, input=messages, store=False)
             return response.output_text
@@ -229,7 +226,7 @@ def ask_model(client, messages, tools, *, comparison_summary=False, model=MODEL,
     except AgentError:
         raise
     except Exception as exc:
-        if type(exc).__name__ == "AuthenticationError":
+        if type(exc).__name__ == "AuthenticationError" or getattr(exc, "status_code", None) == 401:
             key_name = {"openai": "OPENAI_API_KEY", "gemini": "GOOGLE_API_KEY", "xai": "XAI_API_KEY"}[provider]
             raise AgentError("BAD_KEY", f"The provider rejected the key. Check {key_name} in this terminal.") from None
         status = getattr(exc, "status_code", None)
