@@ -35,7 +35,8 @@ from its own environment. The Grok call is the same Responses request as
 the CLI. It must not send Live Search `search_parameters` or
 `max_tool_calls`. Setting `search_parameters` returns HTTP 410, and
 `max_tool_calls` is not a field on the Responses request. The call omits
-`web_search` and `x_search` and sets `tool_choice` to `none`.
+`web_search`, `x_search`, and `tool_choice`. Setting `tool_choice` without
+tools is rejected.
 
 ```sh
 ollama pull embeddinggemma

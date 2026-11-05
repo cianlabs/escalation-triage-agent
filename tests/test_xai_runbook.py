@@ -50,16 +50,18 @@ def test_grok_request_is_bounded_and_keeps_citations(monkeypatch, capsys):
         seen.update(kwargs)
         assert kwargs['store'] is False
         assert kwargs['max_output_tokens'] == 800
-        assert kwargs['tool_choice'] == 'none'
         assert kwargs['temperature'] == 0
         assert kwargs['reasoning'] == {'effort': 'low'}
         # Live Search is removed. Setting search_parameters, even to mode off,
         # fails the Responses request with HTTP 410. max_tool_calls is not a
-        # ModelRequest field. Omit both, and do not attach web_search or x_search.
+        # ModelRequest field. tool_choice without tools is rejected: "A
+        # tool_choice was set on the request but no tools were specified."
+        # Omit all three, and do not attach web_search or x_search.
         encoded = json.dumps(kwargs)
         assert 'search_parameters' not in encoded
         assert 'max_tool_calls' not in encoded
         assert 'max_turns' not in encoded
+        assert 'tool_choice' not in kwargs
         assert 'extra_body' not in kwargs
         assert 'tools' not in kwargs
         assert 'web_search' not in encoded
