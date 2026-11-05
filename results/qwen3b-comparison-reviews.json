@@ -1,0 +1,78 @@
+{
+  "run_sha256": "3fc9ba16b2841f217e8850fc7c8ca60b165ed224d384b9416a169e46eea6debf",
+  "questions_sha256": "9838fe41c4d3e292537adecf030d955db7e49153b74499ef45d51149a3147991",
+  "reviews": {
+    "T01": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "It claimed the cache symptom had no relevant answer despite supplying cache checks."
+    },
+    "T02": {
+      "complete": true,
+      "grounded": true,
+      "missing_detail": null,
+      "reason": "It supplied all three queue measurements with the correct citation."
+    },
+    "T03": {
+      "complete": true,
+      "grounded": true,
+      "missing_detail": null,
+      "reason": "It supplied validity dates and chain checks. The guide gives no renewal procedure."
+    },
+    "T04": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "It repeated the question as a claim and cited a line that does not state that event."
+    },
+    "T05": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "It incorrectly said deletion approval was absent from the supplied line."
+    },
+    "T06": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "It gave storage checks but incorrectly described the matching symptom as missing."
+    },
+    "T07": {
+      "complete": true,
+      "grounded": true,
+      "missing_detail": null,
+      "reason": "It included rollback, approval, and the warning against restarting."
+    },
+    "T08": {
+      "complete": true,
+      "grounded": true,
+      "missing_detail": null,
+      "reason": "It gave all webhook checks and left the underlying cause open."
+    },
+    "T09": {
+      "complete": null,
+      "grounded": true,
+      "missing_detail": true,
+      "reason": "It explicitly withheld the requested missing detail."
+    },
+    "T10": {
+      "complete": null,
+      "grounded": true,
+      "missing_detail": true,
+      "reason": "It explicitly withheld the requested missing detail."
+    },
+    "T11": {
+      "complete": null,
+      "grounded": null,
+      "missing_detail": null,
+      "reason": "Model validation failed; quality remains unscored."
+    },
+    "T12": {
+      "complete": null,
+      "grounded": true,
+      "missing_detail": true,
+      "reason": "It explicitly withheld the requested missing detail."
+    }
+  }
+}
