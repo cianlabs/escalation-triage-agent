@@ -59,3 +59,27 @@ quality. Every quality summary shows its reviewed denominator and pending count.
 API cost is unrecorded. Capture currently supports local Ollama runs; replay
 works with the existing saved local runs. A cloud capture adapter can use the
 same versioned results format when xAI access is available.
+
+## Reviewed 7B baseline
+
+The saved Qwen 7B answers now have proposed reviewer judgments and reasons
+in results/qwen7b-comparison-reviews.json. Reproduce the report with:
+
+```sh
+python runbook_model_eval.py --replay results/qwen7b-comparison-responses.json --reviews results/qwen7b-comparison-reviews.json
+```
+
+All twelve responses were usable. Completeness scored 0/8, whole-response
+grounding scored 6/12, and missing-detail handling scored 4/4. T02 and T04
+made true statements about absent specifics but still omitted the available
+diagnostic guidance. This distinction explains why a response may pass
+grounding and fail completeness.
+
+These judgments were proposed by the assistant and are supplied for
+human review. They include evaluation of the complete response, including
+claims that evidence is missing and omitted approval requirements.
+
+Use this saved baseline for the planned Grok comparison after xAI access
+resets. First confirm a tiny request succeeds, then capture cloud responses
+using a fixed question set, retrieval evidence, prompt and scoring rubric.
+No new Grok answer or quality score is recorded here.
