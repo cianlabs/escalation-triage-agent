@@ -1,0 +1,78 @@
+{
+  "run_sha256": "3732b0f059da457eae67aa55df6cff49a075fe98f6151c1a9deba8c4873a7991",
+  "questions_sha256": "9838fe41c4d3e292537adecf030d955db7e49153b74499ef45d51149a3147991",
+  "reviews": {
+    "T01": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "Withheld the supported eviction settings and keyspace checks."
+    },
+    "T02": {
+      "complete": false,
+      "grounded": true,
+      "missing_detail": null,
+      "reason": "It truthfully notes that no exact waiting duration is specified, but omits the supported queue depth, oldest message age, and consumer throughput checks."
+    },
+    "T03": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "The guide gives certificate validity and chain checks, contradicting the claim that it gives no handling guidance."
+    },
+    "T04": {
+      "complete": false,
+      "grounded": true,
+      "missing_detail": null,
+      "reason": "The guide gives no laptop count or identity. This statement is true, but it omits resolver comparisons, DNS changes and TTL checks."
+    },
+    "T05": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "It supplies the disk checks and approval requirement but also casts the explicitly stated full-filesystem symptom as missing evidence."
+    },
+    "T06": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "The storage guide describes stalled file operations and supplies the matching diagnostic checks. The response withholds them."
+    },
+    "T07": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "It recommends rollback without preserving the human approval requirement and omits the warning that restart is the wrong first step."
+    },
+    "T08": {
+      "complete": false,
+      "grounded": false,
+      "missing_detail": null,
+      "reason": "It supplies webhook checks but contradicts them by saying no specific steps are mentioned."
+    },
+    "T09": {
+      "complete": null,
+      "grounded": true,
+      "missing_detail": true,
+      "reason": "The guides give no compound-interest procedure. The answer correctly abstains."
+    },
+    "T10": {
+      "complete": null,
+      "grounded": true,
+      "missing_detail": true,
+      "reason": "The guide gives memory checks and an approval requirement, but no command for increasing maxmemory. The answer correctly identifies that missing command."
+    },
+    "T11": {
+      "complete": null,
+      "grounded": true,
+      "missing_detail": true,
+      "reason": "The guide names pooler logs but supplies no path. The answer explicitly identifies the missing path."
+    },
+    "T12": {
+      "complete": null,
+      "grounded": true,
+      "missing_detail": true,
+      "reason": "The guide explicitly puts certificate renewal outside its scope. The answer correctly says no renewal command is supplied."
+    }
+  }
+}
