@@ -33,3 +33,6 @@ jobs:
 
       - name: Reproduce the synthetic investigation challenge
         run: python investigation_eval.py --check
+
+      - name: Score the agent eval set
+        run: python agent_eval.py --check --trace-dir /tmp/agent-eval-traces

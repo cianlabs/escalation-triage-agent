@@ -216,6 +216,16 @@ The key is read from the environment and not printed or saved. `--real` still re
 
 `python handoff.py` runs a triage coordinator that can delegate one question to a runbook specialist. A simulated restart, rollback, or page is still recorded only after a human answers `y` or `yes`. See [how to run both](docs/MCP_AND_HANDOFF.md).
 
+## Agent eval and traces
+
+The escalation loop, the handoff demo, and the MCP tool list have their own synthetic eval set. It scores tool order, stop reasons, cited runbook lines, and the rule that a simulated write stays pending until a human answers `y` or `yes`. The practice model is the default. CI does not call Grok.
+
+```sh
+.venv/bin/python agent_eval.py --check
+```
+
+One JSON trace per case is written under `traces/agent-eval/`. That directory is local output. Open the case file named in a failure to see the tool calls, citations, stop reason, and elapsed time. See [how to run it](docs/AGENT_EVAL.md). This set is not the public incident baseline above.
+
 ## Tests
 
 ```sh

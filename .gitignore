@@ -22,3 +22,6 @@ __pycache__/
 # Both are local practice output. They are not source.
 memory/
 action.log
+
+# Local agent-eval traces. Regenerate them with agent_eval.py.
+traces/
