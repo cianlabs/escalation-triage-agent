@@ -1,0 +1,5 @@
+# Handle CDN and edge error spikes
+
+When the edge or CDN returns a burst of 502 or 503 responses, origin or edge health is suspect.
+Check origin status codes, a recent cache purge, and which POP or region is failing.
+Purge the whole cache or bypass the CDN only after a human approves.

@@ -24,7 +24,7 @@
       <div class="search-actions">
         <label class="field" for="mode">Search method
           <select id="mode">
-            <option value="keyword">Keyword · 5 guides</option>
+            <option value="keyword">Keyword · local runbooks</option>
             <option value="semantic">Semantic · 15 practice guides</option>
           </select>
         </label>
@@ -35,7 +35,9 @@
       <span>Try a question</span>
       <button type="button" data-question="What should I check if Redis hits maxmemory?">Redis memory</button>
       <button type="button" data-question="The dashboard takes ages to load. What should I check?">Slow dashboard</button>
-      <button type="button" data-question="How do I cancel a deployment stuck waiting for a reviewer?">Missing procedure</button>
+      <button type="button" data-question="TLS certificates expire tonight. What should I check before renewing them?">TLS expiry</button>
+      <button type="button" data-question="Kafka consumers are lagging behind the topic. What should I check?">Kafka lag</button>
+      <button type="button" data-question="How do I recalibrate the lunar rover antenna?">No runbook</button>
     </div>
     <p id="status" role="status" aria-live="polite">Ready when you are. Keyword search runs entirely from local guides.</p>
     <div id="error" class="error" role="alert" hidden></div>

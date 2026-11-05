@@ -1,0 +1,5 @@
+# Ship a dependency CVE hotfix
+
+When a dependency advisory names a CVE that this build includes, plan a hotfix rather than a blind upgrade.
+Check the affected version, the fixed version, and whether the vulnerable code path is reachable.
+Deploy the patched build only after a human approves. Do not force-push or skip CI as the first step.

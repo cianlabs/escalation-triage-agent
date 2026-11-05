@@ -13,7 +13,7 @@ def test_hits_are_ranked_and_cite_exact_text():
 
 
 def test_no_shared_terms_returns_no_passage():
-    assert search('Rotate the production TLS certificate') == []
+    assert search('How do I recalibrate the lunar rover antenna?') == []
 
 
 def test_redis_query_omits_generic_check_matches():

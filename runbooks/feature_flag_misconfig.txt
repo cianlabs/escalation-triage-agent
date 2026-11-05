@@ -1,0 +1,5 @@
+# Correct a bad feature-flag change
+
+When a feature flag rollout matches the start of errors, or a flag targets the wrong cohort, treat the flag as suspect.
+Check who changed the flag, the percentage, and whether one region or every region is affected.
+Turn the flag off or roll the percentage back only after a human approves.

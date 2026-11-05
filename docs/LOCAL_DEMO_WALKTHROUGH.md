@@ -37,7 +37,26 @@ the specific question.
 
 ![Related guides without the requested log path](images/runbook-missing-detail.png)
 
-## 3. Compare a local model
+## 3. Ask about a topic the short original set missed
+
+Enter: TLS certificates expire tonight. What should I check before renewing them?
+
+Keyword search should rank `runbooks/tls_certificate_expiry.txt` first and
+cite the certificate end date, hostname, and ingress check. Renewal still
+waits for human approval. The same desk covers other frequent incidents
+that now have guides, including Kafka lag, DNS, 429 storms, disk full,
+Postgres locks, payment webhooks, and feature flags. Sample buttons on
+the page include TLS expiry and Kafka lag.
+
+## 4. Ask about a topic that is intentionally absent
+
+Enter: How do I recalibrate the lunar rover antenna?
+
+No guide discusses that subject. Keyword search should return no passage.
+The rule-based answer should say the guides do not provide a supported
+answer. Do not treat an empty result as a prompt to invent steps.
+
+## 5. Compare a local model
 
 The model menu opens on xAI Grok. For this offline demo, change Provider
 to Local Ollama, select an installed Qwen model, and click Generate answer.
@@ -59,10 +78,13 @@ The page displayed the error and kept the rules and passages visible.
 ## Narration
 
 The assistant finds relevant guides and shows the evidence beside its
-answer. The dashboard example has explicit checks to cite. The database
-example has related material but lacks the requested path, so the rules
-withhold an answer. The optional model comparison makes its successes
-and mistakes visible against the same kind of source evidence.
+answer. The dashboard example has explicit checks to cite. The TLS
+example shows a topic that used to miss because the corpus was thin.
+The database example has related material but lacks the requested path,
+so the rules withhold an answer. The lunar-rover example has no guide
+at all, and the honest response is that the corpus does not know. The
+optional model comparison makes its successes and mistakes visible
+against the same kind of source evidence.
 
 ## Evaluation
 

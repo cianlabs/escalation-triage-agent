@@ -1,0 +1,5 @@
+# Investigate payment webhook failures
+
+When a payment provider reports webhook delivery failures, or checkout events never arrive, billing updates stall.
+Check signature failures, the callback URL, and the provider delivery log for 4xx or timeout responses.
+Replay or discard webhook events only after a human approves. Do not mark payments captured by hand first.

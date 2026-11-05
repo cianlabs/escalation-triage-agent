@@ -1,0 +1,5 @@
+# Free a full disk
+
+When a host reports no space left on device, or disk usage is at 100 percent, writes will fail.
+Check which mount is full and which directory grew, including logs and temp files.
+Delete files or expand the volume only after a human approves. Do not wipe a data directory as a first step.

@@ -1,0 +1,5 @@
+# Investigate Kafka consumer lag
+
+When a consumer group falls behind its topic, lag grows and downstream updates arrive late.
+Check group lag, stuck partitions, and whether consumers are crashing or paused.
+Reset offsets or skip messages only after a human approves. Do not rewind a group as the first step.

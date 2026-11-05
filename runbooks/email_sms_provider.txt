@@ -1,0 +1,5 @@
+# Handle an email or SMS provider outage
+
+When mail or SMS sends fail, or the provider status page shows an incident, notifications are delayed.
+Check provider status, bounce or error codes, and whether one channel or both channels fail.
+Switch providers or drop queued notifications only after a human approves.

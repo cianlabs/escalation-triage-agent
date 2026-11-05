@@ -1,0 +1,5 @@
+# Unstick a missed cron or scheduler
+
+When scheduled jobs did not start, or a scheduler leader lock is held, recurring work is late.
+Check the last success time, the lock owner, and whether the scheduler process is running.
+Clear the scheduler lock or start a duplicate leader only after a human approves.

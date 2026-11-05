@@ -9,10 +9,12 @@ The public incident evaluation is separate from those synthetic workflow fixture
 Run `python runbook_ui.py` from the repository, then open
 [Runbook desk](http://127.0.0.1:8765). Ask a question, inspect the ranked
 source passages, and click a citation to highlight its exact line.
-Keyword search and rule-based answers work without an API key.
+Keyword search reads every text file in `runbooks/` and works without an
+API key. A question the corpus does not cover must stay an honest "the
+guides do not provide a supported answer," not an invented procedure.
 Semantic search uses local Ollama embeddings. Optional comparisons can use
 a local Qwen model or xAI Grok. See [setup and scope](docs/RUNBOOK_UI.md)
-and the [three-case walkthrough](docs/LOCAL_DEMO_WALKTHROUGH.md).
+and the [walkthrough](docs/LOCAL_DEMO_WALKTHROUGH.md).
 
 ## Grok runbook answers
 
@@ -52,7 +54,7 @@ result is recorded in this repository. `pytest` checks routing, citations,
 errors, saved-run metadata and the safety guards. A passing test is not an
 answer-quality score.
 
-One smoke question, on the five local guides, before spending a full run.
+One smoke question, on the local runbooks, before spending a full run.
 This question is not one of the T01–T12 comparison cases:
 
 ```sh

@@ -1,0 +1,5 @@
+# Investigate object storage errors
+
+When uploads or downloads fail against object storage, or clients see 503 from the bucket endpoint, storage is suspect.
+Check error codes, bucket metrics, and whether one prefix or every request fails.
+Delete objects or change the bucket policy only after a human approves.

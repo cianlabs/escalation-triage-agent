@@ -1,0 +1,5 @@
+# Respond to an SSO or login outage
+
+When sign-in fails for many accounts, or the identity provider returns errors, login is impaired.
+Check IdP status, recent SSO config edits, and whether one tenant or every tenant fails.
+Disable SSO or force a local-login bypass only after a human approves.
