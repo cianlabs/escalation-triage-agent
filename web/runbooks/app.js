@@ -153,7 +153,7 @@ compare.addEventListener('click', async () => {
     renderSources(data);
     renderRules(data);
     renderModel(data);
-    status.textContent = data.model_error ? 'Model unavailable. The source passages and rule-based answer are still available.'
+    status.textContent = data.model_error ? 'The model did not produce a usable answer. The source passages and rule-based answer are still available.'
       : 'Comparison ready. Inspect the cited lines before trusting a model claim.';
   } catch (failure) {
     modelOutput.append(element('p', 'error', failure.message));
