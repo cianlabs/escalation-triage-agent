@@ -4,6 +4,15 @@ A practice support agent that searches local runbooks, reads synthetic evidence,
 
 The public incident evaluation is separate from those synthetic workflow fixtures. It uses verified user-impact observations from 30 distinct incidents and calls this repository's unchanged ranking tool.
 
+## Local runbook workspace
+
+Run `python runbook_ui.py` from the repository, then open
+[Runbook desk](http://127.0.0.1:8765). Ask a question, inspect the ranked
+source passages, and click a citation to highlight its exact line.
+Keyword search and rule-based answers work without an API key.
+Semantic search and optional local-model comparisons use Ollama.
+See [setup and scope](docs/RUNBOOK_UI.md).
+
 ## Inspect a specific public Actions run
 
 ```sh

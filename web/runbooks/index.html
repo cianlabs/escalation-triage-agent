@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Runbook desk · Local workspace</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="brand"><span class="brand-icon" aria-hidden="true">R</span> Runbook desk</a>
+    <span class="local"><span aria-hidden="true">●</span> Local workspace</span>
+  </header>
+  <main>
+    <section class="intro">
+      <div class="eyebrow">YOUR OPERATIONS REFERENCE</div>
+      <h1>Find the next check.</h1>
+      <p>Ask a question. Inspect the guidance behind every answer.</p>
+    </section>
+    <form id="query-form" class="searchbox">
+      <label for="question">What are you investigating?</label>
+      <textarea id="question" rows="2" maxlength="2000" required placeholder="What should I check if Redis hits maxmemory?"></textarea>
+      <div class="search-actions">
+        <label class="field" for="mode">Search method
+          <select id="mode">
+            <option value="keyword">Keyword · 5 guides</option>
+            <option value="semantic">Semantic · 15 practice guides</option>
+          </select>
+        </label>
+        <button class="primary" id="search-button" type="submit">Find guidance <span aria-hidden="true">↗</span></button>
+      </div>
+    </form>
+    <div class="examples" aria-label="Example questions">
+      <span>Try a question</span>
+      <button type="button" data-question="What should I check if Redis hits maxmemory?">Redis memory</button>
+      <button type="button" data-question="The dashboard takes ages to load. What should I check?">Slow dashboard</button>
+      <button type="button" data-question="How do I cancel a deployment stuck waiting for a reviewer?">Missing procedure</button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Ready when you are. Keyword search runs entirely from local guides.</p>
+    <div id="error" class="error" role="alert" hidden></div>
+    <section id="results" class="results" aria-label="Search results" hidden>
+      <div class="answers">
+        <article class="answer-card">
+          <div class="card-top"><h2>Rule-based answer</h2><span class="tag">EXTRACTED</span></div>
+          <div id="rule-answer" class="answer-content"></div>
+          <p class="quiet">Each citation opens its source passage.</p>
+        </article>
+        <article class="answer-card model-card">
+          <div class="card-top"><h2>Compare a local model</h2><span class="tag outline">OPTIONAL</span></div>
+          <p class="model-description">Use the same question and search method to see how a local model answers.</p>
+          <div class="model-controls">
+            <label for="model" class="sr-only">Local model</label>
+            <select id="model"><option value="qwen2.5:3b">Qwen 2.5 · 3B</option><option value="qwen2.5:7b">Qwen 2.5 · 7B</option></select>
+            <button type="button" id="compare">Generate answer</button>
+          </div>
+          <div id="model-answer" class="answer-content" aria-live="polite"></div>
+          <p class="quiet">Experimental output. Check each claim against its source. Requires Ollama.</p>
+        </article>
+      </div>
+      <aside class="sources" aria-label="Retrieved passages">
+        <div class="source-heading"><h2>Source passages</h2><span id="passage-count"></span></div>
+        <p class="quiet source-note" id="source-note"></p>
+        <div id="passages"></div>
+      </aside>
+    </section>
+    <section id="empty-state" class="welcome">
+      <div class="welcome-rule" aria-hidden="true"></div>
+      <p>A clear answer starts with the source.</p>
+      <span>Search your guides, read the cited lines, and decide what to check next.</span>
+    </section>
+  </main>
+  <footer>Runbook desk <span>Local guides · Read-only investigation</span></footer>
+</body>
+</html>
