@@ -4,14 +4,9 @@ There are two separate kinds of data. Synthetic workflow fixtures exercise the a
 
 ## The public evaluation
 
-```mermaid
-flowchart LR
-    sources[Read public reports] --> dataset[Reviewed observations and separate labels]
-    dataset --> boundary[Allow only evidence id, source and observation]
-    boundary --> ranker[Unchanged rank_hypotheses]
-    ranker --> scoring[Compare output with separate labels]
-    scoring --> report[One results table and every miss]
-```
+![Practice agent eval is 20/20 on synthetic fixtures. The public incident baseline is top-1 10/26. The scores are kept apart.](images/two-scores.png)
+
+The public path is the orange card: a ranker-only baseline on reviewed public observations. It is not the green 20/20 practice workflow.
 
 incident_data.py validates 30 cases and their fetch receipts. ranking_input copies only the public observation fields. evaluation.py calls tools.rank_hypotheses with those copies. It never calls read_logs, check_recent_deploys, a model client or an action function. Source titles, retrospective causes, families, case kind, dates and context are not ranking inputs. The symptom is retained in the dataset for review but this existing tool does not accept it.
 
@@ -56,22 +51,11 @@ Seven original events were re-annotated from their actual pages. The AWS citatio
 
 ## The synthetic agent workflow
 
-```mermaid
-flowchart TD
-  ticket[Synthetic escalation or saved state] --> model[PracticeModel checklist or optional RealModel]
-  model --> tools[Registered read tools and propose_action]
-  tools --> state[EscalationState saved as local JSON]
-  state --> model
-  tools --> pending[Proposal status pending]
-  pending --> human{Human answer}
-  human -->|y or yes| log[One simulated action.log line]
-  human -->|anything else| none[No write]
-  question[Question on handoff.py] --> specialist[Runbook specialist]
-  specialist --> mcp[invoke_tool: search or cited answer only]
-  mcp --> coordinator[Coordinator owns the stop reason]
-  coordinator --> pending
-  server[mcp_server.py stdio] --> mcp
-```
+![Synthetic escalation through the triage coordinator, a read-only runbook specialist, unverified hypotheses, and a human gate before one simulated line](images/architecture.png)
+
+![Handoff from coordinator to the MCP-only specialist, then back for a human y or yes before a simulated write](images/handoff.png)
+
+The architecture figure is the practice loop. The handoff figure is the two-role demo in `handoff.py`: the specialist may call `search_runbooks` and `cited_runbook_answer` only, then the coordinator still waits for a human yes.
 
 The triage loop and the handoff demo share the human gate. `record_simulated_action` is not offered to the model and is not an MCP tool. A model flag named `approved` is ignored. The specialist returns citations and stops.
 
