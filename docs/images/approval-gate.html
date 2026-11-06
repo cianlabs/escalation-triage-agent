@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1600px;height:1040px;background:#f6f7fb;font-family:Inter,"DejaVu Sans",sans-serif;color:#1b2333;position:relative;overflow:hidden}
+h1{position:absolute;left:40px;top:24px;font-size:38px;font-weight:800}
+.sub{position:absolute;left:40px;top:74px;font-size:19px;color:#5b6679;max-width:1400px}
+.sec{position:absolute;left:40px;font-size:15px;font-weight:800;letter-spacing:2px;color:#6b7694}
+.box{position:absolute;border-radius:16px;padding:14px 16px;background:#fff;border:2.5px solid #c9d1e4;box-shadow:0 3px 8px rgba(30,40,70,.08)}
+.box b{display:block;font-size:20px;margin-bottom:6px}
+.box span{font-size:15.5px;line-height:1.35;color:#46526b}
+.user{background:#e7f5ff;border-color:#339af0}
+.model{background:#f3f0ff;border-color:#7048e8}
+.safe{background:#ebfbee;border-color:#2f9e44}
+.danger{background:#fff0f0;border-color:#e03131}
+.gate{background:#fff9db;border-color:#f08c00;border-width:5px}
+.gate b{color:#c92a2a;font-size:24px}
+.card{top:780px;width:360px;height:210px}
+.card .t{font-size:21px;font-weight:800;color:#3b5bdb;margin-bottom:8px}
+.lbl{position:absolute;font-size:14px;color:#46526b;font-weight:600}
+svg{position:absolute;left:0;top:0}
+</style></head><body>
+<h1>escalation-triage-agent: approval gate</h1>
+<div class="sub">Pending proposals never execute themselves. Only a human y/yes (or Approve click) appends one simulated log line.</div>
+
+<div class="sec" style="top:130px">WHAT REACHES THE GATE</div>
+<div class="box user" style="left:40px;top:190px;width:280px;height:140px"><b>Unverified hypotheses</b><span>Ranked guesses. Never marked confirmed by the agent.</span></div>
+<div class="box model" style="left:360px;top:190px;width:280px;height:140px"><b>Customer draft</b><span>Written locally. Never sent by this agent.</span></div>
+<div class="box safe" style="left:680px;top:190px;width:280px;height:140px"><b>Runbook citations</b><span>From specialist / MCP search — or abstain.</span></div>
+<div class="box" style="left:1000px;top:190px;width:360px;height:140px;background:#fff0f0;border-color:#e03131"><b>Pending proposal</b><span>propose_action → status pending. Model approved=true is ignored.</span></div>
+
+<div class="box gate" style="left:420px;top:400px;width:520px;height:200px"><b>HUMAN APPROVAL GATE</b><span style="font-size:17px">Shows the action and context, then waits.<br><br><b style="display:inline;font-size:17px;color:#2f9e44">y / yes / Approve</b> → one simulated action.log line<br><b style="display:inline;font-size:17px;color:#e03131">anything else</b> → no write</span></div>
+
+<div class="box safe" style="left:1000px;top:400px;width:360px;height:90px"><b style="font-size:18px;color:#2f9e44">YES path</b><span>record_simulated_action once. Settled.</span></div>
+<div class="box danger" style="left:1000px;top:510px;width:360px;height:90px"><b style="font-size:18px">NO path</b><span>Denied. Nothing appended.</span></div>
+
+<div class="box" style="left:40px;top:400px;width:340px;height:200px;background:#fff8e1;border-color:#f59f00"><b>Hard constraints</b><span>No real restart<br>No rollback<br>No paging<br>No email<br>Default answer is no</span></div>
+
+<svg width="1600" height="1040">
+<defs><marker id="a" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0,1 L15,8 L0,15 z" fill="#46526b"/></marker>
+<marker id="g" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0,1 L15,8 L0,15 z" fill="#2f9e44"/></marker>
+<marker id="r" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0,1 L15,8 L0,15 z" fill="#e03131"/></marker></defs>
+<g stroke="#46526b" stroke-width="3.5" fill="none" marker-end="url(#a)">
+<path d="M180,332 L180,398"/>
+<path d="M500,332 L560,398"/>
+<path d="M820,332 L720,398"/>
+<path d="M1180,332 L900,420"/>
+</g>
+<g stroke="#2f9e44" stroke-width="4" fill="none" marker-end="url(#g)"><path d="M940,460 L998,445"/></g>
+<g stroke="#e03131" stroke-width="4" fill="none" marker-end="url(#r)"><path d="M940,540 L998,555"/></g>
+</svg>
+
+<div class="sec" style="top:740px">KEY IDEAS TO UNDERSTAND</div>
+<div class="box card" style="left:40px"><div class="t">Default is no</div><span>Anything other than y/yes refuses the write. Silence and typos deny.</span></div>
+<div class="box card" style="left:420px"><div class="t">human_said_yes only</div><span>Boolean True only from the human check. Proposal flags cannot bypass.</span></div>
+<div class="box card" style="left:800px"><div class="t">Simulate-only</div><span>Approve appends one local log line. No process restart or deploy change.</span></div>
+<div class="box card" style="left:1180px;width:340px;border-color:#f08c00"><div class="t" style="color:#c92a2a">Draft never sends</div><span>Customer text is a draft artifact. Sending is outside this agent.</span></div>
+</body></html>

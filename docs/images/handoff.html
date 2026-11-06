@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1600px;height:1020px;background:#f6f7fb;font-family:Inter,"DejaVu Sans",sans-serif;color:#1b2333;position:relative;overflow:hidden}
+h1{position:absolute;left:40px;top:24px;font-size:38px;font-weight:800}
+.sub{position:absolute;left:40px;top:74px;font-size:19px;color:#5b6679;max-width:1400px}
+.sec{position:absolute;left:40px;font-size:15px;font-weight:800;letter-spacing:2px;color:#6b7694}
+.box{position:absolute;border-radius:16px;padding:14px 16px;background:#fff;border:2.5px solid #c9d1e4;box-shadow:0 3px 8px rgba(30,40,70,.08)}
+.box b{display:block;font-size:20px;margin-bottom:6px}
+.box span{font-size:15.5px;line-height:1.35;color:#46526b}
+.user{background:#e7f5ff;border-color:#339af0}
+.model{background:#f3f0ff;border-color:#7048e8}
+.safe{background:#ebfbee;border-color:#2f9e44}
+.gate{background:#fff9db;border-color:#f08c00;border-width:5px}
+.gate b{color:#c92a2a;font-size:22px}
+.card{top:760px;width:360px;height:210px}
+.card .t{font-size:21px;font-weight:800;color:#3b5bdb;margin-bottom:8px}
+.lbl{position:absolute;font-size:14px;color:#46526b;font-weight:600}
+svg{position:absolute;left:0;top:0}
+</style></head><body>
+<h1>escalation-triage-agent: coordinator → specialist</h1>
+<div class="sub">Two-role handoff demo. The specialist can only read runbooks through MCP. The coordinator keeps the proposal. Only a human can approve a write.</div>
+
+<div class="sec" style="top:130px">THE HANDOFF LOOP</div>
+<div class="box user" style="left:40px;top:200px;width:240px;height:160px"><b>1. Question in</b><span>Coordinator receives the question or a proposal request.</span></div>
+<div class="box model" style="left:340px;top:200px;width:260px;height:160px"><b>2. Handoff</b><span>Delegate to the runbook specialist. Budget: two messages (out and back).</span></div>
+<div class="box safe" style="left:660px;top:180px;width:300px;height:200px"><b>3. Specialist (MCP-only)</b><span>May call search_runbooks and cited_runbook_answer only. Returns citations. Stops. Never proposes.</span></div>
+<div class="box" style="left:1020px;top:180px;width:280px;height:200px;background:#e6fcf5;border-color:#0ca678"><b>MCP tools</b><span>search_runbooks<br>cited_runbook_answer<br><br>Not exposed: propose_action, record_simulated_action</span></div>
+<div class="box model" style="left:340px;top:440px;width:260px;height:150px"><b>4. Back to coordinator</b><span>Keeps stop reason and any pending proposal. Specialist cannot approve.</span></div>
+<div class="box gate" style="left:660px;top:440px;width:300px;height:150px"><b>5. Human y/yes?</b><span>Same gate as agent.py. Anything else writes nothing.</span></div>
+<div class="box" style="left:1020px;top:440px;width:280px;height:150px;background:#fff0f0;border-color:#e03131"><b>6. Simulate only</b><span>One action.log line on yes. No real restart / rollback / page / email.</span></div>
+<div class="box" style="left:40px;top:440px;width:240px;height:150px;background:#fff8e1;border-color:#f59f00"><b>Stop reasons</b><span>RUNBOOK_ANSWERED · NO_RUNBOOK_MATCH · APPROVAL_REQUIRED · MAX_HANDOFFS · …</span></div>
+
+<svg width="1600" height="1020">
+<defs><marker id="a" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0,1 L15,8 L0,15 z" fill="#46526b"/></marker></defs>
+<g stroke="#46526b" stroke-width="3.5" fill="none" marker-end="url(#a)">
+<path d="M280,280 L338,280"/>
+<path d="M600,280 L658,280"/>
+<path d="M960,280 L1018,280"/>
+<path d="M790,380 L790,438"/>
+<path d="M960,515 L1018,515"/>
+<path d="M340,515 C280,515 280,380 338,360" stroke-dasharray="9 7"/>
+</g>
+</svg>
+<div class="lbl" style="left:250px;top:380px">specialist stops here</div>
+
+<div class="sec" style="top:720px">KEY IDEAS TO UNDERSTAND</div>
+<div class="box card" style="left:40px"><div class="t">Handoff budget</div><span>Two messages max. A smaller budget stops with MAX_HANDOFFS before any write.</span></div>
+<div class="box card" style="left:420px"><div class="t">Read-only specialist</div><span>Cannot approve or log actions. Citations only. Coordinator owns the proposal.</span></div>
+<div class="box card" style="left:800px"><div class="t">Human owns the write</div><span>propose_action always returns pending. Only human_said_yes becomes True.</span></div>
+<div class="box card" style="left:1180px;width:340px;border-color:#f08c00"><div class="t" style="color:#c92a2a">Offline by default</div><span>handoff.py and mcp_server.py need no API key. Practice fixtures only.</span></div>
+</body></html>

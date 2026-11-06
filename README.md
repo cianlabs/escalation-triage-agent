@@ -357,3 +357,17 @@ The CLI runbooks are simplified synthetic prompts, not verified operational proc
 See [how it works](docs/HOW_IT_WORKS.md) for the input boundary, label rules and next learning exercise.
 
 For failed runs, the inspector also shows failed steps and available public error annotations. See the [real failed-run example](docs/WORKFLOW_RUN.md#try-a-real-failed-run).
+
+## Architecture graphics
+
+Same visual system as runbook-copilot (`docs/images/`):
+
+| File | What it shows |
+|------|----------------|
+| [architecture.png](docs/images/architecture.png) | End-to-end flow (M5) |
+| [handoff.png](docs/images/handoff.png) | Coordinator → specialist |
+| [approval-gate.png](docs/images/approval-gate.png) | Human y/yes before simulate |
+| [two-scores.png](docs/images/two-scores.png) | Practice 20/20 vs public 10/26 |
+
+HTML sources sit beside the PNGs for regenerating with headless Chrome.
+
