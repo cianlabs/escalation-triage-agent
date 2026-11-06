@@ -1,0 +1,73 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1600px;height:1260px;background:#f6f7fb;font-family:Inter,"DejaVu Sans",sans-serif;color:#1b2333;position:relative;overflow:hidden}
+h1{position:absolute;left:40px;top:24px;font-size:38px;font-weight:800}
+.sub{position:absolute;left:40px;top:74px;font-size:19px;color:#5b6679;max-width:1200px}
+.sec{position:absolute;left:40px;font-size:15px;font-weight:800;letter-spacing:2px;color:#6b7694}
+.box{position:absolute;border-radius:16px;padding:14px 16px;background:#fff;border:2.5px solid #c9d1e4;box-shadow:0 3px 8px rgba(30,40,70,.08)}
+.box b{display:block;font-size:20px;margin-bottom:6px}
+.box span{font-size:15.5px;line-height:1.35;color:#46526b}
+.m{height:112px;width:235px;top:150px}
+.m .n{font-size:26px;font-weight:800;color:#3b5bdb}
+.here{background:#fff4e0;border-color:#f08c00;border-width:4px}
+.here .n{color:#d9480f}
+.tag{position:absolute;left:1064px;top:120px;background:#f08c00;color:#fff;font-weight:800;font-size:14px;letter-spacing:1px;padding:4px 12px;border-radius:12px 12px 0 0}
+.user{background:#e7f5ff;border-color:#339af0}
+.model{background:#f3f0ff;border-color:#7048e8}
+.safe{background:#ebfbee;border-color:#2f9e44}
+.danger{background:#fff0f0;border-color:#e03131}
+.gate{background:#fff9db;border-color:#f08c00;border-width:5px}
+.gate b{color:#c92a2a;font-size:22px}
+.card{top:960px;width:235px;height:250px}
+.card .t{font-size:21px;font-weight:800;color:#3b5bdb;margin-bottom:8px}
+.lbl{position:absolute;font-size:14px;color:#46526b;font-weight:600}
+svg{position:absolute;left:0;top:0}
+</style></head><body>
+<h1>escalation-triage-agent: how it works</h1>
+<div class="sub">Approval-gated synthetic triage: runbook cites, unverified hypotheses, MCP + coordinator→specialist — a human must approve before any simulated write.</div>
+
+<div class="sec" style="top:122px">THE 6-MONTH AI ENGINEER ARC</div>
+<div class="tag">YOU ARE HERE</div>
+<div class="box m" style="left:40px"><div class="n">M1</div><span>Python, APIs, Git</span></div>
+<div class="box m" style="left:299px"><div class="n">M2</div><span>LLM basics + first tool call</span></div>
+<div class="box m" style="left:558px"><div class="n">M3</div><span>Agent loop + RAG</span></div>
+<div class="box m" style="left:817px"><div class="n">M4</div><span>Graphs, evals, tracing</span></div>
+<div class="box m here" style="left:1076px"><div class="n">M5</div><span><b style="font-size:17px;margin:0">Human-approved agents</b>escalation-triage-agent</span></div>
+<div class="box m" style="left:1335px"><div class="n">M6</div><span>Ship 2 live demos</span></div>
+
+<div class="sec" style="top:318px">THE ARCHITECTURE</div>
+<div class="box user" style="left:40px;top:500px;width:220px;height:130px"><b>1. Synthetic escalation</b><span>Practice ticket or Streamlit sample (fixtures only).</span></div>
+<div class="box model" style="left:320px;top:450px;width:280px;height:210px"><b>2. Triage coordinator</b><span>Owns the stop reason and any pending proposal. Can hand a question to the specialist.</span></div>
+<div class="box safe" style="left:680px;top:360px;width:320px;height:160px"><b>3. Runbook specialist</b><span>Cite or abstain. Calls only search_runbooks and cited_runbook_answer. Cannot approve.</span></div>
+<div class="box" style="left:1080px;top:360px;width:300px;height:160px;background:#e6fcf5;border-color:#0ca678"><b>MCP (read-only)</b><span>search_runbooks · cited answer · practice logs · list escalations. No write tools.</span></div>
+<div class="box" style="left:680px;top:560px;width:320px;height:110px;background:#fffbe6;border-color:#e0b400"><b>4. Rank hypotheses</b><span>Unverified only. Never claims a confirmed root cause.</span></div>
+<div class="box gate" style="left:1080px;top:560px;width:320px;height:170px"><b>HUMAN APPROVAL GATE</b><span>Shows the pending proposal. Only "y" / "yes" or Approve passes. Model approved=true is ignored.</span></div>
+<div class="box danger" style="left:1080px;top:770px;width:320px;height:100px"><b style="font-size:17px">5. One simulated line</b><span>Appends to action.log only. No restart, rollback, page, or email.</span></div>
+<div class="box" style="left:40px;top:760px;width:260px;height:120px;background:#fff8e1;border-color:#f59f00"><span><b style="font-size:17px">Failure-first</b>Named stops: RUNBOOK_ANSWERED, NO_RUNBOOK_MATCH, APPROVAL_REQUIRED, …</span></div>
+<div class="box model" style="left:320px;top:760px;width:280px;height:120px"><b style="font-size:17px">Draft never sends</b><span>Customer update text stays local until a human acts outside this agent.</span></div>
+
+<svg width="1600" height="1260">
+<defs><marker id="a" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0,1 L15,8 L0,15 z" fill="#46526b"/></marker>
+<marker id="r" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0,1 L17,9 L0,17 z" fill="#e03131"/></marker></defs>
+<g stroke="#46526b" stroke-width="3.5" fill="none" marker-end="url(#a)">
+<path d="M277,206 L297,206"/><path d="M536,206 L556,206"/><path d="M795,206 L815,206"/><path d="M1054,206 L1074,206"/><path d="M1313,206 L1333,206"/>
+<path d="M260,565 L318,555"/>
+<path d="M600,520 L678,450"/>
+<path d="M1000,440 L1078,440"/>
+<path d="M840,520 L840,558"/>
+<path d="M1000,615 L1078,620"/>
+</g>
+<g stroke="#e03131" stroke-width="5" fill="none" marker-end="url(#r)">
+<path d="M1240,732 L1240,768"/>
+</g>
+</svg>
+<div class="lbl" style="left:990px;top:732px;color:#c92a2a">must pass the gate</div>
+
+<div class="sec" style="top:930px">KEY IDEAS TO UNDERSTAND</div>
+<div class="box card" style="left:40px"><div class="t">MCP</div><span>Model Context Protocol over stdio. Four read-only tools. Propose and record_simulated_action are not exposed.</span></div>
+<div class="box card" style="left:299px"><div class="t">Handoff</div><span>Coordinator → runbook specialist → back. Specialist returns citations and stops. Budget: two messages.</span></div>
+<div class="box card" style="left:558px"><div class="t">Approval gate</div><span>Risky writes wait for a person's y/yes. Default is no. Model flags cannot bypass.</span></div>
+<div class="box card" style="left:817px"><div class="t">Practice 20/20</div><span>Offline agent_eval on synthetic fixtures (15 golden + 5 holdout). CI path.</span></div>
+<div class="box card" style="left:1076px"><div class="t">Public 10/26</div><span>Ranker-only baseline on public postmortems. Weaker — reported honestly, not mixed with 20/20.</span></div>
+<div class="box card" style="left:1335px;border-color:#f08c00"><div class="t" style="color:#c92a2a">Simulate-only</div><span>Approve appends one local log line. Nothing restarts, rolls back, pages, or emails.</span></div>
+</body></html>

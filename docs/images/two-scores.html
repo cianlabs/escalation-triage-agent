@@ -1,0 +1,54 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1600px;height:1180px;background:#f6f7fb;font-family:Inter,"DejaVu Sans",sans-serif;color:#1b2333;position:relative;overflow:hidden}
+h1{position:absolute;left:40px;top:24px;font-size:38px;font-weight:800}
+.sub{position:absolute;left:40px;top:74px;font-size:19px;color:#5b6679;max-width:1400px}
+.sec{position:absolute;left:40px;font-size:15px;font-weight:800;letter-spacing:2px;color:#6b7694}
+.box{position:absolute;border-radius:16px;padding:14px 16px;background:#fff;border:2.5px solid #c9d1e4;box-shadow:0 3px 8px rgba(30,40,70,.08)}
+.box b{display:block;font-size:20px;margin-bottom:6px}
+.box span{font-size:15.5px;line-height:1.35;color:#46526b}
+.safe{background:#ebfbee;border-color:#2f9e44}
+.danger{background:#fff0f0;border-color:#e03131}
+.gate{background:#fff9db;border-color:#f08c00;border-width:5px}
+.gate b{color:#c92a2a;font-size:22px}
+.card{top:900px;width:360px;height:220px}
+.card .t{font-size:21px;font-weight:800;color:#3b5bdb;margin-bottom:8px}
+.big{font-size:48px;font-weight:800;line-height:1.1;margin:8px 0}
+</style></head><body>
+<h1>escalation-triage-agent: two scores, keep them apart</h1>
+<div class="sub">Practice agent_eval and the public incident baseline measure different jobs. Publishing both is the point — do not mix them.</div>
+
+<div class="sec" style="top:140px">THE TWO PATHS</div>
+<div class="box safe" style="left:40px;top:200px;width:680px;height:420px">
+  <b style="font-size:26px;color:#2f9e44">Practice agent_eval</b>
+  <div class="big" style="color:#2f9e44">20 / 20</div>
+  <span style="font-size:18px">Offline · 15 golden + 5 holdout · CI<br><br>
+  Synthetic fixtures and PracticeModel checklist.<br>
+  Measures the approval-gated workflow: tools, state, stop reasons, human gate.<br><br>
+  Does <b style="display:inline;font-size:18px">not</b> measure live Grok tool choice or public RCA accuracy.
+  </span>
+</div>
+<div class="box gate" style="left:760px;top:280px;width:80px;height:260px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px">
+  <b style="font-size:16px;line-height:1.3">DO NOT<br>MIX</b>
+</div>
+<div class="box" style="left:880px;top:200px;width:680px;height:420px;background:#fff4e0;border-color:#f08c00;border-width:3px">
+  <b style="font-size:26px;color:#d9480f">Public incident baseline</b>
+  <div class="big" style="color:#d9480f">10 / 26</div>
+  <span style="font-size:18px">Top-1 · 38.5% · top-3 is 11/26<br><br>
+  Ranker-only on public postmortems. Cause-family labels, not exact prose RCA.<br>
+  Weaker on purpose — reported honestly.<br><br>
+  Different job from 20/20. Keep both numbers.
+  </span>
+</div>
+
+<div class="box" style="left:40px;top:660px;width:1520px;height:140px;background:#fff8e1;border-color:#f59f00">
+  <b>Also true</b>
+  <span>Cautious cases 4/4 held empty confirmed cause. Fixtures, logs, and runbooks on the agent path are synthetic. Approve only appends a local simulated line — no restart, rollback, page, or email.</span>
+</div>
+
+<div class="sec" style="top:860px">KEY IDEAS TO UNDERSTAND</div>
+<div class="box card" style="left:40px"><div class="t">Different jobs</div><span>20/20 = synthetic workflow. 10/26 = public ranker baseline. Same product page; separate claims.</span></div>
+<div class="box card" style="left:420px"><div class="t">Cause families</div><span>Scoring uses a fixed family vocabulary. Broad family credit is not exact root-cause discovery.</span></div>
+<div class="box card" style="left:800px"><div class="t">Honest weak score</div><span>Top-1 hits can lack supporting evidence. We publish the miss list instead of hiding it.</span></div>
+<div class="box card" style="left:1180px;width:340px;border-color:#f08c00"><div class="t" style="color:#c92a2a">Next learning step</div><span>Lock a fresh public set before tuning the ranker so 10/26 is not the hidden test set.</span></div>
+</body></html>
