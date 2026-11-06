@@ -8,26 +8,17 @@ It is a small, inspectable example of a human-approved agent for support and SRE
 
 The triage loop, the human gate, the runbook specialist, and the read-only MCP server stay separate. A fuller walk-through is in [How it works](docs/HOW_IT_WORKS.md).
 
-```mermaid
-flowchart TD
-  ticket[Synthetic escalation] --> loop[Practice triage loop]
-  loop --> search[Search local runbooks]
-  loop --> evidence[Read synthetic logs and deploys]
-  search --> rank[Rank unverified hypotheses]
-  evidence --> rank
-  rank --> draft[Draft an update that is not sent]
-  draft --> propose["propose_action stays pending"]
-  propose --> human{Human types y or yes?}
-  human -->|yes| sim[Append one simulated line]
-  human -->|any other answer| denied[Write nothing]
-  question[Runbook question] --> specialist[Runbook specialist]
-  specialist --> cite[Return a cited line or abstain]
-  cite --> coordinator[Coordinator keeps the stop reason]
-  coordinator --> propose
-  mcp[MCP stdio: four read-only tools] --> search
-```
+![escalation-triage-agent architecture: synthetic ticket, triage coordinator, read-only runbook specialist, unverified hypotheses, and a human approval gate before one simulated log line](docs/images/architecture.png)
 
-`propose_action` and `record_simulated_action` are not MCP tools. The specialist can search and cite. It cannot approve or log an action.
+A synthetic ticket enters the coordinator. The runbook specialist may only search and cite through MCP. Hypotheses stay unverified. `propose_action` stays pending until a person types `y` or `yes`.
+
+![Coordinator to specialist handoff: two-message budget, MCP search and cited answer only, then the same human gate](docs/images/handoff.png)
+
+The specialist returns citations and stops. It cannot approve. The coordinator keeps the stop reason and any pending proposal.
+
+![Human approval gate: y, yes, or Approve appends one simulated action.log line; anything else writes nothing](docs/images/approval-gate.png)
+
+`propose_action` and `record_simulated_action` are not MCP tools. A model flag named `approved` is ignored. Only the human's `y` or `yes` (or the Streamlit Approve control) appends one simulated line. Anything else writes nothing.
 
 ## Quickstart
 
@@ -94,6 +85,10 @@ This table is the report from an offline run of the committed sets. Golden is `f
 The command prints `Agent eval: 20/20 passed`. CI runs `python agent_eval.py --check --trace-dir /tmp/agent-eval-traces` on Python 3.11 and 3.13 (see `.github/workflows/tests.yml`). `--check` exits 1 if any case fails. Case ids, what each check means, and how to open a trace are in [Agent eval](docs/AGENT_EVAL.md).
 
 This 20/20 is the practice path only. It is not a Grok tool-choice score. The separate public incident ranker is much weaker: top-1 is 10/26. That table is below.
+
+![Practice agent eval 20/20 beside the public incident baseline 10/26. The two scores measure different jobs and are not mixed.](docs/images/two-scores.png)
+
+Practice `agent_eval` checks the synthetic workflow (15 golden + 5 holdout). The public baseline is ranker-only on published incidents: top-1 is 10/26 and top-3 is 11/26. Keep the numbers apart.
 
 ## MCP and handoff
 
@@ -358,16 +353,5 @@ See [how it works](docs/HOW_IT_WORKS.md) for the input boundary, label rules and
 
 For failed runs, the inspector also shows failed steps and available public error annotations. See the [real failed-run example](docs/WORKFLOW_RUN.md#try-a-real-failed-run).
 
-## Architecture graphics
-
-Same visual system as runbook-copilot (`docs/images/`):
-
-| File | What it shows |
-|------|----------------|
-| [architecture.png](docs/images/architecture.png) | End-to-end flow (M5) |
-| [handoff.png](docs/images/handoff.png) | Coordinator → specialist |
-| [approval-gate.png](docs/images/approval-gate.png) | Human y/yes before simulate |
-| [two-scores.png](docs/images/two-scores.png) | Practice 20/20 vs public 10/26 |
-
-HTML sources sit beside the PNGs for regenerating with headless Chrome.
+The diagrams in [Architecture](#architecture) and [Agent eval](#agent-eval) are the styled PNGs under `docs/images/`. Matching HTML sources sit beside them for regenerating with headless Chrome.
 
