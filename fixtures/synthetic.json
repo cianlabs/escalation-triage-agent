@@ -527,5 +527,325 @@
       }
     ],
     "data_kind": "synthetic_practice"
+  },
+  {
+    "id": "ESC-2001",
+    "title": "Redis cache memory pressure",
+    "customer_tier": "gold",
+    "service": "redis-cache",
+    "ticket": "Redis memory is exhausted and the cache nodes need a careful restart after approval.",
+    "logs": [
+      {
+        "id": "log-r1",
+        "source": "redis-cache.log (synthetic practice fixture)",
+        "observation": "redis-cache memory exhausted and process crash recorded on primary"
+      },
+      {
+        "id": "log-r2",
+        "source": "redis-cache.log (synthetic practice fixture)",
+        "observation": "oom killer fired on cache node killing redis-cache"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-r1",
+        "service": "redis-cache",
+        "version": "7.2.1",
+        "previous_version": "7.2.0",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) redis-cache 7.2.1 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Process needs a restart"
+  },
+  {
+    "id": "ESC-2002",
+    "title": "API gateway timeouts climbing",
+    "customer_tier": "gold",
+    "service": "api-gateway",
+    "ticket": "API gateway timeouts are climbing and clients see 504s on /v1/checkout.",
+    "logs": [
+      {
+        "id": "log-gw1",
+        "source": "api-gateway.log (synthetic practice fixture)",
+        "observation": "api-gateway p99 latency climbed and /v1/checkout returned 504 gateway timeout"
+      },
+      {
+        "id": "log-gw2",
+        "source": "api-gateway.log (synthetic practice fixture)",
+        "observation": "upstream checkout-api error rate jumped after the noon deploy"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-gw1",
+        "service": "api-gateway",
+        "version": "4.6.0",
+        "previous_version": "4.5.3",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy release 4.6.0 caused gateway timeout spike"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "ESC-2003",
+    "title": "SSO login outage for gold customers",
+    "customer_tier": "gold",
+    "service": "auth-sso",
+    "ticket": "SSO login is down for gold customers. Auth redirects fail and this looks like a sev-1 outage.",
+    "logs": [
+      {
+        "id": "log-sso1",
+        "source": "auth-sso.log (synthetic practice fixture)",
+        "observation": "sev-1 outage: auth-sso is down and unavailable for customers"
+      },
+      {
+        "id": "log-sso2",
+        "source": "auth-sso.log (synthetic practice fixture)",
+        "observation": "OIDC redirect endpoint returned connection failures across regions"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-sso1",
+        "service": "auth-sso",
+        "version": "3.11.0",
+        "previous_version": "3.10.8",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) auth-sso 3.11.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Customer-facing outage"
+  },
+  {
+    "id": "ESC-2004",
+    "title": "CDN edge 5xx spike after config push",
+    "customer_tier": "gold",
+    "service": "cdn-edge",
+    "ticket": "CDN edge POPs are returning 5xx errors and static asset error rate jumped after the last config push.",
+    "logs": [
+      {
+        "id": "log-cdn1",
+        "source": "cdn-edge.log (synthetic practice fixture)",
+        "observation": "cdn-edge error rate jumped to 35 percent after config deploy"
+      },
+      {
+        "id": "log-cdn2",
+        "source": "cdn-edge.log (synthetic practice fixture)",
+        "observation": "GET /static/app.js returned 500 internal server error across edge POPs"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-cdn1",
+        "service": "cdn-edge",
+        "version": "2026.01.05",
+        "previous_version": "2026.01.02",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy release 2026.01.05 caused edge 5xx spike"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "ESC-2005",
+    "title": "DNS resolution failures for api host",
+    "customer_tier": "silver",
+    "service": "dns-resolver",
+    "ticket": "DNS resolution is failing for api.example.com and clients cannot resolve the service name.",
+    "logs": [
+      {
+        "id": "log-dns1",
+        "source": "dns-resolver.log (synthetic practice fixture)",
+        "observation": "NXDOMAIN and SERVFAIL spikes for api.example.com queries"
+      },
+      {
+        "id": "log-dns2",
+        "source": "dns-resolver.log (synthetic practice fixture)",
+        "observation": "sev-1 style impact: customers report the service is unavailable after DNS failure"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-dns1",
+        "service": "dns-resolver",
+        "version": "1.9.4",
+        "previous_version": "1.9.3",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) dns-resolver 1.9.4 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Customer-facing outage"
+  },
+  {
+    "id": "ESC-2006",
+    "title": "Postgres lock contention on orders",
+    "customer_tier": "gold",
+    "service": "orders-db",
+    "ticket": "Postgres locks are blocking the orders table and checkout queries are timing out.",
+    "logs": [
+      {
+        "id": "log-pg1",
+        "source": "orders-db.log (synthetic practice fixture)",
+        "observation": "postgres lock wait on orders table exceeded 30 seconds"
+      },
+      {
+        "id": "log-pg2",
+        "source": "orders-db.log (synthetic practice fixture)",
+        "observation": "checkout query returned 500 after lock timeout"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-pg1",
+        "service": "orders-db",
+        "version": "15.4.2",
+        "previous_version": "15.4.1",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy migration 15.4.2 worsened lock contention"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "ESC-2007",
+    "title": "Kafka consumer lag on billing",
+    "customer_tier": "gold",
+    "service": "billing-consumer",
+    "ticket": "Kafka consumer lag is climbing on the billing topic and workers fell far behind.",
+    "logs": [
+      {
+        "id": "log-k1",
+        "source": "billing-consumer.log (synthetic practice fixture)",
+        "observation": "billing-consumer lag climbed past 2 million messages"
+      },
+      {
+        "id": "log-k2",
+        "source": "billing-consumer.log (synthetic practice fixture)",
+        "observation": "worker memory exhausted and process crash recorded on billing-consumer"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-k1",
+        "service": "billing-consumer",
+        "version": "2.3.0",
+        "previous_version": "2.2.7",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) billing-consumer 2.3.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Process needs a restart"
+  },
+  {
+    "id": "ESC-2008",
+    "title": "Rate limit 429 storm on public API",
+    "customer_tier": "silver",
+    "service": "public-api",
+    "ticket": "Public API clients are getting rate limit 429 responses and traffic looks bursty.",
+    "logs": [
+      {
+        "id": "log-rl1",
+        "source": "public-api.log (synthetic practice fixture)",
+        "observation": "public-api returned 429 rate limit to bursty partner traffic"
+      },
+      {
+        "id": "log-rl2",
+        "source": "public-api.log (synthetic practice fixture)",
+        "observation": "error rate jumped on authenticated routes during the burst"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-rl1",
+        "service": "public-api",
+        "version": "6.1.0",
+        "previous_version": "6.0.4",
+        "status": "failed",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) bad deploy release 6.1.0 tightened rate limits unexpectedly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Bad deploy"
+  },
+  {
+    "id": "ESC-2009",
+    "title": "TLS certificate near expiry on checkout",
+    "customer_tier": "gold",
+    "service": "checkout-edge",
+    "ticket": "The TLS certificate for checkout.example.com is near expiry and browsers warn on connect.",
+    "logs": [
+      {
+        "id": "log-tls1",
+        "source": "checkout-edge.log (synthetic practice fixture)",
+        "observation": "TLS certificate for checkout.example.com expires in under 48 hours"
+      },
+      {
+        "id": "log-tls2",
+        "source": "checkout-edge.log (synthetic practice fixture)",
+        "observation": "customers report the service is unavailable in browsers that reject the warning"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-tls1",
+        "service": "checkout-edge",
+        "version": "1.4.0",
+        "previous_version": "1.3.9",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) checkout-edge 1.4.0 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Customer-facing outage"
+  },
+  {
+    "id": "ESC-2010",
+    "title": "Queue backlog on email worker",
+    "customer_tier": "silver",
+    "service": "email-worker",
+    "ticket": "The email worker queue backlog keeps growing and jobs are not draining.",
+    "logs": [
+      {
+        "id": "log-q1",
+        "source": "email-worker.log (synthetic practice fixture)",
+        "observation": "email-worker queue backlog grew past 500k jobs"
+      },
+      {
+        "id": "log-q2",
+        "source": "email-worker.log (synthetic practice fixture)",
+        "observation": "email-worker memory exhausted and the oom killer fired"
+      }
+    ],
+    "deploys": [
+      {
+        "id": "deploy-q1",
+        "service": "email-worker",
+        "version": "8.0.2",
+        "previous_version": "8.0.1",
+        "status": "succeeded",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "(synthetic practice fixture) email-worker 8.0.2 finished cleanly"
+      }
+    ],
+    "data_kind": "synthetic_practice",
+    "expected_practice_hypothesis": "Process needs a restart"
   }
 ]

@@ -25,7 +25,7 @@ from pathlib import Path
 import agent
 from errors import AgentError
 from practice_model import PracticeModel
-from sample_data import SAMPLE_ID
+from sample_data import SAMPLE_ID, get_escalation, list_escalations
 
 try:
     import streamlit as st
@@ -63,6 +63,23 @@ def live_key_present():
     return bool(os.environ.get("XAI_API_KEY", "").strip())
 
 
+def sample_choices():
+    """Labels for the Streamlit picker. Default sample stays first."""
+    rows = list_escalations()
+    rows.sort(key=lambda row: (0 if row["id"] == SAMPLE_ID else 1, row["id"]))
+    return {f"{row['id']} — {row['title']}": row["id"] for row in rows}
+
+
+def selected_escalation_id(session):
+    escalation_id = session.get("escalation_id") or SAMPLE_ID
+    try:
+        get_escalation(escalation_id)
+    except AgentError:
+        escalation_id = SAMPLE_ID
+    session["escalation_id"] = escalation_id
+    return escalation_id
+
+
 def mode_banner():
     """Which model triages. The banner never includes the key."""
     if live_key_present():
@@ -98,8 +115,10 @@ def ensure_session(store):
             "memory_dir": root / "memory",
             "action_log": root / "action.log",
             "view": None,
+            "escalation_id": SAMPLE_ID,
         }
         store["triage_session"] = session
+    session.setdefault("escalation_id", SAMPLE_ID)
     return session
 
 
@@ -165,10 +184,11 @@ def view_from_result(result, action_log):
 
 
 def _run(session, *, defer_approval, answer, fresh):
+    escalation_id = selected_escalation_id(session)
     memory_dir = Path(session["memory_dir"])
     action_log = Path(session["action_log"])
     if fresh:
-        path = agent.memory_path(memory_dir, SAMPLE_ID)
+        path = agent.memory_path(memory_dir, escalation_id)
         if path.exists():
             path.unlink()
     use_real = live_key_present() and defer_approval
@@ -176,7 +196,7 @@ def _run(session, *, defer_approval, answer, fresh):
     try:
         with contextlib.redirect_stdout(buffer), contextlib.redirect_stderr(buffer):
             result = agent.run_escalation(
-                SAMPLE_ID,
+                escalation_id,
                 model=None if use_real else PracticeModel(),
                 ask=lambda _prompt: answer,
                 memory_dir=memory_dir,
@@ -195,7 +215,7 @@ def _run(session, *, defer_approval, answer, fresh):
             "trace": "",
             "pending": "",
             "log_text": "",
-            "escalation_id": SAMPLE_ID,
+            "escalation_id": escalation_id,
         }
     if result is None:
         return {
@@ -208,13 +228,15 @@ def _run(session, *, defer_approval, answer, fresh):
             "trace": "",
             "pending": "",
             "log_text": "",
-            "escalation_id": SAMPLE_ID,
+            "escalation_id": escalation_id,
         }
     return view_from_result(result, action_log)
 
 
-def on_sample(session):
+def on_sample(session, escalation_id=None):
     """Same path as `agent.py --sample --fresh --defer-approval`."""
+    if escalation_id:
+        session["escalation_id"] = escalation_id
     view = _run(session, defer_approval=True, answer="", fresh=True)
     session["view"] = view
     return view
@@ -289,9 +311,25 @@ def main():
         "The fixtures in this demo are not customer data."
     )
     st.markdown(mode_banner())
-    st.write(f"Sample ticket: `{SAMPLE_ID}` (synthetic checkout-style outage).")
+    choices = sample_choices()
+    labels = list(choices)
+    current = selected_escalation_id(session)
+    label_for = {escalation_id: label for label, escalation_id in choices.items()}
+    default_label = label_for.get(current, labels[0])
+    picked = st.selectbox(
+        "Practice sample",
+        labels,
+        index=labels.index(default_label),
+        help="Synthetic fixtures only. Pick one, then run the practice sample.",
+    )
+    session["escalation_id"] = choices[picked]
+    sample = get_escalation(session["escalation_id"])
+    st.write(
+        f"Selected ticket: `{sample['id']}` — {sample['title']} "
+        f"(service `{sample['service']}`, synthetic practice fixture)."
+    )
     if st.button("Run the practice sample"):
-        on_sample(session)
+        on_sample(session, session["escalation_id"])
         st.rerun()
     view = session.get("view")
     if view:
