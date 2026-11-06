@@ -36,7 +36,7 @@ The third command runs one synthetic case and saves a pending proposal without a
 
 ## Try it on Streamlit Community Cloud
 
-`streamlit_app.py` is the page a stranger can open. It runs the same loop as `agent.py --sample --fresh --defer-approval`: ranked hypotheses, a customer draft that is not sent, runbook citations, the stop reason, and the step trace. **Approve and simulate** is the same gate as typing `y`. It appends one simulated line for that browser only. **Do not run** writes nothing. Nothing is restarted, rolled back, paged, or emailed. The ticket is a synthetic fixture, not customer data.
+`streamlit_app.py` is the page a stranger can open. It runs the same loop as `agent.py --sample --fresh --defer-approval`: ranked hypotheses, a customer draft that is not sent, runbook citations, the stop reason, and the step trace. **Approve and simulate** is the same gate as typing `y`. It appends one simulated line for that browser only. **Do not run** writes nothing. Nothing is restarted, rolled back, paged, or emailed. The ticket is a synthetic fixture, not customer data. The public interactive demo is Streamlit Community Cloud. A free Hugging Face hub card for that demo is the Static Space at https://huggingface.co/spaces/itskeeeyin/escalation-triage-agent (a landing page that points at Streamlit; it does not run the app).
 
 Each browser session has its own memory directory and action log (`st.session_state`). Two visitors do not share a pending action.
 
@@ -68,7 +68,9 @@ Streamlit prints a local URL, usually http://127.0.0.1:8501. No key means practi
 7. Click **Deploy**. Wait until the app status is running. The public URL is the one Streamlit shows at the top of that app (it ends in `.streamlit.app`).
 8. Optional live model: on the running app, open the menu (⋮) → **Settings** → **Secrets**, paste the `XAI_API_KEY` line from above, save, then menu → **Reboot app**. Skip this step to stay in practice mode.
 
-Share that `.streamlit.app` URL. A visitor can run the sample with no account and no API key.
+Share that `.streamlit.app` URL. A visitor can run the sample with no account and no API key. The live public demo is https://escalation-triage-agent-hjnwi7cnblzl4aptdnkuym.streamlit.app.
+
+**Free Hugging Face hub card.** https://huggingface.co/spaces/itskeeeyin/escalation-triage-agent is a Static Space (`sdk: static`). It is a landing page on a free account. It links to the Streamlit demo above and to this repository. It does not run the app.
 
 ## Agent eval
 
