@@ -10,6 +10,7 @@ env/
 *.key
 *.pem
 secrets/
+.streamlit/secrets.toml
 
 # Python junk
 __pycache__/
