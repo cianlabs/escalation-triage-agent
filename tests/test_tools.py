@@ -184,3 +184,22 @@ def test_call_tool_strips_approved_before_propose(tmp_path, monkeypatch):
     assert result["status"] == "pending"
     assert "approved" not in result
     assert list(tmp_path.iterdir()) == []
+
+
+def test_new_demo_samples_match_runbooks():
+    """Added Streamlit demo scenarios should cite existing guides."""
+    for escalation_id in (
+        "ESC-2001",
+        "ESC-2002",
+        "ESC-2003",
+        "ESC-2004",
+        "ESC-2005",
+        "ESC-2006",
+        "ESC-2007",
+        "ESC-2008",
+        "ESC-2009",
+        "ESC-2010",
+    ):
+        hits = search_runbooks(get_escalation(escalation_id)["ticket"])
+        assert hits, escalation_id
+        assert hits[0]["score"] > 0

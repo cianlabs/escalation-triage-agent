@@ -35,7 +35,7 @@ def test_real_escalations_catalog(cases):
 
 def test_synthetic_logs_are_not_claimed_as_real(cases):
     practice = list_escalations()
-    assert len(practice) == 17
+    assert len(practice) == 27
     assert {c['id'] for c in practice}.isdisjoint(c['id'] for c in cases)
     for fixture in practice:
         assert fixture['data_kind'] == 'synthetic_practice'
