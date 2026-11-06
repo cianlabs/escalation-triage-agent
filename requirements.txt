@@ -1,6 +1,10 @@
 # Tests. The practice agent itself uses only the Python standard library.
 pytest>=8
 
+# Public demo. Streamlit Community Cloud installs this file.
+# streamlit_app.py is the main file path. The practice agent does not import it.
+streamlit>=1.39
+
 # The opt-in xAI modes use this SDK.
 openai>=1.68.2
 

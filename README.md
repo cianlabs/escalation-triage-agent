@@ -43,6 +43,42 @@ python3 -m venv .venv
 
 The third command runs one synthetic case and saves a pending proposal without asking. Resume it with `.venv/bin/python agent.py --sample` if you want the approval prompt. `y` or `yes` appends one line to `action.log`. Any other answer writes nothing.
 
+## Try it on Streamlit Community Cloud
+
+`streamlit_app.py` is the page a stranger can open. It runs the same loop as `agent.py --sample --fresh --defer-approval`: ranked hypotheses, a customer draft that is not sent, runbook citations, the stop reason, and the step trace. **Approve and simulate** is the same gate as typing `y`. It appends one simulated line for that browser only. **Do not run** writes nothing. Nothing is restarted, rolled back, paged, or emailed. The ticket is a synthetic fixture, not customer data.
+
+Each browser session has its own memory directory and action log (`st.session_state`). Two visitors do not share a pending action.
+
+**Practice path (no key).** Leave secrets empty. The app uses `PracticeModel`. It does not call the model network. `tests/test_streamlit.py` uses that path and does not start a Streamlit server unless Streamlit is installed (the AppTest is skipped otherwise).
+
+**Live path.** On the deployed app, open the overflow menu, then **Settings → Secrets**, and paste a single line. Reboot the app. The app copies that name into the process environment for `agent.make_client`. The value is not printed and is not written into the page. Do not commit `.streamlit/secrets.toml` (it is gitignored). Locally, export `XAI_API_KEY` in the terminal, or put the same line in an untracked `.streamlit/secrets.toml`, then start again.
+
+```toml
+XAI_API_KEY = "paste-the-xai-key-here"
+```
+
+**Run it on your machine**
+
+```
+.venv/bin/pip install -r requirements.txt
+.venv/bin/streamlit run streamlit_app.py
+```
+
+Streamlit prints a local URL, usually http://127.0.0.1:8501. No key means practice mode.
+
+**What you still click, once, on share.streamlit.io.** This repo cannot create the Cloud app for you. Do this after this change is on `main` (or point the branch at the pull request branch if you want to try it first).
+
+1. Open https://share.streamlit.io/ and sign in with GitHub as the account that can read `cianlabs/escalation-triage-agent`.
+2. Click **Create app**.
+3. Repository: `cianlabs/escalation-triage-agent`.
+4. Branch: `main`.
+5. Main file path: `streamlit_app.py`.
+6. Leave the app public. This demo does not need extra Python packages beyond `requirements.txt`. Leave Secrets empty for practice mode.
+7. Click **Deploy**. Wait until the app status is running. The public URL is the one Streamlit shows at the top of that app (it ends in `.streamlit.app`).
+8. Optional live model: on the running app, open the menu (⋮) → **Settings** → **Secrets**, paste the `XAI_API_KEY` line from above, save, then menu → **Reboot app**. Skip this step to stay in practice mode.
+
+Share that `.streamlit.app` URL. A visitor can run the sample with no account and no API key.
+
 ## Agent eval
 
 `agent_eval.py` scores the practice model, the handoff demo, and the MCP tool list on synthetic fixtures. It does not read `XAI_API_KEY`. A live Grok run (`agent.py --sample --fresh --real`) is optional and is outside CI.
